@@ -1,0 +1,198 @@
+import { RiskFactor } from '../types/projects';
+
+export interface ExplainabilityAnalysis {
+  projectId: string;
+  projectCode: string;
+  projectName: string;
+  healthScore: number;
+  riskSeverity: 'CRITICAL' | 'HIGH' | 'WATCH' | 'STABLE';
+  modelConfidencePercent: number;
+  baseBaselineScore: number; // e.g. 50 (neutral base)
+  aiSummary: string;
+  factors: RiskFactor[];
+}
+
+export const MOCK_EXPLAINABILITY: Record<string, ExplainabilityAnalysis> = {
+  'PRJ-MORT-891': {
+    projectId: 'PRJ-MORT-891',
+    projectCode: 'DME-PKG-14B',
+    projectName: 'Delhi-Mumbai Expressway Package 14B (Vadodara-Kim)',
+    healthScore: 42,
+    riskSeverity: 'CRITICAL',
+    modelConfidencePercent: 93.8,
+    baseBaselineScore: 50,
+    aiSummary:
+      'The primary driver pushing risk into the CRITICAL category is Schedule Slippage (+24.2 pts SHAP impact) stemming from unshifted GAIL gas pipelines at ROB Chainage 312, closely followed by Physical Progress Lag (+18.5 pts). Contractor working capital reserves (+4.2 pts mitigating) partially prevent deeper financial insolvency.',
+    factors: [
+      {
+        id: 'f1',
+        name: 'Schedule Slippage & Critical Path Delay',
+        category: 'Schedule',
+        contributionScore: 24.2,
+        importancePercent: 32.5,
+        impactType: 'POSITIVE_RISK',
+        description: 'ROB construction at Ch 312+400 is delayed by 100 days, falling on the critical path and blocking contiguous paving.',
+        evidence: 'Railway safety launch window postponed from Jan 20 to late April 2025.',
+        mitigationSuggestion: 'Convene joint MoRTH-MoR high-level taskforce to obtain fast-track block permissions.',
+      },
+      {
+        id: 'f2',
+        name: 'Physical Progress vs DPR Baseline Gap',
+        category: 'Schedule',
+        contributionScore: 18.5,
+        importancePercent: 24.8,
+        impactType: 'POSITIVE_RISK',
+        description: 'Actual physical progress (68.4%) lags expected scheduled curve (78.5%) by 10.1 percentage points.',
+        evidence: 'Earthwork excavation pace dropped by 28% in monsoon waterlogged sections.',
+        mitigationSuggestion: 'Deploy 4 additional dewatering pump stations and increase night-shift earthmovers.',
+      },
+      {
+        id: 'f3',
+        name: 'Regulatory Utility Shifting & Gas Line NOC',
+        category: 'Regulatory',
+        contributionScore: 14.8,
+        importancePercent: 19.9,
+        impactType: 'POSITIVE_RISK',
+        description: 'Gas Authority of India Ltd (GAIL) 24-inch cross-country pipeline relocation approval was delayed by 7 months.',
+        evidence: 'Inter-agency clearance protocol signed only in early Q1 FY26.',
+        mitigationSuggestion: 'Enforce statutory timeline via Cabinet Secretariat Project Monitoring Group (PMG).',
+      },
+      {
+        id: 'f4',
+        name: 'Cost Escalation & Material Index Adjustments',
+        category: 'Cost',
+        contributionScore: 9.4,
+        importancePercent: 12.6,
+        impactType: 'POSITIVE_RISK',
+        description: 'Bitumen and structural steel price increases generated ₹340 Cr projected cost escalation claims.',
+        evidence: 'Contractor submitted variation claim #4 on Jan 28, 2026.',
+        mitigationSuggestion: 'Audit price adjustment formula against actual wholesale price index (WPI) benchmarks.',
+      },
+      {
+        id: 'f5',
+        name: 'Tier-1 EPC Contractor Financial Solvency',
+        category: 'Contractor',
+        contributionScore: -8.5,
+        importancePercent: 11.4,
+        impactType: 'STABILIZING',
+        description: 'Lead EPC contractor holds credit rating AA+ with active bank guarantees, mitigating immediate abandonment risk.',
+        evidence: 'Zero debt defaults across commercial paper obligations over 36 months.',
+        mitigationSuggestion: 'Maintain prompt milestone disbursements into dedicated escrow account.',
+      },
+      {
+        id: 'f6',
+        name: 'Land Acquisition Completeness (94% Handover)',
+        category: 'Regulatory',
+        contributionScore: -4.2,
+        importancePercent: 5.6,
+        impactType: 'STABILIZING',
+        description: '94% of right-of-way corridor is unencumbered and physically handed over to the concessionaire.',
+        evidence: 'Zero pending civil writ petitions on 8-lane main alignment.',
+        mitigationSuggestion: 'Preserve possession through local revenue police patrols.',
+      },
+    ],
+  },
+  'PRJ-METRO-552': {
+    projectId: 'PRJ-METRO-552',
+    projectCode: 'CMRL-PH2-C4',
+    projectName: 'Chennai Metro Rail Phase II - Corridor 4 (Poonamallee Bypass to Lighthouse)',
+    healthScore: 49,
+    riskSeverity: 'CRITICAL',
+    modelConfidencePercent: 95.1,
+    baseBaselineScore: 50,
+    aiSummary:
+      'Geotechnical geological anomalies encountered in underground twin tunnels (+28.4 pts SHAP) dominate risk exposure. Severe cutter-head wear in mixed charnockite rock has cut excavation velocity by 64%. Fast-track viaduct casting (+6.8 pts stabilizing) cushions elevated transit sections.',
+    factors: [
+      {
+        id: 'f1',
+        name: 'Geotechnical Hard-Rock Strata Encountered',
+        category: 'Geotechnical',
+        contributionScore: 28.4,
+        importancePercent: 36.8,
+        impactType: 'POSITIVE_RISK',
+        description: 'Uncharted ultra-hard charnockite rock (>180 MPa compressive strength) damaged TBM-03 cutterhead.',
+        evidence: 'TBM mining advance rate reduced from 12m/day to 2.8m/day across 850m tunnel segment.',
+        mitigationSuggestion: 'Import heavy-duty tungsten carbide disc cutters and deploy auxiliary high-pressure water jet assist.',
+      },
+      {
+        id: 'f2',
+        name: 'Urban Traffic Diversion & Dense Utility Matrix',
+        category: 'Regulatory',
+        contributionScore: 17.2,
+        importancePercent: 22.3,
+        impactType: 'POSITIVE_RISK',
+        description: 'Kodambakkam station box excavation restricted to 6-hour night windows due to arterial traffic.',
+        evidence: 'Chennai City Traffic Police granted only single-lane diversions.',
+        mitigationSuggestion: 'Erect temporary steel deck roadways over excavated station shafts to open daytime traffic.',
+      },
+      {
+        id: 'f3',
+        name: 'Progress Trajectory Lag',
+        category: 'Schedule',
+        contributionScore: 13.6,
+        importancePercent: 17.6,
+        impactType: 'POSITIVE_RISK',
+        description: 'Physical progress (46.1%) vs planned (58.0%) leaves a deficit of 11.9 percentage points.',
+        evidence: 'Panagal Park breakthrough milestone delayed by 163 days.',
+        mitigationSuggestion: 'Mobilize 2 additional TBM maintenance teams for simultaneous cutterhead overhaul.',
+      },
+      {
+        id: 'f4',
+        name: 'Elevated Viaduct Segment Casting Pace',
+        category: 'Contractor',
+        contributionScore: -6.8,
+        importancePercent: 8.8,
+        impactType: 'STABILIZING',
+        description: 'Zone 1 elevated viaduct piers and U-girder erection at Poonamallee is tracking 2 weeks ahead.',
+        evidence: '100% pier caps completed in Zone 1 casting yard.',
+        mitigationSuggestion: 'Begin track bed casting on elevated sections ahead of tunnel completion.',
+      },
+    ],
+  },
+  'PRJ-RLY-204': {
+    projectId: 'PRJ-RLY-204',
+    projectCode: 'EDFC-SON-AND',
+    projectName: 'Eastern Dedicated Freight Corridor (Sonnagar - Andal Section)',
+    healthScore: 58,
+    riskSeverity: 'HIGH',
+    modelConfidencePercent: 88.2,
+    baseBaselineScore: 50,
+    aiSummary:
+      'Procurement delay in specialized continuous welded track laying trains (+19.1 pts SHAP) and signaling equipment lead times (+14.3 pts) constitute 62% of composite risk. Subgrade earthwork completion (-9.2 pts) provides firm civil foundation.',
+    factors: [
+      {
+        id: 'f1',
+        name: 'Track Laying Machinery Non-Availability',
+        category: 'Procurement',
+        contributionScore: 19.1,
+        importancePercent: 34.2,
+        impactType: 'POSITIVE_RISK',
+        description: 'Dedicated high-speed Track Laying Machine (TLM) suffered hydraulic failure with spare parts trapped in customs.',
+        evidence: 'Track laying output reduced by 42 km below Q4 schedule.',
+        mitigationSuggestion: 'Air-freight replacement hydraulic valves directly from manufacturer under emergency procurement.',
+      },
+      {
+        id: 'f2',
+        name: 'Signaling & Interlocking Integration Lead Time',
+        category: 'Procurement',
+        contributionScore: 14.3,
+        importancePercent: 25.6,
+        impactType: 'POSITIVE_RISK',
+        description: 'Electronic Interlocking (EI) microprocessor cards lead time stretched to 24 weeks.',
+        evidence: 'Supplier notified 6-week factory backlog.',
+        mitigationSuggestion: 'Reallocate spare EI hardware kits from completed Western DFC packages.',
+      },
+      {
+        id: 'f3',
+        name: 'Completed Civil Embankments & Bridges',
+        category: 'Contractor',
+        contributionScore: -9.2,
+        importancePercent: 16.5,
+        impactType: 'STABILIZING',
+        description: 'Major bridges across Son river and 180 km embankment formation are 100% complete.',
+        evidence: 'Zero remaining civil earthwork vulnerability before monsoon.',
+        mitigationSuggestion: 'Focus all contractor resources exclusively on ballast dumping and track assembly.',
+      },
+    ],
+  },
+};
