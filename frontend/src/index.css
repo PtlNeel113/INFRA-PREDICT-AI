@@ -1,0 +1,255 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================
+   INFRA-PREDICT AI — PREMIUM DESIGN SYSTEM
+   Warm White Editorial Intelligence Platform
+   ============================================ */
+
+@theme {
+  /* === PREMIUM COLOR PALETTE === */
+  /* Warm whites & neutrals */
+  --color-warm-white: #F7F8F5;
+  --color-warm-white-alt: #F3F5F2;
+  --color-near-white: #FAFBF9;
+  
+  /* Primary text & surfaces */
+  --color-text-primary: #0B1220;
+  --color-text-secondary: #536174;
+  --color-text-tertiary: #8B95A8;
+  
+  /* Intelligence blue */
+  --color-blue-primary: #1557D6;
+  --color-blue-dark: #0A1B33;
+  --color-blue-light: #EBF5FF;
+  --color-blue-ultra-light: #F5F9FF;
+  
+  /* Accent green (selective use) */
+  --color-accent-green: #8EDC35;
+  --color-accent-green-light: #F2F9E8;
+  
+  /* Risk colors (refined) */
+  --color-risk-critical: #DC2626;
+  --color-risk-criticalBg: #FEF2F2;
+  --color-risk-high: #EA580C;
+  --color-risk-highBg: #FFF7ED;
+  --color-risk-watch: #D97706;
+  --color-risk-watchBg: #FFFBEB;
+  --color-risk-stable: #16A34A;
+  --color-risk-stableBg: #F0FDF4;
+  
+  /* Glass surfaces */
+  --color-glass-white: rgba(255, 255, 255, 0.85);
+  --color-glass-border: rgba(15, 30, 50, 0.08);
+  --color-glass-border-strong: rgba(15, 30, 50, 0.12);
+  
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  
+  /* Border radius (premium rounded) */
+  --radius-premium: 12px;
+  --radius-premium-sm: 8px;
+  --radius-premium-lg: 16px;
+  --radius-premium-xl: 20px;
+  
+  /* Shadows (soft layered depth) */
+  --shadow-lifted: 0 1px 3px 0 rgba(15, 30, 50, 0.04), 0 1px 2px -1px rgba(15, 30, 50, 0.02);
+  --shadow-elevated: 0 4px 12px -2px rgba(15, 30, 50, 0.06), 0 2px 6px -1px rgba(15, 30, 50, 0.03);
+  --shadow-float: 0 8px 24px -4px rgba(15, 30, 50, 0.08), 0 4px 12px -2px rgba(15, 30, 50, 0.04);
+  --shadow-deep: 0 16px 48px -8px rgba(15, 30, 50, 0.12), 0 8px 24px -4px rgba(15, 30, 50, 0.06);
+}
+
+/* === PREMIUM GLASS SYSTEM === */
+.glass-card {
+  background: var(--color-glass-white);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-lifted);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid var(--color-glass-border-strong);
+  box-shadow: var(--shadow-elevated);
+}
+
+.glass-surface {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--color-glass-border);
+}
+
+/* === PREMIUM SHADOW UTILITIES === */
+.shadow-lifted {
+  box-shadow: var(--shadow-lifted);
+}
+
+.shadow-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+
+.shadow-float {
+  box-shadow: var(--shadow-float);
+}
+
+.shadow-deep {
+  box-shadow: var(--shadow-deep);
+}
+
+/* === AI INTELLIGENCE INDICATOR === */
+.ai-indicator {
+  position: relative;
+}
+
+.ai-indicator::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--color-blue-primary) 0%, var(--color-accent-green) 100%);
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+/* === PREMIUM TYPOGRAPHY === */
+.heading-hero {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+}
+
+.heading-section {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.text-editorial {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+/* === NUMBERED SECTION LABELS === */
+.section-number {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
+}
+
+/* === DEPTH & ELEVATION === */
+.depth-layer-1 {
+  transform: translateZ(0);
+  box-shadow: var(--shadow-lifted);
+}
+
+.depth-layer-2 {
+  transform: translateZ(0);
+  box-shadow: var(--shadow-elevated);
+}
+
+.depth-layer-3 {
+  transform: translateZ(0);
+  box-shadow: var(--shadow-float);
+}
+
+/* === PREMIUM HOVER STATES === */
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-float);
+}
+
+:root {
+  font-family: var(--font-sans);
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-warm-white);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease;
+}
+
+/* === PREMIUM SCROLLBAR STYLING === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-warm-white-alt);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(83, 97, 116, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(83, 97, 116, 0.35);
+}
+
+/* === REDUCED MOTION SUPPORT === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === REDUCED TRANSPARENCY FALLBACK === */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-card,
+  .glass-panel,
+  .glass-surface {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #FFFFFF;
+  }
+}
+
+/* === PRINT OPTIMIZATION === */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  .print\:hidden {
+    display: none !important;
+  }
+  
+  .glass-card,
+  .glass-panel,
+  .glass-surface {
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    border: 1px solid #e5e7eb !important;
+  }
+}
