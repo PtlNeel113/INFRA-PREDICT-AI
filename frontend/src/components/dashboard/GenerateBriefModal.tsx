@@ -1,30 +1,66 @@
 import React, { useState } from 'react';
-import { FileSpreadsheet, Download, CheckCircle2, X, Sparkles, Printer, FileText } from 'lucide-react';
+import { FileSpreadsheet, Download, CheckCircle2, X, Sparkles, Building2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useToast } from '../../hooks/useToast';
+import { InfraProject } from '../../types/projects';
+import { MOCK_INFRA_PROJECTS } from '../../data/mockData';
+import { generateSignedPdf, BriefFormat } from '../../utils/generateSignedPdf';
 
 interface GenerateBriefModalProps {
   isOpen: boolean;
   onClose: () => void;
+  project?: InfraProject | null;
 }
 
-export const GenerateBriefModal: React.FC<GenerateBriefModalProps> = ({ isOpen, onClose }) => {
+export const GenerateBriefModal: React.FC<GenerateBriefModalProps> = ({
+  isOpen,
+  onClose,
+  project,
+}) => {
   const toast = useToast();
-  const [reportType, setReportType] = useState('CABINET_SUMMARY');
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(
+    project?.id || MOCK_INFRA_PROJECTS[0]?.id || '',
+  );
+  const [reportType, setReportType] = useState<BriefFormat>('CABINET_SUMMARY');
   const [isGenerating, setIsGenerating] = useState(false);
+
+  // Sync selected project when modal opens with a project
+  React.useEffect(() => {
+    if (project?.id) {
+      setSelectedProjectId(project.id);
+    }
+  }, [project]);
 
   if (!isOpen) return null;
 
+  const currentProject =
+    MOCK_INFRA_PROJECTS.find((p) => p.id === selectedProjectId) ||
+    project ||
+    MOCK_INFRA_PROJECTS[0];
+
   const handleDownload = () => {
     setIsGenerating(true);
-    setTimeout(() => {
+    try {
+      const filename = generateSignedPdf({
+        project: currentProject,
+        format: reportType,
+        includeSHAP: true,
+        includeBenchmarking: true,
+        includeMitigation: true,
+      });
+
+      setTimeout(() => {
+        setIsGenerating(false);
+        toast.success(
+          'Executive Briefing Downloaded',
+          `${filename} successfully saved to your downloads.`,
+        );
+        onClose();
+      }, 600);
+    } catch (err: any) {
       setIsGenerating(false);
-      toast.success(
-        'Executive Briefing Downloaded',
-        'Cabinet_Risk_Dossier_FY26_Q1.pdf successfully saved to your downloads.',
-      );
-      onClose();
-    }, 1000);
+      toast.error('Download Failed', err?.message || 'Could not generate signed PDF.');
+    }
   };
 
   return (
@@ -48,6 +84,36 @@ export const GenerateBriefModal: React.FC<GenerateBriefModalProps> = ({ isOpen, 
           >
             <X className="w-4 h-4" />
           </button>
+        </div>
+
+        {/* Target Infrastructure Package Select */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold text-[#0B1F3A] flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <Building2 className="w-3.5 h-3.5 text-[#155EEF]" />
+              <span>Target Infrastructure Package</span>
+            </span>
+            <span className="text-[11px] font-mono text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">
+              {currentProject.code}
+            </span>
+          </label>
+          <select
+            value={selectedProjectId}
+            onChange={(e) => setSelectedProjectId(e.target.value)}
+            className="w-full text-xs font-bold bg-[#F8FAFC] border border-slate-200 rounded-xl p-2.5 text-[#0B1F3A] focus:outline-none focus:border-[#155EEF] transition-all cursor-pointer"
+          >
+            {MOCK_INFRA_PROJECTS.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.code} — {p.name} ({p.riskLevel})
+              </option>
+            ))}
+          </select>
+          <div className="flex items-center justify-between text-[11px] text-slate-500 px-1">
+            <span>Sector: <strong className="text-slate-700">{currentProject.sector}</strong></span>
+            <span className={`font-bold ${currentProject.riskLevel === 'CRITICAL' ? 'text-rose-600' : 'text-amber-600'}`}>
+              Health Score: {currentProject.healthScore}/100 ({currentProject.riskLevel})
+            </span>
+          </div>
         </div>
 
         {/* Template Select */}

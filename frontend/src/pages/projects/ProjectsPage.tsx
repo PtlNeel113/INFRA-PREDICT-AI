@@ -26,6 +26,7 @@ import { InfraProject, ProjectStage } from '../../types/projects';
 import { RiskBadge } from '../../components/ui/RiskBadge';
 import { HealthScoreBadge } from '../../components/ui/HealthScoreBadge';
 import { RiskLevel } from '../../types/ui';
+import { AddProjectModal } from '../../components/modals/AddProjectModal';
 
 type SortField =
   | 'name'
@@ -58,6 +59,9 @@ export const ProjectsPage: React.FC = () => {
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
+
+  // Add Project Modal States
+  const [showAddProjectModal, setShowAddProjectModal] = useState(false);
 
   // Extract unique filter options from data
   const ministries = useMemo(() => {
@@ -177,7 +181,9 @@ export const ProjectsPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 pb-12" id="projects-intelligence-page">
+    <>
+      <AddProjectModal isOpen={showAddProjectModal} onClose={() => setShowAddProjectModal(false)} />
+      <div className="space-y-6 pb-12" id="projects-intelligence-page">
       {/* Header Banner */}
       <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
@@ -199,6 +205,14 @@ export const ProjectsPage: React.FC = () => {
           >
             <Download className="w-4 h-4" />
             <span>Export CSV</span>
+          </button>
+          <button
+            id="add-project-btn"
+            onClick={() => setShowAddProjectModal(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors shadow-sm"
+          >
+            <Building2 className="w-4 h-4" />
+            <span>+ Add Project</span>
           </button>
           <button
             id="quick-risk-report-btn"
@@ -674,5 +688,6 @@ export const ProjectsPage: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

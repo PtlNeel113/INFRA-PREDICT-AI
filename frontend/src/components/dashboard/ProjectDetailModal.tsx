@@ -15,12 +15,14 @@ import {
   Send,
   Layers,
   MapPin,
+  Download,
 } from 'lucide-react';
 import { InfraProject } from '../../types/projects';
 import { RiskBadge } from '../ui/RiskBadge';
 import { HealthScoreBadge } from '../ui/HealthScoreBadge';
 import { Button } from '../ui/Button';
 import { useToast } from '../../hooks/useToast';
+import { generateSignedPdf } from '../../utils/generateSignedPdf';
 
 interface ProjectDetailModalProps {
   project: InfraProject | null;
@@ -248,6 +250,21 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
               leftIcon={<Sparkles className="w-3.5 h-3.5 text-[#155EEF]" />}
             >
               Simulate Mitigations
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                try {
+                  const filename = generateSignedPdf({ project });
+                  toast.success('Signed Brief Exported', `${filename} saved to your downloads.`);
+                } catch (e: any) {
+                  toast.error('Export Failed', e?.message);
+                }
+              }}
+              leftIcon={<Download className="w-3.5 h-3.5 text-[#155EEF]" />}
+            >
+              Export Signed PDF
             </Button>
             <Button
               variant="primary"

@@ -254,6 +254,7 @@ export const DashboardPage: React.FC = () => {
       <GenerateBriefModal
         isOpen={briefModalOpen}
         onClose={() => setBriefModalOpen(false)}
+        project={selectedProjectForDossier}
       />
 
       <InfraAssistModal
