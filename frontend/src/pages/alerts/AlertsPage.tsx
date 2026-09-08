@@ -31,12 +31,41 @@ import {
   ReferenceLine,
 } from 'recharts';
 import { MOCK_EARLY_WARNING_ALERTS } from '../../data/alertsData';
-import { MOCK_PROJECTS } from '../../data/projectsData';
+import { useProjectStore } from '../../store/projectStore';
 import { EarlyWarningAlert } from '../../types/projects';
 import { RiskBadge } from '../../components/ui/RiskBadge';
 
 export const AlertsPage: React.FC = () => {
   const navigate = useNavigate();
+  const projects = useProjectStore((s) => s.projects);
+
+  // Dynamic alerts aggregation including newly created projects
+  const allAlerts = useMemo<EarlyWarningAlert[]>(() => {
+    const existingProjectIds = new Set(MOCK_EARLY_WARNING_ALERTS.map((a) => a.projectId));
+    const dynamicAlerts: EarlyWarningAlert[] = projects
+      .filter((p) => !existingProjectIds.has(p.id) && (p.riskLevel === 'CRITICAL' || p.riskLevel === 'HIGH' || p.riskLevel === 'MEDIUM'))
+      .map((p) => ({
+        id: `alert-${p.id}`,
+        projectId: p.id,
+        projectCode: p.code,
+        projectName: p.name,
+        sector: p.sector,
+        state: p.state,
+        ministry: p.ministry || 'MoRTH / MoR',
+        severity: (p.riskLevel === 'CRITICAL' ? 'CRITICAL' : p.riskLevel === 'HIGH' ? 'HIGH' : 'WATCH') as 'CRITICAL' | 'HIGH' | 'WATCH',
+        riskScore: p.impactScore || (100 - p.healthScore),
+        impactScore: p.impactScore || Math.min(95, Math.round((p.sanctionedCostCr / 1000) * 10 + 40)),
+        changeType: p.progressGap > 0 ? `Schedule Lag (${p.progressGap}%)` : 'Elevated Risk Level',
+        changeSummary: `${p.progressGap > 0 ? `Schedule lag of ${p.progressGap}% identified.` : 'Risk threshold alert.'} ${p.predictedCostOverrunCr > 0 ? `Cost exposure +₹${p.predictedCostOverrunCr} Cr.` : ''}`,
+        primaryDriver: p.primaryRiskDriver,
+        detectedAt: 'Just Now',
+        recommendedReviewDate: 'Within 72 Hours',
+        recommendedAction: p.recommendedActions?.[0] || 'Convene urgent ministerial taskforce review.',
+        nodalOfficer: `${p.implementingAgency} Project Director`,
+        status: 'OPEN' as const,
+      }));
+    return [...dynamicAlerts, ...MOCK_EARLY_WARNING_ALERTS];
+  }, [projects]);
 
   // State
   const [selectedSeverity, setSelectedSeverity] = useState<string>('ALL');
@@ -45,19 +74,19 @@ export const AlertsPage: React.FC = () => {
   const [selectedAlertId, setSelectedAlertId] = useState<string | null>(null);
 
   // Counters
-  const criticalCount = MOCK_EARLY_WARNING_ALERTS.filter((a) => a.severity === 'CRITICAL').length;
-  const highCount = MOCK_EARLY_WARNING_ALERTS.filter((a) => a.severity === 'HIGH').length;
-  const watchCount = MOCK_EARLY_WARNING_ALERTS.filter((a) => a.severity === 'WATCH').length;
+  const criticalCount = allAlerts.filter((a) => a.severity === 'CRITICAL').length;
+  const highCount = allAlerts.filter((a) => a.severity === 'HIGH').length;
+  const watchCount = allAlerts.filter((a) => a.severity === 'WATCH').length;
 
   const sectors = useMemo(() => {
     const set = new Set<string>();
-    MOCK_EARLY_WARNING_ALERTS.forEach((a) => set.add(a.sector));
+    allAlerts.forEach((a) => set.add(a.sector));
     return Array.from(set);
-  }, []);
+  }, [allAlerts]);
 
   // Filtered Alerts
   const filteredAlerts = useMemo(() => {
-    return MOCK_EARLY_WARNING_ALERTS.filter((a) => {
+    return allAlerts.filter((a) => {
       if (selectedSeverity !== 'ALL' && a.severity !== selectedSeverity) return false;
       if (selectedSector !== 'ALL' && a.sector !== selectedSector) return false;
       if (searchQuery.trim()) {
@@ -70,11 +99,11 @@ export const AlertsPage: React.FC = () => {
       }
       return true;
     });
-  }, [selectedSeverity, selectedSector, searchQuery]);
+  }, [allAlerts, selectedSeverity, selectedSector, searchQuery]);
 
   // Scatter data for Risk Priority Matrix
   const matrixData = useMemo(() => {
-    return MOCK_PROJECTS.map((p) => ({
+    return projects.map((p) => ({
       id: p.id,
       name: p.name,
       code: p.code,

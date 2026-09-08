@@ -92,7 +92,41 @@ export interface InfraProject {
     expenditure: number;
     forecast: number;
   }[];
+
+  // Additional form inputs & prototype metadata
+  startDate?: string;
+  district?: string;
+  latitude?: number;
+  longitude?: number;
+  currentIssues?: string;
+  delays?: string;
+  constraints?: string;
+  recommendedActions?: string[];
+  isUserCreated?: boolean;
+  calculationMethodology?: string;
 }
+
+export interface CreateProjectInput {
+  name: string;
+  code: string;
+  ministry: string;
+  sector: string;
+  state: string;
+  district: string;
+  latitude?: string | number;
+  longitude?: string | number;
+  sanctionedCostCr: number;
+  expenditureCr: number;
+  revisedCostCr?: number;
+  physicalProgress: number;
+  startDate: string;
+  targetDate: string;
+  milestones: Array<{ name: string; planned: string; actual?: string }>;
+  currentIssues?: string;
+  delays?: string;
+  constraints?: string;
+}
+
 
 export interface MetricCardData {
   id: string;

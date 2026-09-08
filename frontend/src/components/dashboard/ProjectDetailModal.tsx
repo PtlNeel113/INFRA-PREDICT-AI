@@ -69,7 +69,15 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
               <span className="text-slate-300">•</span>
               <span className="text-xs font-bold text-slate-700">{project.sector}</span>
               <span className="text-slate-300">•</span>
-              <span className="text-xs font-bold text-[#0E7490]">{project.state}</span>
+              <span className="text-xs font-bold text-[#0E7490]">
+                {project.state}{project.district ? ` (${project.district})` : ''}
+              </span>
+              {project.startDate && (
+                <>
+                  <span className="text-slate-300">•</span>
+                  <span className="text-xs font-medium text-slate-600">Started: {project.startDate}</span>
+                </>
+              )}
             </div>
             <h2 className="text-lg sm:text-xl font-black text-[#0B1F3A] tracking-tight">
               {project.name}
@@ -240,6 +248,50 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           </div>
         </div>
 
+        {/* Current Issues & Inputs */}
+        {(project.currentIssues || project.delays || project.constraints) && (
+          <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-2.5">
+            <h4 className="text-xs font-black text-[#0B1F3A] uppercase tracking-wider flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
+              <span>Reported Issues & Risk Inputs</span>
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+              <div className="p-3 bg-white rounded-lg border border-slate-200">
+                <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Current Challenges</span>
+                <p className="text-slate-700 leading-snug">{project.currentIssues || 'None recorded'}</p>
+              </div>
+              <div className="p-3 bg-white rounded-lg border border-slate-200">
+                <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Delays & Slippages</span>
+                <p className="text-slate-700 leading-snug">{project.delays || 'None recorded'}</p>
+              </div>
+              <div className="p-3 bg-white rounded-lg border border-slate-200">
+                <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Constraints</span>
+                <p className="text-slate-700 leading-snug">{project.constraints || 'None recorded'}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Recommended Actions */}
+        {project.recommendedActions && project.recommendedActions.length > 0 && (
+          <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-2">
+            <h4 className="text-xs font-black text-[#0B1F3A] uppercase tracking-wider flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-[#155EEF]" />
+              <span>Recommended Prescriptive Actions</span>
+            </h4>
+            <div className="space-y-1.5">
+              {project.recommendedActions.map((act, i) => (
+                <div key={i} className="p-2.5 bg-white rounded-lg border border-slate-200 text-xs text-slate-700 flex items-start gap-2">
+                  <span className="w-4 h-4 rounded-full bg-indigo-100 text-indigo-700 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                    {i + 1}
+                  </span>
+                  <span>{act}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Modal Footer Actions */}
         <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
@@ -276,13 +328,26 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             </Button>
           </div>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-          >
-            Close Dossier
-          </Button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                navigate(`/projects/${project.id}`);
+              }}
+              className="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition-colors cursor-pointer border border-indigo-200 flex items-center gap-1"
+            >
+              <span>Full Details Page</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+            >
+              Close
+            </Button>
+          </div>
         </div>
       </div>
     </div>

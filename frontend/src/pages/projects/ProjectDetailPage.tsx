@@ -39,7 +39,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { MOCK_PROJECTS } from '../../data/projectsData';
+import { useProjectStore } from '../../store/projectStore';
 import { HealthScoreBadge } from '../../components/ui/HealthScoreBadge';
 import { RiskBadge } from '../../components/ui/RiskBadge';
 
@@ -49,8 +49,9 @@ export const ProjectDetailPage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'overview' | 'cost' | 'schedule' | 'milestones' | 'what-changed'>('overview');
 
-  // Find project or fallback to first
-  const project = MOCK_PROJECTS.find((p) => p.id === id) || MOCK_PROJECTS[0];
+  // Find project from store or fallback
+  const { getProject, projects } = useProjectStore();
+  const project = getProject(id || '') || projects.find((p) => p.id === id || p.code === id) || projects[0];
 
   return (
     <div className="space-y-6 pb-16" id={`project-detail-page-${project.id}`}>
@@ -125,11 +126,17 @@ export const ProjectDetailPage: React.FC = () => {
               )}
               <div className="flex items-center gap-1.5">
                 <MapPin className="w-4 h-4 text-slate-400" />
-                <span>Location: <strong>{project.state}</strong></span>
+                <span>Location: <strong>{project.state}{project.district ? ` (${project.district})` : ''}</strong></span>
               </div>
+              {project.startDate && (
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-slate-400" />
+                  <span>Start Date: <strong>{project.startDate}</strong></span>
+                </div>
+              )}
               <div className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-slate-400" />
-                <span>Original Deadline: <strong>{project.originalDeadline}</strong></span>
+                <span>Target Date: <strong>{project.originalDeadline}</strong></span>
               </div>
             </div>
           </div>
@@ -477,6 +484,91 @@ export const ProjectDetailPage: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Current Issues & Risk Inputs Card */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-amber-600" />
+                <h3 className="font-bold text-slate-900 text-base">Current Issues & Risk Inputs</h3>
+              </div>
+              <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-md">
+                Field Intake Log
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+                <span className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
+                  Current Challenges
+                </span>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {project.currentIssues || 'No active operational or technical challenges logged for this project package.'}
+                </p>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+                <span className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
+                  Delays & Schedule Slippages
+                </span>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {project.delays || 'No schedule recovery adjustments or statutory timeline slippages registered.'}
+                </p>
+              </div>
+
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+                <span className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
+                  Resource & Other Constraints
+                </span>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {project.constraints || 'No labor, machinery, capital, or environmental clearances flagged as bottlenecks.'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Recommended Actions Section */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                <h3 className="font-bold text-slate-900 text-base">Recommended Actions & Prescriptive Mitigations</h3>
+              </div>
+              <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-md">
+                Priority Interventions
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              {((project.recommendedActions && project.recommendedActions.length > 0)
+                ? project.recommendedActions
+                : [
+                    `Convene nodal coordination with ${project.ministry || 'Ministry'} to resolve critical path inter-agency dependencies.`,
+                    `Re-baseline construction milestones and enforce daily liquidated damages clause for delays exceeding 30 days.`,
+                    `Initiate joint district collectorate hearings to expedite right-of-way and utility handover corridors.`,
+                  ]
+              ).map((action, idx) => (
+                <div
+                  key={idx}
+                  className="p-3.5 bg-slate-50 hover:bg-slate-100/80 rounded-xl border border-slate-200 flex items-start gap-3 transition-colors"
+                >
+                  <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-black flex items-center justify-center shrink-0 mt-0.5">
+                    {idx + 1}
+                  </span>
+                  <div className="flex-1">
+                    <p className="text-xs font-medium text-slate-800 leading-relaxed">
+                      {action}
+                    </p>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
+                    idx === 0 ? 'bg-rose-100 text-rose-700' : idx === 1 ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {idx === 0 ? 'Critical' : idx === 1 ? 'High' : 'Advisory'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 

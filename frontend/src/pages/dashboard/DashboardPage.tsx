@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import {
   AlertTriangle,
@@ -11,9 +11,9 @@ import {
 } from 'lucide-react';
 import { useToast } from '../../hooks/useToast';
 import { useDemoStore } from '../../store/demoStore';
+import { useProjectStore } from '../../store/projectStore';
 import {
   EXECUTIVE_KPI_CARDS,
-  MOCK_INFRA_PROJECTS,
 } from '../../data/mockData';
 import { InfraProject } from '../../types/projects';
 import { DecisionHeroPanel } from '../../components/dashboard/DecisionHeroPanel';
@@ -35,6 +35,7 @@ export const DashboardPage: React.FC = () => {
 
   const toast = useToast();
   const { isDecisionMode, setDecisionMode } = useDemoStore();
+  const projects = useProjectStore((s) => s.projects);
 
   // State Management
   const [selectedStateFilter, setSelectedStateFilter] = useState<string | null>(null);
@@ -45,6 +46,59 @@ export const DashboardPage: React.FC = () => {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [briefModalOpen, setBriefModalOpen] = useState(false);
   const [assistModalOpen, setAssistModalOpen] = useState(false);
+
+  const dynamicKpiCards = useMemo(() => {
+    const avgHealth = Math.round(
+      projects.reduce((sum, p) => sum + (p.healthScore || 68), 0) / (projects.length || 1)
+    );
+    const criticalCount = projects.filter(
+      (p) => p.riskLevel === 'CRITICAL'
+    ).length;
+    const atRiskCount = projects.filter(
+      (p) => p.riskLevel === 'CRITICAL' || p.riskLevel === 'HIGH'
+    ).length;
+    const actionCount = projects.filter(
+      (p) =>
+        p.escalationStatus === 'UNRESOLVED' ||
+        p.escalationStatus === 'UNDER_REVIEW' ||
+        (p.healthScore !== undefined && p.healthScore < 60)
+    ).length;
+
+    return EXECUTIVE_KPI_CARDS.map((card) => {
+      if (card.id === 'portfolio-health') {
+        return {
+          ...card,
+          value: `${avgHealth}`,
+          sub: `Composite index across ${projects.length} monitored assets`,
+        };
+      }
+      if (card.id === 'at-risk') {
+        return {
+          ...card,
+          value: `${atRiskCount}`,
+          trend: `${Math.round((atRiskCount / (projects.length || 1)) * 100)}% of portfolio`,
+          sub: 'Predicted delay >3 months or high risk',
+        };
+      }
+      if (card.id === 'critical-projects') {
+        return {
+          ...card,
+          value: `${criticalCount}`,
+          trend: criticalCount > 0 ? 'Immediate attention' : 'Nominal',
+          sub: 'Highest severity band',
+        };
+      }
+      if (card.id === 'action-required') {
+        return {
+          ...card,
+          value: `${actionCount}`,
+          trend: actionCount > 0 ? 'Active interventions' : 'All clear',
+          sub: 'Pending review or escalation',
+        };
+      }
+      return card;
+    });
+  }, [projects]);
 
   const getKpiIcon = (id: string) => {
     switch (id) {
@@ -121,7 +175,7 @@ export const DashboardPage: React.FC = () => {
 
       {/* PRIMARY 4 KPI CARDS */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-        {EXECUTIVE_KPI_CARDS.map((card, idx) => {
+        {dynamicKpiCards.map((card, idx) => {
           const isSelected = activeKpiFilter === card.filterKey;
 
           return (
@@ -194,7 +248,7 @@ export const DashboardPage: React.FC = () => {
         <div className="lg:col-span-6 flex flex-col">
           <WhatChangedFeed
             onSelectProjectCode={(code) => {
-              const matched = MOCK_INFRA_PROJECTS.find((p) => p.code === code);
+              const matched = projects.find((p) => p.code === code || p.id === code);
               if (matched) setSelectedProjectForDossier(matched);
             }}
           />
@@ -212,7 +266,7 @@ export const DashboardPage: React.FC = () => {
       {/* ROW 4: PROJECTS REQUIRING ATTENTION (TABLE) */}
       <div id="attention-table">
         <ProjectsAttentionTable
-          projects={MOCK_INFRA_PROJECTS}
+          projects={projects}
           selectedStateFilter={selectedStateFilter}
           onClearStateFilter={() => setSelectedStateFilter(null)}
           onSelectProject={(project) => setSelectedProjectForDossier(project)}

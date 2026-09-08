@@ -16,7 +16,7 @@ import {
   TrendingDown,
   AlertTriangle,
 } from 'lucide-react';
-import { MOCK_PROJECTS } from '../../data/projectsData';
+import { useProjectStore } from '../../store/projectStore';
 import { ReportConfig, ReportType } from '../../types/reports';
 import { InfraProject } from '../../types/projects';
 import { RiskBadge } from '../../components/ui/RiskBadge';
@@ -27,7 +27,8 @@ import { generateSignedPdf } from '../../utils/generateSignedPdf';
 export const ReportsPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const toast = useToast();
-  const initialProjectId = searchParams.get('projectId') || 'PRJ-MORT-891';
+  const projects = useProjectStore((s) => s.projects);
+  const initialProjectId = searchParams.get('projectId') || (projects[0]?.id || 'PRJ-MORT-891');
 
   const [selectedProjectId, setSelectedProjectId] = useState<string>(initialProjectId);
   const [reportType, setReportType] = useState<ReportType>('EXECUTIVE_RISK_BRIEF');
@@ -37,7 +38,7 @@ export const ReportsPage: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const activeProject: InfraProject =
-    MOCK_PROJECTS.find((p) => p.id === selectedProjectId) || MOCK_PROJECTS[0];
+    projects.find((p) => p.id === selectedProjectId || p.code === selectedProjectId) || projects[0];
 
   const handlePrint = () => {
     window.print();
@@ -127,7 +128,7 @@ export const ReportsPage: React.FC = () => {
               onChange={(e) => setSelectedProjectId(e.target.value)}
               className="w-full text-xs font-bold bg-[#F8FAFC] border border-slate-200 rounded-xl p-2.5 focus:outline-none focus:border-indigo-500 text-[#0B1F3A] cursor-pointer"
             >
-              {MOCK_PROJECTS.map((p) => (
+              {projects.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.code} — {p.name.slice(0, 34)}...
                 </option>

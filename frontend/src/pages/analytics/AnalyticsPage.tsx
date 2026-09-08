@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   BarChart3,
   TrendingUp,
@@ -10,7 +10,7 @@ import {
   Sparkles,
   Filter,
 } from 'lucide-react';
-import { MOCK_PROJECTS } from '../../data/projectsData';
+import { useProjectStore } from '../../store/projectStore';
 import {
   BarChart,
   Bar,
@@ -28,23 +28,58 @@ import { cn } from '../../utils/cn';
 
 export const AnalyticsPage: React.FC = () => {
   const [selectedSector, setSelectedSector] = useState<string>('ALL');
+  const projects = useProjectStore((s) => s.projects);
+
+  const totalSanctionedCr = useMemo(
+    () => projects.reduce((acc, p) => acc + p.sanctionedCostCr, 0),
+    [projects]
+  );
+  const criticalProjects = useMemo(
+    () => projects.filter((p) => p.riskLevel === 'CRITICAL'),
+    [projects]
+  );
+  const highRiskProjects = useMemo(
+    () => projects.filter((p) => p.riskLevel === 'HIGH'),
+    [projects]
+  );
+  const watchProjects = useMemo(
+    () => projects.filter((p) => p.riskLevel === 'WATCH'),
+    [projects]
+  );
+  const stableProjects = useMemo(
+    () => projects.filter((p) => p.riskLevel === 'STABLE'),
+    [projects]
+  );
+  const avgHealthScore = useMemo(
+    () => Math.round(projects.reduce((acc, p) => acc + p.healthScore, 0) / (projects.length || 1)),
+    [projects]
+  );
 
   // Sector breakdown aggregation
-  const sectorData = [
-    { name: 'Roads & Highways', count: 480, outlay: 184500, avgDelay: 8.4 },
-    { name: 'Railways', count: 312, outlay: 142000, avgDelay: 12.6 },
-    { name: 'Urban Transport', count: 184, outlay: 96000, avgDelay: 14.1 },
-    { name: 'Power & Transmission', count: 228, outlay: 68400, avgDelay: 5.2 },
-    { name: 'Petroleum & Gas', count: 165, outlay: 54000, avgDelay: 9.8 },
-  ];
+  const sectorData = useMemo(() => {
+    const map = new Map<string, { count: number; outlay: number; totalDelay: number }>();
+    projects.forEach((p) => {
+      const existing = map.get(p.sector) || { count: 0, outlay: 0, totalDelay: 0 };
+      existing.count += 1;
+      existing.outlay += p.sanctionedCostCr;
+      existing.totalDelay += p.predictedDelayMonths || 0;
+      map.set(p.sector, existing);
+    });
+    return Array.from(map.entries()).map(([name, val]) => ({
+      name,
+      count: val.count,
+      outlay: val.outlay,
+      avgDelay: Number((val.totalDelay / (val.count || 1)).toFixed(1)),
+    }));
+  }, [projects]);
 
   // Risk Distribution Data
-  const riskDistribution = [
-    { name: 'Critical Risk', value: 18, color: '#DC2626' },
-    { name: 'High Risk', value: 34, color: '#D97706' },
-    { name: 'Moderate Risk', value: 42, color: '#2563EB' },
-    { name: 'Low Risk', value: 6, color: '#15803D' },
-  ];
+  const riskDistribution = useMemo(() => [
+    { name: 'Critical Risk', value: criticalProjects.length, color: '#DC2626' },
+    { name: 'High Risk', value: highRiskProjects.length, color: '#D97706' },
+    { name: 'Watch', value: watchProjects.length, color: '#2563EB' },
+    { name: 'Stable', value: stableProjects.length, color: '#15803D' },
+  ], [criticalProjects, highRiskProjects, watchProjects, stableProjects]);
 
   // Root cause distribution
   const rootCauses = [
@@ -78,11 +113,11 @@ export const AnalyticsPage: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-[#0F1D2E] rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-slate-100">
           <span className="text-[10px] uppercase font-bold text-slate-400 block font-mono">
-            Monitored Projects (Demo)
+            Active Directory Projects
           </span>
-          <strong className="text-2xl font-black font-mono block mt-1">1,842</strong>
+          <strong className="text-2xl font-black font-mono block mt-1">{projects.length} Packages</strong>
           <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1 mt-1">
-            <TrendingUp className="w-3 h-3" /> +42 this quarter
+            <TrendingUp className="w-3 h-3" /> Live Synced State
           </span>
         </div>
 
@@ -90,33 +125,33 @@ export const AnalyticsPage: React.FC = () => {
           <span className="text-[10px] uppercase font-bold text-slate-400 block font-mono">
             Cumulative Capital Outlay
           </span>
-          <strong className="text-2xl font-black font-mono block mt-1">₹14.82 L Cr</strong>
+          <strong className="text-2xl font-black font-mono block mt-1">₹{totalSanctionedCr.toLocaleString()} Cr</strong>
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1 block">
-            Across 28 States
+            Across Monitored Packages
           </span>
         </div>
 
         <div className="bg-white dark:bg-[#0F1D2E] rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-slate-100">
           <span className="text-[10px] uppercase font-bold text-slate-400 block font-mono">
-            At-Risk Outlay Exposure
+            At-Risk Project Count
           </span>
           <strong className="text-2xl font-black font-mono text-rose-600 dark:text-rose-400 block mt-1">
-            ₹3.14 L Cr
+            {criticalProjects.length + highRiskProjects.length} Projects
           </strong>
           <span className="text-[11px] text-rose-600 dark:text-rose-400 font-medium mt-1 block">
-            21.2% Portfolio Exposure
+            {(((criticalProjects.length + highRiskProjects.length) / (projects.length || 1)) * 100).toFixed(1)}% Portfolio Ratio
           </span>
         </div>
 
         <div className="bg-white dark:bg-[#0F1D2E] rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-slate-100">
           <span className="text-[10px] uppercase font-bold text-slate-400 block font-mono">
-            Avg Weighted Schedule Lag
+            Average Health Score
           </span>
-          <strong className="text-2xl font-black font-mono text-amber-600 dark:text-amber-400 block mt-1">
-            +9.8 Months
+          <strong className="text-2xl font-black font-mono text-indigo-600 dark:text-indigo-400 block mt-1">
+            {avgHealthScore}/100
           </strong>
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1 block">
-            Median across all packages
+            Composite health index
           </span>
         </div>
       </div>

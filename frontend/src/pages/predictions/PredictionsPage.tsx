@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   TrendingUp,
   AlertTriangle,
@@ -27,19 +27,88 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { MOCK_PROJECTS } from '../../data/projectsData';
+import { useProjectStore } from '../../store/projectStore';
 import { MOCK_PREDICTIONS } from '../../data/predictionsData';
+import { InfraProject, PredictionData } from '../../types/projects';
 import { useNavigate } from 'react-router-dom';
+
+function generateDynamicPrediction(p: InfraProject): PredictionData {
+  const sCost = p.sanctionedCostCr;
+  const overrun = p.predictedCostOverrunCr;
+  const forecast = p.forecastCostCr;
+  const progress = p.currentPhysicalProgress;
+  const expected = p.expectedProgress;
+  const delayMo = p.predictedDelayMonths;
+
+  return {
+    projectId: p.id,
+    projectCode: p.code,
+    projectName: p.name,
+    costOverrun: {
+      sanctionedCostCr: sCost,
+      currentEstimateCr: p.revisedCostCr,
+      forecastEstimateCr: forecast,
+      potentialEscalationCr: overrun,
+      escalationPercentage: sCost > 0 ? Number(((overrun / sCost) * 100).toFixed(1)) : 0,
+      modelConfidencePercent: 88.5,
+      confidenceInterval: {
+        lower: Math.round(forecast * 0.96),
+        upper: Math.round(forecast * 1.05),
+      },
+      historicalSeries: [
+        { period: 'Base Sanction', sanctioned: sCost, actualExp: Math.round(p.expenditureCr * 0.3), forecast: sCost },
+        { period: 'Interim Review', sanctioned: sCost, actualExp: Math.round(p.expenditureCr * 0.7), forecast: Math.round(forecast * 0.95) },
+        { period: 'Current Audit', sanctioned: sCost, actualExp: p.expenditureCr, forecast: forecast },
+        { period: 'Forecast Final', sanctioned: sCost, actualExp: forecast, forecast: forecast },
+      ],
+    },
+    timeOverrun: {
+      plannedCompletion: p.originalDeadline,
+      forecastCompletion: p.predictedCompletionDate,
+      expectedDelayMonths: delayMo,
+      delayDays: Math.round(delayMo * 30.4),
+      modelConfidencePercent: 86.2,
+      confidenceIntervalMonths: {
+        lower: Math.max(0, Number((delayMo * 0.8).toFixed(1))),
+        upper: Number((delayMo * 1.25).toFixed(1)),
+      },
+      historicalSeries: [
+        { period: 'Start', plannedProgress: 10, actualProgress: 10, projectedProgress: 10 },
+        { period: 'Midpoint', plannedProgress: Math.round(expected * 0.6), actualProgress: Math.round(progress * 0.6), projectedProgress: Math.round(progress * 0.6) },
+        { period: 'Current', plannedProgress: expected, actualProgress: progress, projectedProgress: progress },
+        { period: 'Forecast Target', plannedProgress: 100, actualProgress: Math.min(100, progress + 20), projectedProgress: 100 },
+      ],
+    },
+    implementationRisk: {
+      currentRiskScore: 100 - p.healthScore,
+      projectedRiskScore: Math.min(95, Math.max(15, 100 - p.healthScore + p.riskTrend)),
+      riskVelocityTrend: p.riskTrend > 0 ? 'ACCELERATING' : 'DECELERATING',
+      compositeIndex: p.priorityScore || 85,
+      historicalSeries: (p.riskTrajectory || []).map((t, idx) => ({
+        period: t.date,
+        historicalRisk: t.score,
+        forecastRisk: t.forecast ? t.score : undefined,
+        p10: Math.max(10, t.score - 6),
+        p90: Math.min(95, t.score + 8),
+      })),
+    },
+  };
+}
 
 export const PredictionsPage: React.FC = () => {
   const navigate = useNavigate();
+  const projects = useProjectStore((state) => state.projects);
   const [selectedProjectId, setSelectedProjectId] = useState<string>('PRJ-MORT-891');
 
   const selectedProject =
-    MOCK_PROJECTS.find((p) => p.id === selectedProjectId) || MOCK_PROJECTS[0];
+    projects.find((p) => p.id === selectedProjectId || p.code === selectedProjectId) || projects[0];
 
-  const prediction =
-    MOCK_PREDICTIONS[selectedProjectId] || MOCK_PREDICTIONS['PRJ-MORT-891'];
+  const prediction = useMemo(() => {
+    if (MOCK_PREDICTIONS[selectedProject.id]) {
+      return MOCK_PREDICTIONS[selectedProject.id];
+    }
+    return generateDynamicPrediction(selectedProject);
+  }, [selectedProject]);
 
   return (
     <div className="space-y-6 pb-16" id="predictive-intelligence-page">
@@ -61,11 +130,11 @@ export const PredictionsPage: React.FC = () => {
           <label className="text-xs font-semibold text-slate-600 whitespace-nowrap">Select Target Project:</label>
           <select
             id="prediction-project-select"
-            value={selectedProjectId}
+            value={selectedProject.id}
             onChange={(e) => setSelectedProjectId(e.target.value)}
             className="px-3 py-2 text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-xs truncate"
           >
-            {MOCK_PROJECTS.map((p) => (
+            {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.code} - {p.name}
               </option>

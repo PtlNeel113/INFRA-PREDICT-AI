@@ -21,7 +21,7 @@ import {
   RefreshCw,
   ExternalLink,
 } from 'lucide-react';
-import { MOCK_PROJECTS } from '../../data/projectsData';
+import { useProjectStore } from '../../store/projectStore';
 import { InfraProject, ProjectStage } from '../../types/projects';
 import { RiskBadge } from '../../components/ui/RiskBadge';
 import { HealthScoreBadge } from '../../components/ui/HealthScoreBadge';
@@ -42,6 +42,7 @@ type SortField =
 
 export const ProjectsPage: React.FC = () => {
   const navigate = useNavigate();
+  const projects = useProjectStore((state) => state.projects);
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,21 +67,21 @@ export const ProjectsPage: React.FC = () => {
   // Extract unique filter options from data
   const ministries = useMemo(() => {
     const set = new Set<string>();
-    MOCK_PROJECTS.forEach((p) => p.ministry && set.add(p.ministry));
+    projects.forEach((p) => p.ministry && set.add(p.ministry));
     return Array.from(set);
-  }, []);
+  }, [projects]);
 
   const sectors = useMemo(() => {
     const set = new Set<string>();
-    MOCK_PROJECTS.forEach((p) => set.add(p.sector));
+    projects.forEach((p) => set.add(p.sector));
     return Array.from(set);
-  }, []);
+  }, [projects]);
 
   const states = useMemo(() => {
     const set = new Set<string>();
-    MOCK_PROJECTS.forEach((p) => set.add(p.state));
+    projects.forEach((p) => set.add(p.state));
     return Array.from(set);
-  }, []);
+  }, [projects]);
 
   const stages: ProjectStage[] = [
     'Planning',
@@ -92,15 +93,16 @@ export const ProjectsPage: React.FC = () => {
 
   // Filtering Logic
   const filteredProjects = useMemo(() => {
-    return MOCK_PROJECTS.filter((p) => {
+    return projects.filter((p) => {
       // Search
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesName = p.name.toLowerCase().includes(q);
         const matchesCode = p.code.toLowerCase().includes(q);
-        const matchesDriver = p.primaryRiskDriver.toLowerCase().includes(q);
-        const matchesAgency = p.implementingAgency.toLowerCase().includes(q);
-        if (!matchesName && !matchesCode && !matchesDriver && !matchesAgency) return false;
+        const matchesDriver = (p.primaryRiskDriver || '').toLowerCase().includes(q);
+        const matchesAgency = (p.implementingAgency || '').toLowerCase().includes(q);
+        const matchesState = (p.state || '').toLowerCase().includes(q);
+        if (!matchesName && !matchesCode && !matchesDriver && !matchesAgency && !matchesState) return false;
       }
 
       // Ministry
@@ -126,6 +128,7 @@ export const ProjectsPage: React.FC = () => {
       return true;
     });
   }, [
+    projects,
     searchQuery,
     selectedMinistry,
     selectedSector,
@@ -246,7 +249,7 @@ export const ProjectsPage: React.FC = () => {
 
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
             <span className="text-xs text-slate-500">
-              Showing <strong className="text-slate-800">{filteredProjects.length}</strong> of {MOCK_PROJECTS.length} projects
+              Showing <strong className="text-slate-800">{filteredProjects.length}</strong> of {projects.length} projects
             </span>
             {(searchQuery || selectedMinistry !== 'ALL' || selectedSector !== 'ALL' || selectedState !== 'ALL' || selectedRisk !== 'ALL' || selectedStage !== 'ALL' || costRange !== 'ALL') && (
               <button

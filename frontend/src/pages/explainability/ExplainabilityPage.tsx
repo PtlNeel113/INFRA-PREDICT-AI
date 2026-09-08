@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   Sparkles,
@@ -14,22 +14,103 @@ import {
   BarChart2,
   Compass,
 } from 'lucide-react';
-import { MOCK_PROJECTS } from '../../data/projectsData';
+import { useProjectStore } from '../../store/projectStore';
 import { MOCK_EXPLAINABILITY, ExplainabilityAnalysis } from '../../data/explainabilityData';
 import { HealthScoreBadge } from '../../components/ui/HealthScoreBadge';
+import { InfraProject } from '../../types/projects';
+
+// Helper to build a dynamic SHAP profile for any project
+const generateDynamicExplainability = (p: InfraProject): ExplainabilityAnalysis => {
+  const progressGap = p.expectedProgress - p.currentPhysicalProgress;
+  const overrun = p.predictedCostOverrunCr;
+  const isHighRisk = p.riskLevel === 'CRITICAL' || p.riskLevel === 'HIGH';
+
+  return {
+    projectId: p.id,
+    projectCode: p.code,
+    projectName: p.name,
+    healthScore: p.healthScore,
+    riskSeverity: (p.riskLevel === 'CRITICAL' ? 'CRITICAL' : p.riskLevel === 'HIGH' ? 'HIGH' : p.riskLevel === 'MEDIUM' ? 'WATCH' : 'STABLE') as 'CRITICAL' | 'HIGH' | 'WATCH' | 'STABLE',
+    modelConfidencePercent: 91.5,
+    baseBaselineScore: 50,
+    aiSummary: `Explainability analysis for ${p.name}: primary risk factor is ${p.primaryRiskDriver} with ${progressGap > 0 ? `a schedule deficit of ${progressGap}%` : 'nominal progress'} and estimated cost escalation of ₹${overrun} Cr.`,
+    factors: [
+      {
+        id: 'f1',
+        name: p.primaryRiskDriver,
+        category: 'Regulatory',
+        contributionScore: isHighRisk ? 22.4 : 12.1,
+        importancePercent: 35.0,
+        impactType: 'POSITIVE_RISK',
+        description: `Primary operational impedance identified during onboarding: "${p.primaryRiskDriver}".`,
+        evidence: `Direct project intake assessment under ${p.implementingAgency}.`,
+        mitigationSuggestion: p.recommendedActions?.[0] || 'Convene urgent inter-ministerial taskforce.',
+      },
+      {
+        id: 'f2',
+        name: progressGap > 0 ? `Schedule Execution Lag (${progressGap}% Deficit)` : 'Baseline Pace Maintenance',
+        category: 'Schedule',
+        contributionScore: progressGap > 5 ? 18.2 : 7.5,
+        importancePercent: 28.0,
+        impactType: progressGap > 0 ? 'POSITIVE_RISK' : 'STABILIZING',
+        description: `Physical completion is ${p.currentPhysicalProgress}% against DPR expected target of ${p.expectedProgress}%.`,
+        evidence: `DPR milestone delta tracking.`,
+        mitigationSuggestion: p.recommendedActions?.[1] || 'Compress remaining critical path milestones with round-the-clock shift staffing.',
+      },
+      {
+        id: 'f3',
+        name: overrun > 0 ? `Anticipated Cost Escalation (+₹${overrun} Cr)` : 'Budgetary Containment',
+        category: 'Cost',
+        contributionScore: overrun > 0 ? 14.6 : -8.4,
+        importancePercent: 22.0,
+        impactType: overrun > 0 ? 'POSITIVE_RISK' : 'STABILIZING',
+        description: `Sanctioned baseline ₹${p.sanctionedCostCr.toLocaleString()} Cr vs current forecast ₹${p.forecastCostCr.toLocaleString()} Cr.`,
+        evidence: `Quarterly revised expenditure reconciliation.`,
+        mitigationSuggestion: p.recommendedActions?.[2] || 'Audit contractor billing claims and execute value-engineering review.',
+      },
+      {
+        id: 'f4',
+        name: 'Milestone Tracking Governance',
+        category: 'Contractor',
+        contributionScore: -9.5,
+        importancePercent: 8.5,
+        impactType: 'STABILIZING',
+        description: `${p.keyMilestones.length} active deliverable gates monitored with digital telemetry verification.`,
+        evidence: `${p.keyMilestones.filter((m) => m.status === 'COMPLETED').length} milestones completed.`,
+        mitigationSuggestion: 'Maintain bi-weekly PMO inspection rhythm.',
+      },
+      {
+        id: 'f5',
+        name: 'Implementing Agency Statutory Backing',
+        category: 'Regulatory',
+        contributionScore: -6.2,
+        importancePercent: 6.5,
+        impactType: 'STABILIZING',
+        description: `Direct supervision by ${p.implementingAgency}.`,
+        evidence: `Institutional nodal framework.`,
+        mitigationSuggestion: 'Leverage state nodal officers for fast-track statutory clearances.',
+      },
+    ],
+  };
+};
 
 export const ExplainabilityPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const projects = useProjectStore((s) => s.projects);
 
-  const initialProjectId = searchParams.get('project') || 'PRJ-MORT-891';
+  const initialProjectId = searchParams.get('project') || (projects[0]?.id || 'PRJ-MORT-891');
   const [selectedProjectId, setSelectedProjectId] = useState<string>(initialProjectId);
 
   const selectedProject =
-    MOCK_PROJECTS.find((p) => p.id === selectedProjectId) || MOCK_PROJECTS[0];
+    projects.find((p) => p.id === selectedProjectId || p.code === selectedProjectId) || projects[0];
 
-  const analysis: ExplainabilityAnalysis =
-    MOCK_EXPLAINABILITY[selectedProjectId] || MOCK_EXPLAINABILITY['PRJ-MORT-891'];
+  const analysis: ExplainabilityAnalysis = useMemo(() => {
+    if (MOCK_EXPLAINABILITY[selectedProject.id]) {
+      return MOCK_EXPLAINABILITY[selectedProject.id];
+    }
+    return generateDynamicExplainability(selectedProject);
+  }, [selectedProject]);
 
   const positiveFactors = analysis.factors.filter((f) => f.impactType === 'POSITIVE_RISK');
   const stabilizingFactors = analysis.factors.filter((f) => f.impactType === 'STABILIZING');
@@ -54,11 +135,11 @@ export const ExplainabilityPage: React.FC = () => {
           <label className="text-xs font-semibold text-slate-600 whitespace-nowrap">Select Target Project:</label>
           <select
             id="explainability-project-select"
-            value={selectedProjectId}
+            value={selectedProject.id}
             onChange={(e) => setSelectedProjectId(e.target.value)}
             className="px-3 py-2 text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-xs truncate"
           >
-            {MOCK_PROJECTS.map((p) => (
+            {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.code} - {p.name}
               </option>
