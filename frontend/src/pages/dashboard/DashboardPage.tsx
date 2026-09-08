@@ -129,12 +129,12 @@ export const DashboardPage: React.FC = () => {
 
         <div className="relative z-10 space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950 px-2.5 py-0.5 rounded-full border border-indigo-200 dark:border-indigo-800">
-              Demo Environment
+            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+              Operational Intelligence Active
             </span>
             <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>Prototype Dataset</span>
+              <span>Grounded Decision System</span>
             </span>
           </div>
 
