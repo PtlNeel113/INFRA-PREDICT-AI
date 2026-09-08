@@ -1,8 +1,0 @@
-{
-  "name": "INFRA-PREDICT AI",
-  "description": "AI-Powered Predictive & Prescriptive Intelligence Layer for PAIMANA. From Infrastructure Monitoring to Predictive Action.",
-  "requestFramePermissions": [],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
-}
