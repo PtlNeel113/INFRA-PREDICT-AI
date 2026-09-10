@@ -1,0 +1,13 @@
+# Database files (exclude from git)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Backups
+*_backup_*.db
+backup_*.sql
+
+# But keep the README
+!README.md
+!.gitignore
