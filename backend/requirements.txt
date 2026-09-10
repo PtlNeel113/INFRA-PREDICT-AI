@@ -13,10 +13,12 @@ psycopg2-binary==2.9.9
 pandas==2.2.0
 openpyxl==3.1.2
 xlrd==2.0.1
+scikit-learn
 
 # Async & HTTP
 httpx==0.26.0
 aiofiles==23.2.1
+python-multipart
 
 # Testing
 pytest==7.4.4
