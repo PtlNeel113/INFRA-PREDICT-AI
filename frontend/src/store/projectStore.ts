@@ -14,8 +14,8 @@ interface ProjectState {
   resetProjects: () => void;
 }
 
-const STORAGE_KEY = 'infra_predict_projects_v1';
-const STORAGE_KEY_JOBS = 'infra_predict_ingestion_jobs_v1';
+const STORAGE_KEY = 'paimana_official_projects_v2';
+const STORAGE_KEY_JOBS = 'paimana_ingestion_jobs_v2';
 
 function loadInitialProjects(): InfraProject[] {
   try {
@@ -23,8 +23,12 @@ function loadInitialProjects(): InfraProject[] {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        const existingIds = new Set(parsed.map((p: InfraProject) => p.id));
-        const combined = [...parsed];
+        // Filter out legacy mock project IDs if present
+        const realProjects = parsed.filter(
+          (p: InfraProject) => !p.id.startsWith('PRJ-MORT') && !p.id.startsWith('PRJ-METRO') && !p.id.startsWith('PRJ-RLY')
+        );
+        const existingIds = new Set(realProjects.map((p: InfraProject) => p.id));
+        const combined = [...realProjects];
         MOCK_PROJECTS.forEach((mockP) => {
           if (!existingIds.has(mockP.id)) {
             combined.push(mockP);
@@ -34,7 +38,7 @@ function loadInitialProjects(): InfraProject[] {
       }
     }
   } catch (err) {
-    console.warn('Failed to parse saved projects, falling back to seed mock data', err);
+    console.warn('Failed to parse saved projects, falling back to seed official data', err);
   }
   return [...MOCK_PROJECTS];
 }

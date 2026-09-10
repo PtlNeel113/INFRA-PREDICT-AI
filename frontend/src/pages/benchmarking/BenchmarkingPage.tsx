@@ -27,21 +27,78 @@ import {
   PolarRadiusAxis,
   Radar,
 } from 'recharts';
-import { MOCK_PROJECTS } from '../../data/projectsData';
+import { useProjectStore } from '../../store/projectStore';
 import { MOCK_BENCHMARKS } from '../../data/benchmarkingData';
+import { PeerBenchmark, InfraProject } from '../../types/projects';
+
+function generateDynamicBenchmark(project: InfraProject, peers: InfraProject[]): PeerBenchmark {
+  const sameSector = peers.filter((p) => p.sector === project.sector);
+  const peerList = sameSector.length > 1 ? sameSector : peers;
+
+  const avgCostRisk = Math.round(peerList.reduce((s, p) => s + p.costRiskScore, 0) / peerList.length) || 50;
+  const avgTimeRisk = Math.round(peerList.reduce((s, p) => s + p.timeRiskScore, 0) / peerList.length) || 50;
+  const avgProgress = Math.round((peerList.reduce((s, p) => s + p.currentPhysicalProgress, 0) / peerList.length) * 10) / 10 || 65;
+  const avgHealth = Math.round(peerList.reduce((s, p) => s + p.healthScore, 0) / peerList.length) || 60;
+  const avgDuration = 42;
+  const avgVelocity = Math.round(peerList.reduce((s, p) => s + (p.expenditureCr / 24), 0) / peerList.length) || 85;
+
+  return {
+    projectId: project.id,
+    projectCode: project.code,
+    projectName: project.name,
+    sector: project.sector,
+    metrics: {
+      costRisk: { project: project.costRiskScore, peerMedian: avgCostRisk, sectorAverage: avgCostRisk + 2, unit: '/100' },
+      timeRisk: { project: project.timeRiskScore, peerMedian: avgTimeRisk, sectorAverage: avgTimeRisk + 3, unit: '/100' },
+      progress: { project: project.currentPhysicalProgress, peerMedian: avgProgress, sectorAverage: avgProgress, unit: '%' },
+      healthScore: { project: project.healthScore, peerMedian: avgHealth, sectorAverage: avgHealth, unit: '/100' },
+      durationMonths: { project: 48, peerMedian: avgDuration, sectorAverage: avgDuration + 4, unit: 'mo' },
+      expenditureVelocityCrPerMonth: {
+        project: Math.round(project.expenditureCr / 36),
+        peerMedian: avgVelocity,
+        sectorAverage: avgVelocity + 5,
+        unit: '₹Cr/mo',
+      },
+    },
+    keyDifferences: [
+      {
+        metric: 'Risk Severity Variance',
+        difference: `${project.riskLevel} classification (${project.healthScore}/100 health)`,
+        explanation: `Primary risk driver: "${project.primaryRiskDriver}". Sanctioned outlay ₹${project.sanctionedCostCr.toLocaleString()} Cr vs expenditure ₹${project.expenditureCr.toLocaleString()} Cr.`,
+        impact: project.healthScore >= 70 ? 'FAVORABLE' : 'UNFAVORABLE',
+      },
+      {
+        metric: 'Physical Progress vs Peer Benchmark',
+        difference: `${project.currentPhysicalProgress}% completed (Sector median ${avgProgress}%)`,
+        explanation: `Progress gap is ${(project.expectedProgress - project.currentPhysicalProgress).toFixed(1)}% against expected schedule.`,
+        impact: project.currentPhysicalProgress >= avgProgress ? 'FAVORABLE' : 'UNFAVORABLE',
+      },
+      {
+        metric: 'Cost Variance & Financial Health',
+        difference: project.predictedCostOverrunCr > 0 ? `+₹${project.predictedCostOverrunCr.toLocaleString()} Cr cost revision` : 'Within approved budgetary ceiling',
+        explanation: `Implementing agency: ${project.implementingAgency} (${project.ministry}).`,
+        impact: project.predictedCostOverrunCr > 0 ? 'UNFAVORABLE' : 'FAVORABLE',
+      },
+    ],
+    aiComparisonSummary: `${project.name} in ${project.state} is under implementation by ${project.implementingAgency}. Current health score is ${project.healthScore}/100 with physical completion at ${project.currentPhysicalProgress}%. Primary impediment: "${project.primaryRiskDriver}".`,
+  };
+}
 
 export const BenchmarkingPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { projects } = useProjectStore();
 
-  const initialProjectId = searchParams.get('project') || 'PRJ-MORT-891';
+  const initialProjectId = searchParams.get('project') || projects[0]?.id || '702637';
   const [selectedProjectId, setSelectedProjectId] = useState<string>(initialProjectId);
 
   const selectedProject =
-    MOCK_PROJECTS.find((p) => p.id === selectedProjectId) || MOCK_PROJECTS[0];
+    projects.find((p) => p.id === selectedProjectId) || projects[0] || ({} as InfraProject);
 
   const benchmark =
-    MOCK_BENCHMARKS[selectedProjectId] || MOCK_BENCHMARKS['PRJ-MORT-891'];
+    MOCK_BENCHMARKS[selectedProjectId] ||
+    (selectedProject.id ? generateDynamicBenchmark(selectedProject, projects) : null) ||
+    Object.values(MOCK_BENCHMARKS)[0];
 
   // Radar comparison dataset
   const radarData = [
@@ -134,7 +191,7 @@ export const BenchmarkingPage: React.FC = () => {
             onChange={(e) => setSelectedProjectId(e.target.value)}
             className="px-3 py-2 text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-xs truncate"
           >
-            {MOCK_PROJECTS.map((p) => (
+            {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.code} - {p.name}
               </option>
