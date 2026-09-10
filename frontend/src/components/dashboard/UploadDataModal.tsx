@@ -75,7 +75,7 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
 
   // Query authentic backend sync status on mount
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/sync/status')
+    fetch('/api/sync/status')
       .then((res) => res.json())
       .then((data) => setLiveSyncStatus(data))
       .catch(() => {
@@ -166,7 +166,7 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
         formData.append('user', user?.fullName || 'Dr. Vikram Malhotra');
         formData.append('column_mapping', JSON.stringify(columnMappings));
 
-        const res = await fetch('http://127.0.0.1:8000/api/ingest/commit', {
+        const res = await fetch('/api/ingest/commit', {
           method: 'POST',
           body: formData,
         });

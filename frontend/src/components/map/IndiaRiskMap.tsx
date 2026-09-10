@@ -1,520 +1,455 @@
-import React, { useState, useMemo } from 'react';
-import { motion } from 'motion/react';
-import { ProjectGeoData, MapMode, StateGeoSummary } from '../../types/map';
-import { INDIA_BOUNDARY_PATH, INDIA_STATE_COORDINATES } from '../../data/indiaGeoData';
-import { STATE_GEO_SUMMARIES } from '../../data/mapData';
-import { ProjectMarker } from './ProjectMarker';
-import { ProjectTooltip } from './ProjectTooltip';
+import React, { useState, useMemo, useRef } from 'react';
+import india from '@svg-maps/india';
+import { StateGeoSummary, ReportingPeriod } from '../../types/map';
+import { PAIMANA_STATE_METADATA } from '../../data/paimanaData';
+import { PaimanaDataService } from '../../data/paimanaDataService';
+import {
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  AlertCircle,
+  TrendingUp,
+  X,
+  Layers,
+  ChevronRight,
+  ShieldAlert,
+} from 'lucide-react';
 
 interface IndiaRiskMapProps {
-  projects: ProjectGeoData[];
-  mode: MapMode;
-  selectedState: StateGeoSummary | null;
-  selectedProject: ProjectGeoData | null;
-  hoveredProject: ProjectGeoData | null;
-  onStateSelect: (state: StateGeoSummary) => void;
-  onProjectSelect: (project: ProjectGeoData) => void;
-  onProjectHover: (project: ProjectGeoData | null) => void;
+  stateSummaries: Map<string, StateGeoSummary>;
+  selectedStateId: string | null;
+  onSelectState: (state: StateGeoSummary | null) => void;
+  reportingPeriod: ReportingPeriod;
+  activeRiskFilter?: string;
+  onSelectRiskFilter?: (filter: string) => void;
+  className?: string;
+}
+
+interface HoveredStateData {
+  meta: typeof PAIMANA_STATE_METADATA[0];
+  summary?: StateGeoSummary;
+  x: number;
+  y: number;
 }
 
 export const IndiaRiskMap: React.FC<IndiaRiskMapProps> = ({
-  projects,
-  mode,
-  selectedState,
-  selectedProject,
-  hoveredProject,
-  onStateSelect,
-  onProjectSelect,
-  onProjectHover,
+  stateSummaries,
+  selectedStateId,
+  onSelectState,
+  reportingPeriod,
+  activeRiskFilter = 'ALL',
+  className = '',
 }) => {
-  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
-  const [hoveredStateCoord, setHoveredStateCoord] = useState<typeof INDIA_STATE_COORDINATES[0] | null>(null);
-  const [stateTooltipPos, setStateTooltipPos] = useState<{ x: number; y: number } | null>(null);
-  
-  // Calculate project score based on mode
-  const getProjectScore = (project: ProjectGeoData): number => {
-    switch (mode) {
-      case 'COST_RISK':
-        return project.costRiskScore;
-      case 'TIME_RISK':
-        return project.timeRiskScore;
-      case 'EXECUTION_RISK':
-        return project.executionRiskScore;
-      case 'RISK':
-      case 'PORTFOLIO':
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [hoveredState, setHoveredState] = useState<HoveredStateData | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const [startPan, setStartPan] = useState({ x: 0, y: 0 });
+
+  // Map state metadata for fast O(1) lookup
+  const metaMap = useMemo(() => {
+    const map = new Map<string, typeof PAIMANA_STATE_METADATA[0]>();
+    PAIMANA_STATE_METADATA.forEach((m) => {
+      map.set(m.id.toLowerCase(), m);
+    });
+    return map;
+  }, []);
+
+  // Determine state fill color based on risk level
+  const getStateFill = (summary?: StateGeoSummary, isHovered = false, isSelected = false): string => {
+    if (isSelected) {
+      return '#1E40AF'; // Deep royal blue focus for selected
+    }
+
+    if (!summary || summary.riskSeverity === 'NO_DATA' || summary.projectCount === 0) {
+      return isHovered ? '#CBD5E1' : '#E2E8F0';
+    }
+
+    switch (summary.riskSeverity) {
+      case 'CRITICAL':
+        return isHovered ? '#B91C1C' : '#DC2626';
+      case 'HIGH':
+        return isHovered ? '#C2410C' : '#EA580C';
+      case 'WATCH':
+        return isHovered ? '#B45309' : '#D97706';
+      case 'STABLE':
+        return isHovered ? '#15803D' : '#16A34A';
       default:
-        return 100 - project.healthScore;
+        return isHovered ? '#CBD5E1' : '#E2E8F0';
     }
   };
-  
-  // Convert lat/lng to SVG coordinates
-  const latLngToSVG = (lat: number, lng: number): { x: number; y: number } => {
-    // India bounding box (approximate)
-    const minLat = 6;
-    const maxLat = 37;
-    const minLng = 68;
-    const maxLng = 98;
-    
-    const svgWidth = 600;
-    const svgHeight = 700;
-    
-    const x = ((lng - minLng) / (maxLng - minLng)) * svgWidth;
-    const y = ((maxLat - lat) / (maxLat - minLat)) * svgHeight;
-    
-    return { x, y };
+
+  const getStateStroke = (summary?: StateGeoSummary, isHovered = false, isSelected = false): string => {
+    if (isSelected) return '#FFFFFF';
+    if (isHovered) return '#0B1F3A';
+    return '#FFFFFF';
   };
-  
-  // Cluster nearby projects
-  const projectClusters = useMemo(() => {
-    const clusters: { projects: ProjectGeoData[]; x: number; y: number }[] = [];
-    const processed = new Set<string>();
-    const clusterRadius = 15; // pixels
-    
-    projects.forEach(project => {
-      if (processed.has(project.id)) return;
-      
-      const pos = latLngToSVG(project.lat, project.lng);
-      const nearbyProjects = projects.filter(p => {
-        if (processed.has(p.id)) return false;
-        const pPos = latLngToSVG(p.lat, p.lng);
-        const distance = Math.sqrt(Math.pow(pos.x - pPos.x, 2) + Math.pow(pos.y - pPos.y, 2));
-        return distance < clusterRadius;
+
+  const getStateStrokeWidth = (isSelected = false, isHovered = false): number => {
+    if (isSelected) return 2.8;
+    if (isHovered) return 2.0;
+    return 0.85;
+  };
+
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 0.3, 2.5));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev - 0.3, 0.8));
+  };
+
+  const handleResetZoom = () => {
+    setZoomLevel(1);
+    setPanOffset({ x: 0, y: 0 });
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return; // Only primary mouse button
+    setIsPanning(true);
+    setStartPan({ x: e.clientX - panOffset.x, y: e.clientY - panOffset.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isPanning) {
+      setPanOffset({
+        x: e.clientX - startPan.x,
+        y: e.clientY - startPan.y,
       });
-      
-      nearbyProjects.forEach(p => processed.add(p.id));
-      
-      if (nearbyProjects.length > 0) {
-        const avgX = nearbyProjects.reduce((sum, p) => sum + latLngToSVG(p.lat, p.lng).x, 0) / nearbyProjects.length;
-        const avgY = nearbyProjects.reduce((sum, p) => sum + latLngToSVG(p.lat, p.lng).y, 0) / nearbyProjects.length;
-        
-        clusters.push({
-          projects: nearbyProjects,
-          x: avgX,
-          y: avgY,
-        });
-      }
-    });
-    
-    return clusters;
-  }, [projects]);
-  
-  const handleProjectClick = (project: ProjectGeoData, event: React.MouseEvent) => {
-    event.stopPropagation();
-    onProjectSelect(project);
-    
-    const rect = event.currentTarget.getBoundingClientRect();
-    setTooltipPosition({
-      x: rect.left + rect.width / 2,
-      y: rect.top,
-    });
-  };
-  
-  const handleProjectMouseEnter = (project: ProjectGeoData, event: React.MouseEvent) => {
-    onProjectHover(project);
-    
-    const rect = event.currentTarget.getBoundingClientRect();
-    setTooltipPosition({
-      x: rect.left + rect.width / 2,
-      y: rect.top,
-    });
-  };
-  
-  const handleProjectMouseLeave = () => {
-    onProjectHover(null);
-    if (!selectedProject) {
-      setTooltipPosition(null);
     }
   };
-  
-  const handleStateHover = (stateCoord: typeof INDIA_STATE_COORDINATES[0], event: React.MouseEvent) => {
-    setHoveredStateCoord(stateCoord);
-    setStateTooltipPos({ x: event.clientX, y: event.clientY });
+
+  const handleMouseUp = () => {
+    setIsPanning(false);
   };
-  
-  const handleStateLeave = () => {
-    setHoveredStateCoord(null);
-    setStateTooltipPos(null);
-  };
-  
-  const handleStateClick = (stateName: string) => {
-    const stateSummary = STATE_GEO_SUMMARIES.find(s => s.name === stateName);
-    if (stateSummary) {
-      onStateSelect(stateSummary);
-    }
-  };
-  
-  // Map state coordinates to SVG positions
-  const stateMarkers = useMemo(() => {
-    return INDIA_STATE_COORDINATES.map(stateCoord => {
-      const pos = latLngToSVG(stateCoord.lat, stateCoord.lng);
-      const stateSummary = STATE_GEO_SUMMARIES.find(s => s.name === stateCoord.name);
-      const stateProjects = projects.filter(p => p.state === stateCoord.name);
-      
-      return {
-        ...stateCoord,
-        ...pos,
-        summary: stateSummary,
-        projectCount: stateProjects.length,
-        avgHealth: stateProjects.length > 0 
-          ? Math.round(stateProjects.reduce((sum, p) => sum + p.healthScore, 0) / stateProjects.length)
-          : 100,
-      };
-    }).filter(s => s.projectCount > 0);
-  }, [projects]);
+
+  // Find the selected state summary
+  const selectedSummary = selectedStateId ? stateSummaries.get(selectedStateId.toLowerCase()) : null;
 
   return (
-    <div className="relative w-full h-full bg-gradient-to-br from-[#0B1F3A] via-[#0F2847] to-[#0B1F3A]">
-      {/* Subtle grid pattern */}
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#60A5FA_1px,transparent_1px)] [background-size:20px_20px]" />
-      
-      {/* Main SVG Map */}
-      <svg
-        viewBox="0 0 600 700"
-        className="w-full h-full"
-        style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.2))' }}
-      >
-        {/* Definitions for gradients and effects */}
-        <defs>
-          <linearGradient id="indiaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#1E40AF" stopOpacity="0.3" />
-            <stop offset="50%" stopColor="#1E3A8A" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#1E293B" stopOpacity="0.3" />
-          </linearGradient>
-          
-          <filter id="mapShadow">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-            <feOffset dx="0" dy="4" result="offsetblur" />
-            <feComponentTransfer>
-              <feFuncA type="linear" slope="0.3" />
-            </feComponentTransfer>
-            <feMerge>
-              <feMergeNode />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          
-          <radialGradient id="glowGradient">
-            <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        
-        {/* India Base Map with 3D effect */}
-        <g filter="url(#mapShadow)">
-          {/* Shadow layer for depth */}
-          <path
-            d={INDIA_BOUNDARY_PATH}
-            fill="#0F172A"
-            opacity="0.4"
-            transform="translate(2, 4)"
-          />
-          
-          {/* Main India outline */}
-          <path
-            d={INDIA_BOUNDARY_PATH}
-            fill="url(#indiaGradient)"
-            stroke="#334155"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            className="transition-all duration-300"
-          />
-          
-          {/* Highlight overlay */}
-          <path
-            d={INDIA_BOUNDARY_PATH}
-            fill="url(#glowGradient)"
-            opacity="0.15"
-            pointerEvents="none"
-          />
-          
-          {/* Border glow */}
-          <path
-            d={INDIA_BOUNDARY_PATH}
-            fill="none"
-            stroke="#60A5FA"
-            strokeWidth="1"
-            opacity="0.3"
-            pointerEvents="none"
-          />
-        </g>
-        
-        {/* State Markers (Interactive Hotspots) */}
-        <g>
-          {stateMarkers.map((state) => {
-            const isHovered = hoveredStateCoord?.name === state.name;
-            const isSelected = selectedState?.name === state.name;
-            
-            return (
-              <g 
-                key={state.name}
-                className="cursor-pointer group"
-                onMouseEnter={(e) => handleStateHover(state, e as any)}
-                onMouseLeave={handleStateLeave}
-                onClick={() => handleStateClick(state.name)}
-              >
-                {/* State Glow Effect */}
-                {(isHovered || isSelected) && (
-                  <circle
-                    cx={state.x}
-                    cy={state.y}
-                    r={isSelected ? 25 : 20}
-                    fill="url(#glowGradient)"
-                    opacity="0.5"
-                  />
-                )}
-                
-                {/* State Circle */}
-                <circle
-                  cx={state.x}
-                  cy={state.y}
-                  r={isSelected ? 12 : isHovered ? 10 : 8}
-                  fill={
-                    state.avgHealth < 40 ? '#DC2626' :
-                    state.avgHealth < 60 ? '#EA580C' :
-                    state.avgHealth < 75 ? '#D97706' :
-                    '#15803D'
-                  }
-                  stroke={isSelected ? '#FFFFFF' : isHovered ? '#60A5FA' : '#1E3A8A'}
-                  strokeWidth={isSelected ? 3 : 2}
-                  opacity="0.9"
-                  className="transition-all duration-200"
-                />
-                
-                {/* State Code Label */}
-                <text
-                  x={state.x}
-                  y={state.y}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="#FFFFFF"
-                  fontSize={isSelected ? 7 : 6}
-                  fontWeight="bold"
-                  pointerEvents="none"
-                  className="font-mono"
-                >
-                  {state.shortCode}
-                </text>
-                
-                {/* Project Count Badge */}
-                <g transform={`translate(${state.x + 8}, ${state.y - 8})`}>
-                  <circle
-                    r={6}
-                    fill="#155EEF"
-                    stroke="#FFFFFF"
-                    strokeWidth="1.5"
-                    className={isHovered || isSelected ? 'opacity-100' : 'opacity-80'}
-                  />
-                  <text
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill="#FFFFFF"
-                    fontSize="5"
-                    fontWeight="bold"
-                    pointerEvents="none"
-                  >
-                    {state.projectCount}
-                  </text>
-                </g>
-              </g>
-            );
-          })}
-        </g>
-        
-        {/* Project Clusters and Markers */}
-        <g>
-          {projectClusters.map((cluster, index) => {
-            if (cluster.projects.length === 1) {
-              // Single project
-              const project = cluster.projects[0];
-              return (
-                <ProjectMarker
-                  key={project.id}
-                  project={project}
-                  x={cluster.x}
-                  y={cluster.y}
-                  mode={mode}
-                  score={getProjectScore(project)}
-                  isSelected={selectedProject?.id === project.id}
-                  isHovered={hoveredProject?.id === project.id}
-                  onClick={handleProjectClick}
-                  onMouseEnter={handleProjectMouseEnter}
-                  onMouseLeave={handleProjectMouseLeave}
-                />
-              );
-            } else {
-              // Cluster of projects
-              const avgScore = cluster.projects.reduce((sum, p) => sum + getProjectScore(p), 0) / cluster.projects.length;
-              const dominantRisk = cluster.projects.reduce((max, p) => 
-                getProjectScore(p) > getProjectScore(max) ? p : max
-              );
-              
-              return (
-                <g key={`cluster-${index}`}>
-                  {/* Cluster glow */}
-                  <circle
-                    cx={cluster.x}
-                    cy={cluster.y}
-                    r={12 + Math.min(cluster.projects.length, 10)}
-                    fill={`url(#glowGradient)`}
-                    opacity="0.4"
-                  />
-                  
-                  {/* Cluster circle */}
-                  <circle
-                    cx={cluster.x}
-                    cy={cluster.y}
-                    r={8 + Math.min(cluster.projects.length, 5)}
-                    fill={dominantRisk.riskLevel === 'CRITICAL' ? '#DC2626' :
-                          dominantRisk.riskLevel === 'HIGH' ? '#EA580C' :
-                          dominantRisk.riskLevel === 'WATCH' ? '#D97706' : '#15803D'}
-                    stroke="#FFFFFF"
-                    strokeWidth="2"
-                    opacity="0.9"
-                    className="cursor-pointer hover:opacity-100 transition-opacity"
-                    onClick={(e) => handleProjectClick(cluster.projects[0], e as any)}
-                    onMouseEnter={(e) => handleProjectMouseEnter(cluster.projects[0], e as any)}
-                    onMouseLeave={handleProjectMouseLeave}
-                  />
-                  
-                  {/* Cluster count */}
-                  <text
-                    x={cluster.x}
-                    y={cluster.y}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill="#FFFFFF"
-                    fontSize="10"
-                    fontWeight="bold"
-                    pointerEvents="none"
-                  >
-                    {cluster.projects.length}
-                  </text>
-                </g>
-              );
-            }
-          })}
-        </g>
-      </svg>
-      
-      {/* Project Tooltip */}
-      {(hoveredProject || selectedProject) && tooltipPosition && (
-        <ProjectTooltip
-          project={hoveredProject || selectedProject!}
-          position={tooltipPosition}
-          mode={mode}
-          onClose={() => {
-            onProjectHover(null);
-            onProjectSelect(null as any);
-            setTooltipPosition(null);
-          }}
-        />
+    <div
+      ref={containerRef}
+      className={`relative w-full h-[520px] sm:h-[600px] lg:h-[660px] bg-slate-50 dark:bg-[#091524] rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex items-center justify-center select-none ${className}`}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={() => {
+        handleMouseUp();
+        setHoveredState(null);
+      }}
+    >
+      {/* Background cartographic grid */}
+      <div className="absolute inset-0 bg-[radial-gradient(#94A3B8_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none" />
+
+      {/* Floating State Info Header (if a state is selected) */}
+      {selectedSummary && (
+        <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-white/95 dark:bg-[#0F1D2E]/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 shadow-md">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#155EEF] animate-pulse" />
+            <span className="text-xs font-black text-[#0B1F3A] dark:text-white uppercase tracking-wider">
+              Selected: {selectedSummary.name}
+            </span>
+            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
+              ({selectedSummary.projectCount} projects)
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => onSelectState(null)}
+            className="ml-2 p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors cursor-pointer"
+            title="Deselect state"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
       )}
-      
-      {/* State Hover Tooltip */}
-      {hoveredStateCoord && stateTooltipPos && (
-        <div
-          className="fixed z-50 pointer-events-none"
+
+      {/* Map Zoom & Pan Control Bar */}
+      <div className="absolute top-4 right-4 z-20 flex flex-col gap-1.5 bg-white/95 dark:bg-[#0F1D2E]/95 backdrop-blur-md p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-md">
+        <button
+          type="button"
+          onClick={handleZoomIn}
+          title="Zoom in"
+          className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+        >
+          <ZoomIn className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={handleZoomOut}
+          title="Zoom out"
+          className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+        >
+          <ZoomOut className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={handleResetZoom}
+          title="Reset map view"
+          className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+        >
+          <Maximize2 className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Main Interactive India SVG Canvas */}
+      <div
+        className="w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing transition-transform duration-75"
+        onMouseDown={handleMouseDown}
+      >
+        <svg
+          viewBox={india.viewBox || '0 0 612 696'}
+          className="w-full h-full max-h-[92%] object-contain filter drop-shadow-md"
           style={{
-            left: stateTooltipPos.x,
-            top: stateTooltipPos.y,
-            transform: 'translate(-50%, -100%) translateY(-12px)',
+            transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoomLevel})`,
+            transformOrigin: 'center center',
           }}
         >
-          <motion.div
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-2xl p-4 min-w-[280px]"
-          >
-            <div className="flex items-start justify-between mb-3">
+          {/* Subtle Outer Boundary Drop Shadow */}
+          <defs>
+            <filter id="indiaShadow" x="-5%" y="-5%" width="115%" height="115%">
+              <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.12" />
+            </filter>
+          </defs>
+
+          {/* Render All 36 State Paths */}
+          <g filter="url(#indiaShadow)">
+            {india.locations.map((loc: { id: string; name: string; path: string }) => {
+              const locId = loc.id.toLowerCase();
+              const meta = metaMap.get(locId) || {
+                id: loc.id,
+                name: loc.name,
+                shortCode: loc.id.toUpperCase(),
+                aliases: [],
+                cx: 0,
+                cy: 0,
+              };
+
+              const summary = stateSummaries.get(locId);
+              const isSelected = selectedStateId?.toLowerCase() === locId;
+              const isHovered = hoveredState?.meta.id.toLowerCase() === locId;
+
+              // If risk filter is active (e.g. only show CRITICAL), dim or keep normal
+              const matchesFilter =
+                activeRiskFilter === 'ALL' ||
+                (summary && summary.riskSeverity === activeRiskFilter);
+
+              const fillColor = matchesFilter
+                ? getStateFill(summary, isHovered, isSelected)
+                : '#CBD5E1';
+
+              const opacity = matchesFilter ? 1 : 0.35;
+
+              return (
+                <path
+                  key={loc.id}
+                  d={loc.path}
+                  id={`state-${loc.id}`}
+                  fill={fillColor}
+                  opacity={opacity}
+                  stroke={getStateStroke(summary, isHovered, isSelected)}
+                  strokeWidth={getStateStrokeWidth(isSelected, isHovered)}
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  className="transition-colors duration-150 cursor-pointer outline-none"
+                  onMouseEnter={(e) => {
+                    const rect = containerRef.current?.getBoundingClientRect();
+                    setHoveredState({
+                      meta,
+                      summary,
+                      x: rect ? e.clientX - rect.left : e.clientX,
+                      y: rect ? e.clientY - rect.top : e.clientY,
+                    });
+                  }}
+                  onMouseMove={(e) => {
+                    const rect = containerRef.current?.getBoundingClientRect();
+                    setHoveredState((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            x: rect ? e.clientX - rect.left : e.clientX,
+                            y: rect ? e.clientY - rect.top : e.clientY,
+                          }
+                        : null
+                    );
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredState(null);
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (isSelected) {
+                      onSelectState(null);
+                    } else if (summary) {
+                      onSelectState(summary);
+                    } else {
+                      // Fallback summary for state with zero projects
+                      onSelectState({
+                        name: meta.name,
+                        shortCode: meta.shortCode,
+                        mapId: meta.id,
+                        projectCount: 0,
+                        criticalCount: 0,
+                        highCount: 0,
+                        watchCount: 0,
+                        stableCount: 0,
+                        portfolioHealth: 100,
+                        riskTrend: 0,
+                        riskSeverity: 'NO_DATA',
+                        topProjects: [],
+                      });
+                    }
+                  }}
+                />
+              );
+            })}
+          </g>
+
+          {/* State Short Code Typography Centroids (Only for states with cx/cy & projects) */}
+          <g className="pointer-events-none select-none">
+            {PAIMANA_STATE_METADATA.map((meta) => {
+              const summary = stateSummaries.get(meta.id);
+              if (!summary || summary.projectCount === 0 || meta.cx === 0) return null;
+
+              const isSelected = selectedStateId?.toLowerCase() === meta.id;
+              const matchesFilter =
+                activeRiskFilter === 'ALL' || summary.riskSeverity === activeRiskFilter;
+
+              if (!matchesFilter) return null;
+
+              return (
+                <g key={`label-${meta.id}`} transform={`translate(${meta.cx}, ${meta.cy})`}>
+                  {/* Subtle contrast badge backing */}
+                  <rect
+                    x="-8"
+                    y="-5.5"
+                    width="16"
+                    height="11"
+                    rx="3"
+                    fill={isSelected ? '#0B1F3A' : 'rgba(15, 23, 42, 0.72)'}
+                    stroke={isSelected ? '#38BDF8' : '#FFFFFF'}
+                    strokeWidth={isSelected ? '0.8' : '0.4'}
+                  />
+                  <text
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fontSize="6.2"
+                    fontWeight="800"
+                    fill="#FFFFFF"
+                    fontFamily="monospace"
+                  >
+                    {meta.shortCode}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        </svg>
+      </div>
+
+      {/* Floating State Intelligence Tooltip */}
+      {hoveredState && (
+        <div
+          className="pointer-events-none absolute z-40 transition-transform duration-75"
+          style={{
+            left: `${Math.min(hoveredState.x + 16, (containerRef.current?.clientWidth || 600) - 260)}px`,
+            top: `${Math.max(16, Math.min(hoveredState.y - 40, (containerRef.current?.clientHeight || 600) - 240))}px`,
+          }}
+        >
+          <div className="w-64 bg-[#0B1F3A]/98 text-white rounded-xl p-3.5 shadow-2xl border border-slate-700/80 backdrop-blur-md">
+            {/* Tooltip Header */}
+            <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-700">
               <div>
-                <div className="text-white font-bold text-base mb-0.5">
-                  {hoveredStateCoord.name}
+                <h4 className="text-xs font-black tracking-wide text-white">
+                  {hoveredState.meta.name}
+                </h4>
+                <p className="text-[10px] font-mono text-slate-400">
+                  Short Code: {hoveredState.meta.shortCode}
+                </p>
+              </div>
+
+              <span
+                className={`px-2 py-0.5 rounded text-[9px] font-black tracking-wider uppercase ${
+                  hoveredState.summary?.riskSeverity === 'CRITICAL'
+                    ? 'bg-red-500/25 text-red-300 border border-red-500/40'
+                    : hoveredState.summary?.riskSeverity === 'HIGH'
+                    ? 'bg-orange-500/25 text-orange-300 border border-orange-500/40'
+                    : hoveredState.summary?.riskSeverity === 'WATCH'
+                    ? 'bg-amber-500/25 text-amber-300 border border-amber-500/40'
+                    : hoveredState.summary?.riskSeverity === 'STABLE'
+                    ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/40'
+                    : 'bg-slate-700 text-slate-300'
+                }`}
+              >
+                {hoveredState.summary?.riskSeverity || 'NO DATA'}
+              </span>
+            </div>
+
+            {/* Metrics Breakdown */}
+            {hoveredState.summary && hoveredState.summary.projectCount > 0 ? (
+              <div className="mt-2.5 space-y-1.5 text-[11px]">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Monitored Projects:</span>
+                  <span className="font-bold text-white font-mono">
+                    {hoveredState.summary.projectCount}
+                  </span>
                 </div>
-                <div className="text-slate-400 text-xs font-mono">
-                  {hoveredStateCoord.shortCode}
+
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">High Priority / Critical:</span>
+                  <span className="font-bold text-red-400 font-mono">
+                    {hoveredState.summary.criticalCount + hoveredState.summary.highCount} projects
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Original Outlay:</span>
+                  <span className="font-mono text-slate-200">
+                    {hoveredState.summary.totalOriginalCostCr
+                      ? `₹${(hoveredState.summary.totalOriginalCostCr / 1000).toFixed(1)}K Cr`
+                      : 'N/A'}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Revised Outlay:</span>
+                  <span className="font-mono text-amber-300 font-semibold">
+                    {hoveredState.summary.totalRevisedCostCr
+                      ? `₹${(hoveredState.summary.totalRevisedCostCr / 1000).toFixed(1)}K Cr`
+                      : 'N/A'}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Avg Physical Progress:</span>
+                  <span className="font-bold text-emerald-400 font-mono">
+                    {hoveredState.summary.averagePhysicalProgress
+                      ? `${hoveredState.summary.averagePhysicalProgress}%`
+                      : 'N/A'}
+                  </span>
+                </div>
+
+                {/* Primary Risk Driver */}
+                <div className="mt-2 pt-2 border-t border-slate-700/80">
+                  <span className="text-[10px] text-slate-400 block mb-0.5">
+                    Primary Risk Driver:
+                  </span>
+                  <span className="text-[10px] font-medium text-slate-200 line-clamp-2 italic">
+                    "{hoveredState.summary.topRiskDriver}"
+                  </span>
+                </div>
+
+                <div className="mt-2 text-[9px] text-blue-300 font-semibold flex items-center justify-between">
+                  <span>Click to select & isolate state</span>
+                  <ChevronRight className="w-3 h-3" />
                 </div>
               </div>
-              <div className="text-right">
-                {(() => {
-                  const stateData = stateMarkers.find(s => s.name === hoveredStateCoord.name);
-                  if (!stateData) return null;
-                  
-                  const health = stateData.avgHealth;
-                  const color = health < 40 ? 'text-red-500' : 
-                               health < 60 ? 'text-orange-500' : 
-                               health < 75 ? 'text-amber-500' : 'text-emerald-500';
-                  
-                  return (
-                    <>
-                      <div className={`text-2xl font-black ${color}`}>
-                        {health}%
-                      </div>
-                      <div className="text-slate-400 text-xs">Portfolio Health</div>
-                    </>
-                  );
-                })()}
+            ) : (
+              <div className="mt-2 text-[11px] text-slate-400 py-1">
+                No active central infrastructure projects monitored in the {reportingPeriod} cycle.
               </div>
-            </div>
-            
-            <div className="space-y-2">
-              {(() => {
-                const stateData = stateMarkers.find(s => s.name === hoveredStateCoord.name);
-                if (!stateData) return null;
-                
-                const stateProjects = projects.filter(p => p.state === hoveredStateCoord.name);
-                const criticalCount = stateProjects.filter(p => p.riskLevel === 'CRITICAL').length;
-                const highCount = stateProjects.filter(p => p.riskLevel === 'HIGH').length;
-                const watchCount = stateProjects.filter(p => p.riskLevel === 'WATCH').length;
-                const stableCount = stateProjects.filter(p => p.riskLevel === 'STABLE').length;
-                
-                return (
-                  <>
-                    <div className="flex items-center justify-between text-sm py-1.5 border-t border-slate-700 pt-2">
-                      <span className="text-slate-400">Total Projects</span>
-                      <span className="text-white font-bold">{stateData.projectCount}</span>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-2 pt-1">
-                      {criticalCount > 0 && (
-                        <div className="flex items-center gap-2 text-xs">
-                          <div className="w-2 h-2 rounded-full bg-red-500" />
-                          <span className="text-slate-400">Critical:</span>
-                          <span className="text-white font-bold">{criticalCount}</span>
-                        </div>
-                      )}
-                      {highCount > 0 && (
-                        <div className="flex items-center gap-2 text-xs">
-                          <div className="w-2 h-2 rounded-full bg-orange-500" />
-                          <span className="text-slate-400">High:</span>
-                          <span className="text-white font-bold">{highCount}</span>
-                        </div>
-                      )}
-                      {watchCount > 0 && (
-                        <div className="flex items-center gap-2 text-xs">
-                          <div className="w-2 h-2 rounded-full bg-amber-500" />
-                          <span className="text-slate-400">Watch:</span>
-                          <span className="text-white font-bold">{watchCount}</span>
-                        </div>
-                      )}
-                      {stableCount > 0 && (
-                        <div className="flex items-center gap-2 text-xs">
-                          <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                          <span className="text-slate-400">Stable:</span>
-                          <span className="text-white font-bold">{stableCount}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="mt-3 pt-2 border-t border-slate-700">
-                      <div className="text-blue-400 text-xs font-semibold">
-                        Click to view state details →
-                      </div>
-                    </div>
-                  </>
-                );
-              })()}
-            </div>
-          </motion.div>
+            )}
+          </div>
         </div>
       )}
     </div>

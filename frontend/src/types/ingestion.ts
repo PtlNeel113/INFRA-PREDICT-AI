@@ -24,6 +24,7 @@ export interface IngestionJobRecord {
   updatedRows: number;
   newRows: number;
   rejectedRows: number;
+  qualityScore?: number;
   status: 'COMPLETED' | 'FAILED' | 'PARTIAL';
   timestamp: string;
   errors: IngestionRowError[];

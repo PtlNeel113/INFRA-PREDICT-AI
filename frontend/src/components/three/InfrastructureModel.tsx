@@ -178,7 +178,7 @@ export const InfrastructureModel: React.FC = () => {
         </div>
       </motion.div>
       
-      <style jsx>{`
+      <style>{`
         @keyframes windowBlink {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 0.8; }

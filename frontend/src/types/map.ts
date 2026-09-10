@@ -30,9 +30,12 @@ export interface ProjectGeoData {
   currentPhysicalProgress: number;
 }
 
+export type ReportingPeriod = 'April 2026' | 'May 2026' | 'June 2026' | 'July 2026';
+
 export interface StateGeoSummary {
   name: string;
   shortCode: string;
+  mapId?: string;
   projectCount: number;
   criticalCount: number;
   highCount: number;
@@ -40,6 +43,16 @@ export interface StateGeoSummary {
   stableCount: number;
   portfolioHealth: number;
   riskTrend: number;
+  totalOriginalCostCr?: number;
+  totalRevisedCostCr?: number;
+  totalExpenditureCr?: number;
+  averagePhysicalProgress?: number;
+  costRevisionCount?: number;
+  scheduleRevisionCount?: number;
+  riskSeverity?: 'CRITICAL' | 'HIGH' | 'WATCH' | 'STABLE' | 'NO_DATA';
+  riskIndex?: number;
+  priorityReviewsCount?: number;
+  topRiskDriver?: string;
   topProjects: {
     code: string;
     name: string;

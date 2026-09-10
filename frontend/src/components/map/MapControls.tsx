@@ -223,10 +223,10 @@ export const MapControls: React.FC<MapControlsProps> = ({
       {/* Results Summary */}
       <div className="px-4 py-2 bg-slate-50 dark:bg-slate-900/40 flex items-center justify-between text-xs">
         <span className="font-semibold text-slate-600 dark:text-slate-400">
-          Showing <span className="text-[#155EEF] dark:text-indigo-400 font-black">{filteredProjectCount}</span> of <span className="font-black">{totalProjectCount}</span> projects
+          Filtered <span className="text-[#155EEF] dark:text-indigo-400 font-black">{filteredProjectCount}</span> of <span className="font-black">{totalProjectCount}</span> monitored projects
         </span>
-        <span className="text-slate-500 dark:text-slate-500 font-mono">
-          Demo Dataset
+        <span className="text-slate-500 dark:text-slate-400 font-medium">
+          Source: PAIMANA / MoSPI
         </span>
       </div>
     </div>
