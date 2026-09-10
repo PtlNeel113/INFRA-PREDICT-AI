@@ -1,0 +1,10 @@
+# Ignore all data files
+*.csv
+*.xlsx
+*.json
+*.pkl
+*.parquet
+
+# But track documentation
+!.gitignore
+!README.md
