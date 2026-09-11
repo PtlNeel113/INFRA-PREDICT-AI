@@ -1,394 +1,173 @@
 import React, { useState, useMemo } from 'react';
 import {
-  TrendingUp,
-  AlertTriangle,
-  Clock,
-  DollarSign,
-  ShieldCheck,
-  HelpCircle,
   Sparkles,
-  Info,
-  Calendar,
+  ShieldAlert,
+  TrendingUp,
   Layers,
-  ChevronRight,
-  Activity,
 } from 'lucide-react';
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from 'recharts';
 import { useProjectStore } from '../../store/projectStore';
-import { MOCK_PREDICTIONS } from '../../data/predictionsData';
-import { InfraProject, PredictionData } from '../../types/projects';
-import { useNavigate } from 'react-router-dom';
-
-function generateDynamicPrediction(p: InfraProject): PredictionData {
-  const sCost = p.sanctionedCostCr;
-  const overrun = p.predictedCostOverrunCr;
-  const forecast = p.forecastCostCr;
-  const progress = p.currentPhysicalProgress;
-  const expected = p.expectedProgress;
-  const delayMo = p.predictedDelayMonths;
-
-  return {
-    projectId: p.id,
-    projectCode: p.code,
-    projectName: p.name,
-    costOverrun: {
-      sanctionedCostCr: sCost,
-      currentEstimateCr: p.revisedCostCr,
-      forecastEstimateCr: forecast,
-      potentialEscalationCr: overrun,
-      escalationPercentage: sCost > 0 ? Number(((overrun / sCost) * 100).toFixed(1)) : 0,
-      modelConfidencePercent: 88.5,
-      confidenceInterval: {
-        lower: Math.round(forecast * 0.96),
-        upper: Math.round(forecast * 1.05),
-      },
-      historicalSeries: [
-        { period: 'Base Sanction', sanctioned: sCost, actualExp: Math.round(p.expenditureCr * 0.3), forecast: sCost },
-        { period: 'Interim Review', sanctioned: sCost, actualExp: Math.round(p.expenditureCr * 0.7), forecast: Math.round(forecast * 0.95) },
-        { period: 'Current Audit', sanctioned: sCost, actualExp: p.expenditureCr, forecast: forecast },
-        { period: 'Forecast Final', sanctioned: sCost, actualExp: forecast, forecast: forecast },
-      ],
-    },
-    timeOverrun: {
-      plannedCompletion: p.originalDeadline,
-      forecastCompletion: p.predictedCompletionDate,
-      expectedDelayMonths: delayMo,
-      delayDays: Math.round(delayMo * 30.4),
-      modelConfidencePercent: 86.2,
-      confidenceIntervalMonths: {
-        lower: Math.max(0, Number((delayMo * 0.8).toFixed(1))),
-        upper: Number((delayMo * 1.25).toFixed(1)),
-      },
-      historicalSeries: [
-        { period: 'Start', plannedProgress: 10, actualProgress: 10, projectedProgress: 10 },
-        { period: 'Midpoint', plannedProgress: Math.round(expected * 0.6), actualProgress: Math.round(progress * 0.6), projectedProgress: Math.round(progress * 0.6) },
-        { period: 'Current', plannedProgress: expected, actualProgress: progress, projectedProgress: progress },
-        { period: 'Forecast Target', plannedProgress: 100, actualProgress: Math.min(100, progress + 20), projectedProgress: 100 },
-      ],
-    },
-    implementationRisk: {
-      currentRiskScore: 100 - p.healthScore,
-      projectedRiskScore: Math.min(95, Math.max(15, 100 - p.healthScore + p.riskTrend)),
-      riskVelocityTrend: p.riskTrend > 0 ? 'ACCELERATING' : 'DECELERATING',
-      compositeIndex: p.priorityScore || 85,
-      historicalSeries: (p.riskTrajectory || []).map((t, idx) => ({
-        period: t.date,
-        historicalRisk: t.score,
-        forecastRisk: t.forecast ? t.score : undefined,
-        p10: Math.max(10, t.score - 6),
-        p90: Math.min(95, t.score + 8),
-      })),
-    },
-  };
-}
+import { InfraProject } from '../../types/projects';
+import { ProjectOverviewCard } from '../../components/predictions/ProjectOverviewCard';
+import { PredictiveParametersCard } from '../../components/predictions/PredictiveParametersCard';
+import { RiskPillarsSection } from '../../components/predictions/RiskPillarsSection';
+import { UnifiedRiskDriversSection } from '../../components/predictions/UnifiedRiskDriversSection';
+import { HistoricalTrendSection } from '../../components/predictions/HistoricalTrendSection';
+import { OverallRiskSummaryCard } from '../../components/predictions/OverallRiskSummaryCard';
+import { ForwardRiskOutlookTab } from '../../components/predictions/ForwardRiskOutlookTab';
 
 export const PredictionsPage: React.FC = () => {
-  const navigate = useNavigate();
   const projects = useProjectStore((state) => state.projects);
-  const [selectedProjectId, setSelectedProjectId] = useState<string>('PRJ-MORT-891');
 
-  const selectedProject =
-    projects.find((p) => p.id === selectedProjectId || p.code === selectedProjectId) || projects[0];
+  // Active sub-feature tab: 'risk_intelligence' (Part 1) or 'forward_outlook' (Part 2)
+  const [activeTab, setActiveTab] = useState<'risk_intelligence' | 'forward_outlook'>('risk_intelligence');
 
-  const prediction = useMemo(() => {
-    if (MOCK_PREDICTIONS[selectedProject.id]) {
-      return MOCK_PREDICTIONS[selectedProject.id];
+  // Selected project state
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(() => {
+    if (projects.length > 0) {
+      const foundKadapa = projects.find((p) => p.id === '612786' || p.code.includes('612786'));
+      return foundKadapa ? foundKadapa.id : projects[0].id;
     }
-    return generateDynamicPrediction(selectedProject);
-  }, [selectedProject]);
+    return '612786';
+  });
+
+  const selectedProject: InfraProject = useMemo(() => {
+    return (
+      projects.find((p) => p.id === selectedProjectId || p.code === selectedProjectId) ||
+      projects[0] || {
+        id: '612786',
+        code: 'PAIMANA-612786',
+        name: 'Construction of New Domestic Terminal Building and Allied Works at Kadapa Airport',
+        sector: 'Civil Aviation',
+        state: 'Andhra Pradesh',
+        stage: 'Testing & Commissioning',
+        implementingAgency: 'Airport Authority of India [AAI]',
+        sanctionedCostCr: 265.91,
+        revisedCostCr: 265.91,
+        expenditureCr: 176.38,
+        forecastCostCr: 265.91,
+        originalDeadline: '01/2026',
+        predictedCompletionDate: '09/2026',
+        expectedProgress: 89.6,
+        currentPhysicalProgress: 80.0,
+        progressGap: 9.6,
+        financialProgress: 66.3,
+        healthScore: 86,
+        riskLevel: 'HIGH',
+        riskTrend: 5.0,
+        costRiskScore: 30,
+        timeRiskScore: 50,
+        executionRiskScore: 44,
+        predictedDelayMonths: 8,
+        predictedCostOverrunCr: 0,
+        primaryRiskDriver: 'Apron Expansion & Air Traffic Automation Interface',
+        impactScore: 53,
+        escalationStatus: 'UNDER_REVIEW',
+        keyMilestones: [],
+        aiSummary: '',
+      }
+    );
+  }, [projects, selectedProjectId]);
+
+  const handleSwitchToForwardOutlook = () => {
+    setActiveTab('forward_outlook');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSwitchToRiskIntelligence = () => {
+    setActiveTab('risk_intelligence');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <div className="space-y-6 pb-16" id="predictive-intelligence-page">
-      {/* Top Banner */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <div className="space-y-6 pb-20 max-w-7xl mx-auto" id="predictive-intelligence-page">
+      
+      {/* Top Header & Segmented Sub-Feature Switcher */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1">
-            <Sparkles className="w-4 h-4" />
-            <span>ML Intelligence Engine</span>
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1.5">
+            <Sparkles className="w-4 h-4 text-indigo-600" />
+            <span>AI Predictive & Prescriptive Intelligence</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Predictive Intelligence & Forward Projections</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Bayesian risk modeling, cost escalation trajectories, and completion date probability bounds.
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            Infrastructure Predictive Intelligence
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-3xl">
+            Deterministic risk synthesis grounded in official MoSPI PAIMANA baseline records.
           </p>
         </div>
 
-        {/* Project Selector Dropdown */}
-        <div className="flex items-center gap-3">
-          <label className="text-xs font-semibold text-slate-600 whitespace-nowrap">Select Target Project:</label>
-          <select
-            id="prediction-project-select"
-            value={selectedProject.id}
-            onChange={(e) => setSelectedProjectId(e.target.value)}
-            className="px-3 py-2 text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-xs truncate"
-          >
-            {projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.code} - {p.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      {/* Model Estimate Disclaimer Banner */}
-      <div className="p-4 bg-indigo-50/70 border border-indigo-200 rounded-xl flex items-start gap-3 text-xs text-indigo-950">
-        <Info className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
-        <div className="leading-relaxed">
-          <strong>AI Model Estimate (Confidence: {prediction.costOverrun.modelConfidencePercent}%):</strong> Forward projections are generated via multi-variable regression and historical delay signatures trained on 1,800+ Indian infrastructure DPRs. Estimates incorporate raw material commodity indices, contractor velocity curves, and state-level right-of-way clearance lead times.
-        </div>
-      </div>
-
-      {/* Selected Project Overview Strip */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <span className="text-xs text-slate-400 font-mono font-medium">{selectedProject.code}</span>
-          <h2 className="text-base font-bold text-slate-900">{selectedProject.name}</h2>
-        </div>
-
-        <div className="flex items-center gap-6 text-xs">
-          <div>
-            <span className="text-slate-400 block">Sanctioned Outlay</span>
-            <strong className="text-slate-800 font-mono">₹{selectedProject.sanctionedCostCr.toLocaleString()} Cr</strong>
-          </div>
-          <div>
-            <span className="text-slate-400 block">Current Progress</span>
-            <strong className="text-indigo-600 font-mono">{selectedProject.currentPhysicalProgress}%</strong>
-          </div>
-          <div>
-            <span className="text-slate-400 block">Sector</span>
-            <strong className="text-slate-800">{selectedProject.sector}</strong>
-          </div>
+        {/* Segmented Sub-Feature Navigation (Tab 1 vs Tab 2) */}
+        <div className="flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200/80 self-start md:self-auto shrink-0 shadow-2xs">
           <button
-            onClick={() => navigate(`/projects/${selectedProject.id}`)}
-            className="px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
+            type="button"
+            onClick={() => setActiveTab('risk_intelligence')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              activeTab === 'risk_intelligence'
+                ? 'bg-white text-indigo-900 shadow-2xs border border-slate-200/60'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
           >
-            Inspect Project &rarr;
+            <ShieldAlert className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Project Risk Intelligence</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('forward_outlook')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              activeTab === 'forward_outlook'
+                ? 'bg-white text-indigo-900 shadow-2xs border border-slate-200/60'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Forward Risk Outlook</span>
           </button>
         </div>
       </div>
 
-      {/* 3 Major Predictive Modules Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* MODULE 1: Cost Overrun Prediction */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5 flex flex-col justify-between">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-rose-600" />
-                <h3 className="font-bold text-slate-900 text-base">Cost Overrun Forecast</h3>
-              </div>
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-rose-100 text-rose-700 rounded">
-                +{prediction.costOverrun.escalationPercentage}% Escalation
-              </span>
-            </div>
+      {/* =========================================================================
+          PART 1: PROJECT RISK INTELLIGENCE
+          ========================================================================= */}
+      {activeTab === 'risk_intelligence' && (
+        <div className="space-y-6" id="part-1-project-risk-intelligence">
+          {/* 1. Project Selection & Overview */}
+          <ProjectOverviewCard
+            selectedProject={selectedProject}
+            projects={projects}
+            onSelectProject={setSelectedProjectId}
+          />
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-slate-50 border border-slate-100 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Current Sanctioned</span>
-                <div className="text-sm font-bold text-slate-800 mt-1 font-mono">₹{prediction.costOverrun.sanctionedCostCr} Cr</div>
-              </div>
-              <div className="p-3 bg-rose-50 border border-rose-100 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-rose-700">Forecast Final</span>
-                <div className="text-sm font-bold text-rose-900 mt-1 font-mono">₹{prediction.costOverrun.forecastEstimateCr} Cr</div>
-              </div>
-            </div>
+          {/* 2. Predictive Parameters (Cost, Time, Execution) */}
+          <PredictiveParametersCard project={selectedProject} />
 
-            <div className="space-y-2 text-xs text-slate-600 pt-1">
-              <div className="flex justify-between">
-                <span>Potential Escalation:</span>
-                <strong className="text-rose-600 font-mono">+₹{prediction.costOverrun.potentialEscalationCr} Cr</strong>
-              </div>
-              <div className="flex justify-between">
-                <span>80% Confidence Interval:</span>
-                <strong className="text-slate-800 font-mono">
-                  ₹{prediction.costOverrun.confidenceInterval.lower} - ₹{prediction.costOverrun.confidenceInterval.upper} Cr
-                </strong>
-              </div>
-              <div className="flex justify-between">
-                <span>ML Model Confidence:</span>
-                <strong className="text-emerald-700 font-mono">{prediction.costOverrun.modelConfidencePercent}%</strong>
-              </div>
-            </div>
-          </div>
+          {/* 3, 4, 5. Risk Summary (Cost Risk, Time Risk, Execution Risk) */}
+          <RiskPillarsSection project={selectedProject} />
 
-          {/* Historical vs Forecast Series mini chart */}
-          <div className="pt-3 border-t border-slate-100">
-            <div className="text-[11px] font-semibold text-slate-500 mb-2">Cost Outlay Trajectory (₹ Cr)</div>
-            <div className="h-36 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={prediction.costOverrun.historicalSeries}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="period" tick={{ fontSize: 9, fill: '#64748b' }} />
-                  <YAxis tick={{ fontSize: 9, fill: '#64748b' }} />
-                  <Tooltip />
-                  <Area type="monotone" dataKey="forecast" stroke="#e11d48" fill="#ffe4e6" strokeWidth={2} name="Forecast Cost" />
-                  <Area type="monotone" dataKey="actualExp" stroke="#4f46e5" fill="#e0e7ff" strokeWidth={2} name="Actual Expenditure" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+          {/* 6. Why Is This Project At Risk? (Unified Quantified Risk Drivers) */}
+          <UnifiedRiskDriversSection project={selectedProject} />
+
+          {/* 7. Historical Trend (April -> May -> June -> July 2026 for the same project) */}
+          <HistoricalTrendSection project={selectedProject} />
+
+          {/* 8. Overall Risk Summary with CTA to Forward Risk Outlook */}
+          <OverallRiskSummaryCard
+            project={selectedProject}
+            onViewForwardOutlook={handleSwitchToForwardOutlook}
+          />
         </div>
+      )}
 
-        {/* MODULE 2: Time Overrun Prediction */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5 flex flex-col justify-between">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-amber-600" />
-                <h3 className="font-bold text-slate-900 text-base">Time Overrun Forecast</h3>
-              </div>
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded">
-                +{prediction.timeOverrun.expectedDelayMonths} Months Delay
-              </span>
-            </div>
+      {/* =========================================================================
+          PART 2: FORWARD RISK OUTLOOK
+          ========================================================================= */}
+      {activeTab === 'forward_outlook' && (
+        <ForwardRiskOutlookTab
+          project={selectedProject}
+          onBackToRiskIntelligence={handleSwitchToRiskIntelligence}
+        />
+      )}
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-slate-50 border border-slate-100 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Planned Date</span>
-                <div className="text-xs font-bold text-slate-800 mt-1 truncate">{prediction.timeOverrun.plannedCompletion}</div>
-              </div>
-              <div className="p-3 bg-amber-50 border border-amber-100 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-amber-700">Forecast Date</span>
-                <div className="text-xs font-bold text-amber-900 mt-1 truncate">{prediction.timeOverrun.forecastCompletion}</div>
-              </div>
-            </div>
-
-            <div className="space-y-2 text-xs text-slate-600 pt-1">
-              <div className="flex justify-between">
-                <span>Total Delay in Days:</span>
-                <strong className="text-amber-700 font-mono">~{prediction.timeOverrun.delayDays} Days</strong>
-              </div>
-              <div className="flex justify-between">
-                <span>Delay Bounds (P10-P90):</span>
-                <strong className="text-slate-800 font-mono">
-                  {prediction.timeOverrun.confidenceIntervalMonths.lower} - {prediction.timeOverrun.confidenceIntervalMonths.upper} Months
-                </strong>
-              </div>
-              <div className="flex justify-between">
-                <span>Schedule Adherence Prob.:</span>
-                <strong className="text-rose-600 font-mono">14.2% on original date</strong>
-              </div>
-            </div>
-          </div>
-
-          {/* S-Curve Progress Trajectory */}
-          <div className="pt-3 border-t border-slate-100">
-            <div className="text-[11px] font-semibold text-slate-500 mb-2">S-Curve Progress Velocity (%)</div>
-            <div className="h-36 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={prediction.timeOverrun.historicalSeries}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="period" tick={{ fontSize: 9, fill: '#64748b' }} />
-                  <YAxis domain={[0, 100]} tick={{ fontSize: 9, fill: '#64748b' }} />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="plannedProgress" stroke="#94a3b8" strokeDasharray="3 3" strokeWidth={2} name="Baseline" />
-                  <Line type="monotone" dataKey="actualProgress" stroke="#4f46e5" strokeWidth={2.5} name="Actual" />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-
-        {/* MODULE 3: Implementation Risk */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5 flex flex-col justify-between">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-bold text-slate-900 text-base">Implementation Risk</h3>
-              </div>
-              <span className={`px-2 py-0.5 text-[10px] font-bold rounded ${
-                prediction.implementationRisk.riskVelocityTrend === 'ACCELERATING'
-                  ? 'bg-rose-100 text-rose-700'
-                  : 'bg-emerald-100 text-emerald-700'
-              }`}>
-                {prediction.implementationRisk.riskVelocityTrend}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-slate-50 border border-slate-100 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-slate-400">Current Risk Score</span>
-                <div className="text-2xl font-extrabold text-slate-900 mt-1 font-mono">{prediction.implementationRisk.currentRiskScore}</div>
-              </div>
-              <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-indigo-700">Projected 90d Risk</span>
-                <div className="text-2xl font-extrabold text-indigo-900 mt-1 font-mono">{prediction.implementationRisk.projectedRiskScore}</div>
-              </div>
-            </div>
-
-            <div className="space-y-2 text-xs text-slate-600 pt-1">
-              <div className="flex justify-between">
-                <span>Composite Priority Index:</span>
-                <strong className="text-indigo-700 font-mono">{prediction.implementationRisk.compositeIndex} / 100</strong>
-              </div>
-              <div className="flex justify-between">
-                <span>Momentum Velocity:</span>
-                <strong className="text-rose-600 font-mono">+3.8 pts / month</strong>
-              </div>
-              <div className="flex justify-between">
-                <span>Recommended Monitoring:</span>
-                <strong className="text-slate-800">Weekly Cadence</strong>
-              </div>
-            </div>
-          </div>
-
-          {/* Implementation Risk Confidence Fan Chart */}
-          <div className="pt-3 border-t border-slate-100">
-            <div className="text-[11px] font-semibold text-slate-500 mb-2">90-Day Risk Confidence Band (P10 - P90)</div>
-            <div className="h-36 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={prediction.implementationRisk.historicalSeries}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="period" tick={{ fontSize: 9, fill: '#64748b' }} />
-                  <YAxis domain={[40, 100]} tick={{ fontSize: 9, fill: '#64748b' }} />
-                  <Tooltip />
-                  <Area type="monotone" dataKey="p90" stroke="#cbd5e1" fill="#f1f5f9" strokeWidth={1} name="Upper Bound (P90)" />
-                  <Area type="monotone" dataKey="historicalRisk" stroke="#4f46e5" fill="#e0e7ff" strokeWidth={2.5} name="Risk Score" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Comprehensive Prediction Narrative & Model Parameters */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-        <h3 className="font-bold text-slate-900 text-base">Key Assumptions & Model Sensitivity Drivers</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600">
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-            <span className="font-bold text-slate-900 block mb-1">1. Commodity Price Sensitivity</span>
-            <p>
-              Rebar steel and bulk diesel inflation indices are projected at +4.2% annualized trend. A 2% additional spike would expand cost exposure by ₹68 Cr.
-            </p>
-          </div>
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-            <span className="font-bold text-slate-900 block mb-1">2. Monsoon Weather Window</span>
-            <p>
-              Pre-monsoon bridge girder launching window closes by May 30th. If missed, wet-season earthwork restrictions will add minimum 60 days slippage.
-            </p>
-          </div>
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-            <span className="font-bold text-slate-900 block mb-1">3. Regulatory Statutory Approvals</span>
-            <p>
-              Inter-ministerial railway crossing safety NOC is currently the critical-path bottleneck. Model assigns 88% weight to immediate resolution.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

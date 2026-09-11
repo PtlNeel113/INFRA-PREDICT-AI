@@ -1,4 +1,4 @@
-﻿import { CreateProjectInput, InfraProject, Milestone, ProjectStage } from '../types/projects';
+import { CreateProjectInput, InfraProject, Milestone, ProjectStage } from '../types/projects';
 import { RiskLevel } from '../types/ui';
 
 /**
