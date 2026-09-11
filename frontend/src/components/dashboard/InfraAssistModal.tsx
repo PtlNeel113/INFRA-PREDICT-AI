@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Bot, Send, Sparkles, X, ArrowRight, ExternalLink, Building2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { useProjectStore } from '../../store/projectStore';
-import { generateAssistantResponse } from '../../services/assistantEngine';
+import { useAuth } from '../../hooks/useAuth';
+import { generateAssistantResponse, getPromptChipsForRole } from '../../services/assistantEngine';
+import { ROLE_DEFINITIONS, UserRole } from '../../config/roles';
 import { InfraProject } from '../../types/projects';
 
 interface InfraAssistModalProps {
@@ -20,6 +22,9 @@ interface Message {
 
 export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const currentRole: UserRole = user?.role || 'Senior Decision Maker';
+  const roleDef = ROLE_DEFINITIONS[currentRole] || ROLE_DEFINITIONS['Senior Decision Maker'];
   const projects = useProjectStore((s) => s.projects);
   const [selectedProjectId, setSelectedProjectId] = useState<string>(projects[0]?.id || 'PRJ-MORT-891');
 
@@ -29,7 +34,7 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: 'ai',
-      text: `Welcome to Infra-Assist. Grounded telemetry context is currently set to **${currentProject?.name || 'Monitored Assets'}** (${currentProject?.code || ''}). You can inquire about delay causes, cost escalation projections, milestone delivery, or peer benchmarking.`,
+      text: `Welcome to Infra-Assist. Grounded telemetry context is currently set to **${currentProject?.name || 'Monitored Assets'}** (${currentProject?.code || ''}). Operating under role: **${currentRole}**. You can inquire about delay causes, cost escalation projections, milestone delivery, or peer benchmarking.`,
       timestamp: 'Just now',
       projectId: currentProject?.id,
     },
@@ -55,7 +60,7 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
 
     setTimeout(() => {
       try {
-        const response = generateAssistantResponse(text, currentProject, projects);
+        const response = generateAssistantResponse(text, currentProject, projects, currentRole);
         setMessages((prev) => [
           ...prev,
           {
@@ -80,12 +85,7 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
     }, 450);
   };
 
-  const sampleQueries = [
-    `Why is ${currentProject?.code || 'this project'} at risk?`,
-    'What is the delay forecast & milestone status?',
-    'What are the recommended actions?',
-    'Which projects require attention first?',
-  ];
+  const sampleQueries = getPromptChipsForRole(currentRole).map((c) => c.label);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs select-none">
@@ -99,12 +99,12 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-black text-slate-900">Infra-Assist AI</h3>
-                <span className="text-[10px] font-bold bg-emerald-50 text-emerald-800 px-2.5 py-0.5 rounded-lg border border-emerald-200 neo-raised">
-                  Grounded Core
+                <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-lg border neo-raised ${roleDef.badgeColor.bg} ${roleDef.badgeColor.text} ${roleDef.badgeColor.border}`}>
+                  {currentRole}
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 font-medium">
-                Connected to {projects.length} monitored national infrastructure assets
+                Scope: {roleDef.scope}
               </p>
             </div>
           </div>
@@ -223,7 +223,7 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
         <div className="pt-2 border-t border-slate-300/60 flex items-center gap-2">
           <input
             type="text"
-            placeholder={`Ask about ${currentProject.code}, delays, cost variances, or SHAP...`}
+            placeholder={`Ask about ${currentProject.code}, delays, cost variances, or risk drivers...`}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={(e) => {

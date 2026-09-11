@@ -22,7 +22,7 @@ export const MOCK_EXPLAINABILITY: Record<string, ExplainabilityAnalysis> = {
     modelConfidencePercent: 93.8,
     baseBaselineScore: 50,
     aiSummary:
-      'The primary driver pushing risk into the CRITICAL category is Schedule Slippage (+24.2 pts SHAP impact) stemming from unshifted GAIL gas pipelines at ROB Chainage 312, closely followed by Physical Progress Lag (+18.5 pts). Contractor working capital reserves (+4.2 pts mitigating) partially prevent deeper financial insolvency.',
+      'The primary driver pushing risk into the CRITICAL category is Schedule Slippage (+24.2 pts risk impact) stemming from unshifted GAIL gas pipelines at ROB Chainage 312, closely followed by Physical Progress Lag (+18.5 pts). Contractor working capital reserves (+4.2 pts mitigating) partially prevent deeper financial insolvency.',
     factors: [
       {
         id: 'f1',
@@ -101,7 +101,7 @@ export const MOCK_EXPLAINABILITY: Record<string, ExplainabilityAnalysis> = {
     modelConfidencePercent: 95.1,
     baseBaselineScore: 50,
     aiSummary:
-      'Geotechnical geological anomalies encountered in underground twin tunnels (+28.4 pts SHAP) dominate risk exposure. Severe cutter-head wear in mixed charnockite rock has cut excavation velocity by 64%. Fast-track viaduct casting (+6.8 pts stabilizing) cushions elevated transit sections.',
+      'Geotechnical geological anomalies encountered in underground twin tunnels (+28.4 pts risk weight) dominate risk exposure. Severe cutter-head wear in mixed charnockite rock has cut excavation velocity by 64%. Fast-track viaduct casting (+6.8 pts stabilizing) cushions elevated transit sections.',
     factors: [
       {
         id: 'f1',
@@ -158,7 +158,7 @@ export const MOCK_EXPLAINABILITY: Record<string, ExplainabilityAnalysis> = {
     modelConfidencePercent: 88.2,
     baseBaselineScore: 50,
     aiSummary:
-      'Procurement delay in specialized continuous welded track laying trains (+19.1 pts SHAP) and signaling equipment lead times (+14.3 pts) constitute 62% of composite risk. Subgrade earthwork completion (-9.2 pts) provides firm civil foundation.',
+      'Procurement delay in specialized continuous welded track laying trains (+19.1 pts risk weight) and signaling equipment lead times (+14.3 pts) constitute 62% of composite risk. Subgrade earthwork completion (-9.2 pts) provides firm civil foundation.',
     factors: [
       {
         id: 'f1',

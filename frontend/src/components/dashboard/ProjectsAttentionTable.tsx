@@ -140,7 +140,7 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
             </span>
           </div>
           <p className="text-xs text-[var(--neo-text-secondary)] mt-1">
-            Prioritized by SHAP root-cause sensitivity, schedule slippage, and capital overrun.
+            Prioritized by key risk driver sensitivity, schedule slippage, and capital overrun.
           </p>
         </div>
 
@@ -236,7 +236,7 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </th>
-              <th className="py-3 px-4">Top Risk Driver (SHAP)</th>
+              <th className="py-3 px-4">Top Risk Driver</th>
               <th className="py-3 px-4 text-right">Action</th>
             </tr>
           </thead>

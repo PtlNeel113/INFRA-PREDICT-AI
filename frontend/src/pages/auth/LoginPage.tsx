@@ -75,9 +75,9 @@ export const LoginPage: React.FC = () => {
       await loginAsDemo();
       toast.success(
         'Demo Access Granted',
-        'Logged in as Dr. Vikram Malhotra (Senior Decision Maker)',
+        'Please select your operational role to proceed.',
       );
-      navigate('/dashboard');
+      navigate('/profile-setup');
     } catch {
       setIsTransitioning(false);
       toast.error('Error', 'Unable to initialize demo access.');
@@ -99,8 +99,8 @@ export const LoginPage: React.FC = () => {
     {
       step: '02',
       title: 'EXPLAIN',
-      desc: 'AI Risk Drivers',
-      badge: 'SHAP Attribution',
+      desc: 'Key Risk Drivers',
+      badge: 'Root Causes',
       icon: Eye,
       color: 'text-[#0E7490]',
       bg: 'bg-cyan-50/60',

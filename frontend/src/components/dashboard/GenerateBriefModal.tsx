@@ -133,7 +133,7 @@ export const GenerateBriefModal: React.FC<GenerateBriefModalProps> = ({
               },
               {
                 id: 'EARLY_WARNING_LOG',
-                title: '90-Day Early Warning Mitigation Matrix',
+                title: 'Early Warning Mitigation Matrix',
                 desc: 'Actionable intervention timelines with designated project officers and agency milestones.',
               },
             ].map((tpl) => (
@@ -158,11 +158,11 @@ export const GenerateBriefModal: React.FC<GenerateBriefModalProps> = ({
           </div>
         </div>
 
-        {/* AI Synthesis Notice */}
+        {/* Synthesis Notice */}
         <div className="p-3.5 rounded-xl neo-card border-l-4 border-l-amber-500 flex items-start gap-2.5 text-xs text-amber-950">
           <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           <p className="text-[11px] leading-relaxed text-slate-700">
-            AI synthesis engine automatically correlates monitored projects, attributing top SHAP delay factors for official inter-ministerial review meetings.
+            Synthesis engine correlates monitored project records, attributing key risk drivers for official inter-ministerial review meetings.
           </p>
         </div>
 

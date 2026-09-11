@@ -72,7 +72,7 @@ export const ProjectDetailPage: React.FC = () => {
             className="neo-raised inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#1557D6] hover:translate-y-[-1px] rounded-xl transition-all cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Explainable AI (SHAP)</span>
+            <span>Explainable Risk Drivers</span>
           </button>
           <button
             onClick={() => navigate(`/benchmarking?project=${project.id}`)}
@@ -449,7 +449,7 @@ export const ProjectDetailPage: React.FC = () => {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="font-bold text-slate-900 text-base">Historical & Forecast Risk Trajectory</h3>
-                  <p className="text-xs text-slate-500">6-Month historical risk trend and projected 90-day trajectory</p>
+                  <p className="text-xs text-slate-500">6-Month historical risk trend and indicative forward trajectory</p>
                 </div>
                 <div className="flex items-center gap-3 text-xs">
                   <div className="flex items-center gap-1.5">

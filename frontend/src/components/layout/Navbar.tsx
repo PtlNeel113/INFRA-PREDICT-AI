@@ -5,7 +5,6 @@ import {
   Search,
   Sparkles,
   Command,
-  User,
   Settings,
   LogOut,
   ChevronDown,
@@ -65,11 +64,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     logout();
     toast.success('Logged out successfully.');
     navigate('/login', { replace: true });
-  };
-
-  const handleGoToProfile = () => {
-    setIsProfileOpen(false);
-    navigate('/profile-setup');
   };
 
   const handleGoToSettings = () => {
@@ -145,11 +139,17 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
         
         {isDemoMode && (
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-xs">
+          <span className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-xs">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Operational Intelligence Active
           </span>
         )}
+
+        {/* Current Role Indicator */}
+        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-xl bg-blue-50/90 border border-blue-200/90 text-xs font-semibold text-slate-800 shadow-2xs">
+          <span className="text-slate-500 font-medium">Current Role:</span>
+          <span className="text-[#1557D6] font-extrabold tracking-tight">{user?.role || 'Senior Decision Maker'}</span>
+        </div>
       </div>
 
       {/* Center: Command Search */}
@@ -245,25 +245,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </p>
                     </div>
                   </div>
-                  <div className="mt-2 flex items-center gap-1.5 pt-1.5 border-t border-slate-200/60 dark:border-slate-700/60">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-300">
+                  <div className="mt-2 pt-1.5 border-t border-slate-200/60 dark:border-slate-700/60 space-y-0.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Role (Locked):</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    </div>
+                    <div className="text-xs font-black text-[#1557D6]">
                       {user?.role || 'Senior Decision Maker'}
-                    </span>
+                    </div>
+                    <p className="text-[9px] text-slate-400">
+                      To switch role, please log out and sign in.
+                    </p>
                   </div>
                 </div>
 
                 {/* Dropdown Options */}
                 <div className="space-y-0.5">
-                  <button
-                    type="button"
-                    onClick={handleGoToProfile}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-[#1557D6] dark:hover:text-blue-400 transition-colors cursor-pointer text-left group"
-                  >
-                    <User className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-[#1557D6] dark:group-hover:text-blue-400 transition-colors" />
-                    <span>Profile</span>
-                  </button>
-
                   <button
                     type="button"
                     onClick={handleGoToSettings}

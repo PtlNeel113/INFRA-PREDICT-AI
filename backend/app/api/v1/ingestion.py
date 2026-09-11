@@ -17,13 +17,17 @@ from ...schemas.ingestion import (
     IngestionSummaryResponse,
     IngestionJobResponse,
 )
+from ...core.rbac import require_permission, Permission
 
 logger = get_logger(__name__)
 router = APIRouter()
 
 
 @router.post("/preview", response_model=FilePreviewResponse, summary="Preview uploaded file")
-async def preview_file(file: UploadFile = File(...)):
+async def preview_file(
+    file: UploadFile = File(...),
+    _role: str = Depends(require_permission(Permission.INGEST_DATA)),
+):
     """
     Validate uploaded file and return preview with row count and sample data.
     
@@ -68,6 +72,7 @@ async def commit_ingestion(
     user: Optional[str] = Form("Monitoring Officer"),
     column_mapping: Optional[str] = Form(None),
     db: Session = Depends(get_db),
+    _role: str = Depends(require_permission(Permission.INGEST_DATA)),
 ):
     """
     Execute production ingestion pipeline.

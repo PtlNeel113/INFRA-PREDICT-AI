@@ -7,8 +7,10 @@ import {
   Bot,
   Sparkles,
   ArrowRight,
-  ShieldCheck,
+  MapPin,
 } from 'lucide-react';
+import { useAuth } from '../../hooks/useAuth';
+import { roleHasPermission } from '../../config/roles';
 
 interface QuickActionsDockProps {
   onOpenUpload: () => void;
@@ -22,38 +24,44 @@ export const QuickActionsDock: React.FC<QuickActionsDockProps> = ({
   onOpenAssist,
 }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const canIngest = roleHasPermission(user?.role || 'Senior Decision Maker', 'ingest:data');
 
   const actions = [
-    {
-      title: 'Upload Project Data',
-      desc: 'Ingest DPR files, monthly progress reports, and contractor spreadsheets.',
-      icon: Upload,
-      color: 'bg-blue-500',
-      badge: 'CSV / Excel / GeoJSON',
-      onClick: onOpenUpload,
-    },
+    canIngest
+      ? {
+          title: 'Upload Project Data',
+          desc: 'Ingest DPR files, monthly progress reports, and contractor spreadsheets.',
+          icon: Upload,
+          badge: 'CSV / Excel / GeoJSON',
+          onClick: onOpenUpload,
+        }
+      : {
+          title: 'National Risk Map',
+          desc: 'Explore geospatial infrastructure risk exposure across Indian states.',
+          icon: MapPin,
+          badge: 'All India Map',
+          onClick: () => navigate('/national-risk-map'),
+        },
     {
       title: 'Generate Risk Brief',
-      desc: 'Auto-synthesize high-level Cabinet notes with AI risk attribution.',
+      desc: 'Synthesize high-level Cabinet notes with explainable risk drivers.',
       icon: FileSpreadsheet,
-      color: 'bg-[#0E7490]',
       badge: 'Cabinet Ready PDF',
       onClick: onOpenBrief,
     },
     {
       title: 'Open Early Warnings',
-      desc: 'Inspect 318 active milestone slippages with 90-day predictive lookahead.',
+      desc: 'Inspect active milestone slippages with forward risk outlook.',
       icon: AlertTriangle,
-      color: 'bg-[#DC2626]',
       badge: '42 High Critical',
       onClick: () => navigate('/alerts'),
     },
     {
       title: 'Ask Infra-Assist',
-      desc: 'Query project delay factors, simulate RoW clearance interventions via AI.',
+      desc: 'Query project delay factors and simulate intervention scenarios.',
       icon: Bot,
-      color: 'bg-[#155EEF]',
-      badge: 'AI Assistant',
+      badge: 'Assistant Copilot',
       onClick: onOpenAssist,
     },
   ];

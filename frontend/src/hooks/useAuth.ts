@@ -10,6 +10,7 @@ export const useAuth = () => {
     login: store.login,
     loginAsDemo: store.loginAsDemo,
     updateProfile: store.updateProfile,
+    hasPermission: store.hasPermission,
     logout: store.logout,
   };
 };

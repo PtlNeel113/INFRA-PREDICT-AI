@@ -62,12 +62,15 @@ export const OverallRiskSummaryCard: React.FC<OverallRiskSummaryCardProps> = ({
             <ShieldAlert className="w-5 h-5 text-indigo-600" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
-              Synthesized Current Project Analysis
+            <span className="text-[10px] uppercase font-bold text-[#1557D6] tracking-wider block">
+              Predictive Risk Assessment — Prototype
             </span>
-            <h3 className="text-lg font-bold text-slate-900 tracking-tight">
+            <h3 className="text-lg font-black text-[var(--neo-text-primary)] tracking-tight">
               Overall Project Risk
             </h3>
+            <p className="text-[11px] text-[var(--neo-text-secondary)] mt-0.5">
+              Derived from historical PAIMANA project indicators.
+            </p>
           </div>
         </div>
 

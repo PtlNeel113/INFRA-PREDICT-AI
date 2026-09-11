@@ -117,7 +117,7 @@ export const AnalyticsPage: React.FC = () => {
           </span>
           <strong className="text-2xl font-black font-mono block text-slate-900">{projects.length} Packages</strong>
           <span className="text-[11px] text-emerald-700 font-bold flex items-center gap-1 mt-1">
-            <TrendingUp className="w-3 h-3" /> Live Synced State
+            <TrendingUp className="w-3 h-3" /> PAIMANA Historical Dataset
           </span>
         </div>
 
@@ -213,7 +213,7 @@ export const AnalyticsPage: React.FC = () => {
       <div className="neo-panel rounded-2xl p-6 space-y-4">
         <div className="flex items-center justify-between border-b border-slate-300/60 pb-3">
           <h2 className="text-xs font-black uppercase tracking-wider font-mono text-slate-800">
-            National Infrastructure Risk Drivers (SHAP Aggregation)
+            National Infrastructure Risk Drivers (MoSPI Dataset Aggregation)
           </h2>
           <span className="text-[11px] font-mono text-slate-500 font-bold neo-inset px-2.5 py-1 rounded-lg">Projects Analyzed</span>
         </div>

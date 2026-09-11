@@ -45,7 +45,7 @@ export const SensitivitySimulator: React.FC<SensitivitySimulatorProps> = ({ proj
             <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
               <span>Interactive Prediction Sensitivity Simulator</span>
               <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/30 font-mono">
-                Real-Time Recalculation
+                Dynamic Parameter Simulation
               </span>
             </h3>
             <p className="text-xs text-slate-400">

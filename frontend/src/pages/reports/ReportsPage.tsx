@@ -61,29 +61,28 @@ export const ReportsPage: React.FC = () => {
 
   const handleRegenerate = () => {
     setIsGenerating(true);
-    toast.info('Synthesizing Report', 'Aggregating latest SHAP feature waterfall and peer benchmark percentiles...');
+    toast.info('Synthesizing Report', 'Aggregating latest project risk drivers and peer benchmark percentiles...');
     setTimeout(() => {
       setIsGenerating(false);
-      toast.success('Brief Updated', 'Report updated with latest telemetry snapshot.');
-    }, 600);
+      toast.success('Dossier Compiled', 'Executive Risk Briefing generated with digital signature integrity.');
+    }, 1200);
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12 select-none">
+    <div className="space-y-6 pb-20 max-w-7xl mx-auto select-none">
       {/* Page Header */}
-      <div className="neo-panel p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl neo-raised flex items-center justify-center text-indigo-700">
-            <FileSpreadsheet className="w-6 h-6" />
+      <div className="neo-panel p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1">
+            <span className="w-2 h-2 rounded-full bg-indigo-600" />
+            <span>Formal Ministerial Briefings</span>
           </div>
-          <div>
-            <h1 className="text-xl md:text-2xl font-black text-[#0B1F3A] tracking-tight">
-              EXECUTIVE RISK DOSSIER & AI REPORTS
-            </h1>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">
-              Ministerial-grade briefings synthesizing SHAP attributions, trajectory forecasts & prescriptive actions.
-            </p>
-          </div>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            Executive Project Risk Brief
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Ministerial-grade briefings synthesizing key risk drivers, trajectory forecasts & prescriptive actions.
+          </p>
         </div>
 
         {/* Top Control Buttons */}
@@ -176,7 +175,7 @@ export const ReportsPage: React.FC = () => {
             </label>
 
             <label className="flex items-center justify-between p-3 rounded-xl neo-card border-transparent text-xs font-semibold text-slate-700 cursor-pointer transition-colors">
-              <span>SHAP Feature Attributions</span>
+              <span>Explainable Risk Drivers</span>
               <input
                 type="checkbox"
                 checked={includeSHAP}
@@ -270,19 +269,19 @@ export const ReportsPage: React.FC = () => {
           <div className="space-y-2">
             <h3 className="text-xs font-black uppercase tracking-wider text-indigo-700 font-mono flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5" />
-              1.0 Executive Risk Assessment & Forecast
+              1.0 Executive Risk Assessment & Forward Outlook
             </h3>
             <p className="text-xs text-slate-700 leading-relaxed font-normal">
-              Based on the Machine learning ensemble (XGBoost + TreeSHAP), <strong className="text-[#0B1F3A]">{activeProject.name}</strong> exhibits acute delivery risk. Current physical execution stands at <strong className="text-[#0B1F3A]">{activeProject.currentPhysicalProgress}%</strong> against an expected baseline of <strong className="text-[#0B1F3A]">{activeProject.expectedProgress}%</strong>, creating an execution gap of <strong className="text-rose-600">{activeProject.progressGap}%</strong>. The model projects an anticipated schedule overrun of <strong className="text-rose-600">+{activeProject.predictedDelayMonths} months</strong> and a capital escalation of <strong className="text-amber-700">+₹{activeProject.predictedCostOverrunCr} Cr</strong> beyond sanctioned estimates.
+              Based on the Risk Assessment Engine evaluating historical PAIMANA project indicators, <strong className="text-[#0B1F3A]">{activeProject.name}</strong> exhibits acute delivery risk. Current physical execution stands at <strong className="text-[#0B1F3A]">{activeProject.currentPhysicalProgress}%</strong> against an expected baseline of <strong className="text-[#0B1F3A]">{activeProject.expectedProgress}%</strong>, creating an execution gap of <strong className="text-rose-600">{activeProject.progressGap}%</strong>. The assessment indicates an anticipated schedule overrun of <strong className="text-rose-600">+{activeProject.predictedDelayMonths} months</strong> and a capital escalation of <strong className="text-amber-700">+₹{activeProject.predictedCostOverrunCr} Cr</strong> beyond sanctioned estimates.
             </p>
           </div>
 
-          {/* Section 2: SHAP Risk Drivers */}
+          {/* Section 2: Key Risk Drivers */}
           {includeSHAP && (
             <div className="space-y-3 pt-2">
               <h3 className="text-xs font-black uppercase tracking-wider text-indigo-700 font-mono flex items-center gap-1.5">
                 <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
-                2.0 SHAP Root Cause Attribution Matrix
+                2.0 Key Risk Drivers & Root-Cause Matrix
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                 <div className="p-3.5 rounded-xl neo-card border-l-4 border-l-rose-500 space-y-1">

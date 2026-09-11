@@ -132,15 +132,15 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
       {/* Current Project Risk Summary Header */}
       <div className="neo-panel p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1">
-            <span className="w-2 h-2 rounded-full bg-indigo-600" />
-            <span>Part 2: Forward Decision Support</span>
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#1557D6] mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#1557D6]" />
+            <span>Part 2: Indicative Forward Decision Support</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-            Forward Risk Outlook
+          <h2 className="text-xl sm:text-2xl font-black text-[var(--neo-text-primary)] tracking-tight">
+            Forward Risk Outlook — Prototype
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            What could happen next and what should decision-makers watch? Grounded in current indicators.
+          <p className="text-xs sm:text-sm text-[var(--neo-text-secondary)] mt-0.5">
+            Indicative prototype assessment of potential risk trajectories grounded in historical PAIMANA indicators.
           </p>
         </div>
 

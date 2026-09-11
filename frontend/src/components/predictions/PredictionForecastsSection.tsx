@@ -42,19 +42,19 @@ export const PredictionForecastsSection: React.FC<PredictionForecastsSectionProp
           </div>
           <div>
             <h2 className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
-              <span>AI Predictions & Forward Projections</span>
+              <span>Predictive Risk Assessment — Prototype</span>
               <span className="text-xs font-normal px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-mono">
-                Bayesian Machine Learning Bounds
+                Historical PAIMANA Indicators
               </span>
             </h2>
             <p className="text-xs text-slate-500">
-              Forward completion dates, potential cost escalation limits, and 90-day probability envelopes.
+              Derived from historical PAIMANA project indicators • Schedule, expenditure and physical progress evaluation.
             </p>
           </div>
         </div>
         <div className="text-xs text-slate-600 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-2xs self-start sm:self-auto flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-          <span>Confidence: <strong>{prediction.costOverrun.modelConfidencePercent}%</strong></span>
+          <span>Evaluation: <strong>Derived Indicators</strong></span>
         </div>
       </div>
 
@@ -97,15 +97,15 @@ export const PredictionForecastsSection: React.FC<PredictionForecastsSectionProp
                 </strong>
               </div>
               <div className="flex justify-between">
-                <span>80% Confidence Interval:</span>
+                <span>Estimated Range:</span>
                 <strong className="text-slate-800 font-mono">
                   ₹{prediction.costOverrun.confidenceInterval.lower.toLocaleString()} - ₹{prediction.costOverrun.confidenceInterval.upper.toLocaleString()} Cr
                 </strong>
               </div>
               <div className="flex justify-between">
-                <span>ML Model Confidence:</span>
+                <span>Methodology Status:</span>
                 <strong className="text-emerald-700 font-mono">
-                  {prediction.costOverrun.modelConfidencePercent}%
+                  Indicator Derived
                 </strong>
               </div>
             </div>
@@ -179,15 +179,15 @@ export const PredictionForecastsSection: React.FC<PredictionForecastsSectionProp
                 </strong>
               </div>
               <div className="flex justify-between">
-                <span>Delay Bounds (P10-P90):</span>
+                <span>Delay Range Estimate:</span>
                 <strong className="text-slate-800 font-mono">
                   {prediction.timeOverrun.confidenceIntervalMonths.lower} - {prediction.timeOverrun.confidenceIntervalMonths.upper} Months
                 </strong>
               </div>
               <div className="flex justify-between">
-                <span>Original DoC Probability:</span>
+                <span>Schedule Adherence:</span>
                 <strong className="text-rose-600 font-mono">
-                  14.2% on planned deadline
+                  Critical Path Lag
                 </strong>
               </div>
             </div>
@@ -251,7 +251,7 @@ export const PredictionForecastsSection: React.FC<PredictionForecastsSectionProp
                 </div>
               </div>
               <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-lg">
-                <span className="text-[10px] uppercase font-bold text-indigo-700">Projected 90d Risk</span>
+                <span className="text-[10px] uppercase font-bold text-indigo-700">Forward Risk Outlook</span>
                 <div className="text-2xl font-extrabold text-indigo-900 mt-1 font-mono">
                   {prediction.implementationRisk.projectedRiskScore}
                 </div>
@@ -278,7 +278,7 @@ export const PredictionForecastsSection: React.FC<PredictionForecastsSectionProp
 
           {/* Implementation Risk Confidence Fan Chart */}
           <div className="pt-3 border-t border-slate-100">
-            <div className="text-[11px] font-semibold text-slate-500 mb-2">90-Day Risk Confidence Band (P10 - P90)</div>
+            <div className="text-[11px] font-semibold text-slate-500 mb-2">Indicative Risk Outlook Trajectory</div>
             <div className="h-36 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={prediction.implementationRisk.historicalSeries}>
@@ -314,7 +314,7 @@ export const PredictionForecastsSection: React.FC<PredictionForecastsSectionProp
       <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-indigo-600" />
-          <h3 className="font-bold text-slate-900 text-sm">Key Model Sensitivity Drivers & Strategic Assumptions</h3>
+          <h3 className="font-bold text-slate-900 text-sm">Key Risk Sensitivity Drivers & Strategic Assumptions</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600">
           <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
@@ -332,7 +332,7 @@ export const PredictionForecastsSection: React.FC<PredictionForecastsSectionProp
           <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
             <span className="font-bold text-slate-900 block">3. Statutory Clearances & Nodal Interface</span>
             <p className="leading-relaxed">
-              Inter-agency railway safety and forest clearance lead times represent critical-path bottlenecks with 88% predictive sensitivity weighting.
+              Inter-agency railway safety and forest clearance lead times represent critical-path bottlenecks with high sensitivity weighting.
             </p>
           </div>
         </div>

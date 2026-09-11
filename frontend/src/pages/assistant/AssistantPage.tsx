@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Bot,
@@ -23,8 +23,10 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
+import { useAuth } from '../../hooks/useAuth';
 import { AssistantMessage, PromptChip } from '../../types/assistant';
-import { PROMPT_CHIPS, generateAssistantResponse } from '../../services/assistantEngine';
+import { PROMPT_CHIPS, generateAssistantResponse, getPromptChipsForRole } from '../../services/assistantEngine';
+import { ROLE_DEFINITIONS, UserRole } from '../../config/roles';
 import { InfraProject } from '../../types/projects';
 import { RiskBadge } from '../../components/ui/RiskBadge';
 import { useToast } from '../../hooks/useToast';
@@ -35,11 +37,15 @@ export const AssistantPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const toast = useToast();
   const projects = useProjectStore((s) => s.projects);
+  const { user } = useAuth();
+  const currentRole: UserRole = user?.role || 'Senior Decision Maker';
 
   const initialProjectId = searchParams.get('project') || projects[0]?.id || 'PRJ-MORT-891';
   const [selectedProjectId, setSelectedProjectId] = useState<string>(initialProjectId);
   const [inputQuery, setInputQuery] = useState<string>('');
   const [isThinking, setIsThinking] = useState<boolean>(false);
+
+  const roleChips = useMemo(() => getPromptChipsForRole(currentRole), [currentRole]);
 
   const activeProject: InfraProject =
     projects.find((p) => p.id === selectedProjectId || p.code === selectedProjectId) || projects[0];
@@ -53,7 +59,7 @@ Operational Decision Copilot connected to the **Infrastructure Intelligence Core
 I have loaded telemetry context for **${p.name}** (${p.code}).
 
 You can inquire about:
-• **Root causes & SHAP feature attributions** ("Why is this project high risk?")
+• **Root causes & key risk drivers** ("Why is this project high risk?")
 • **Schedule slippages & critical milestone gates** ("What is the delay status?")
 • **Sanctioned cost vs expenditure & forecast overruns** ("What are the cost drivers?")
 • **Peer benchmarks** against ${p.sector} medians
@@ -61,10 +67,9 @@ You can inquire about:
 • **National portfolio urgency rankings** across all monitored projects`,
     timestamp: 'Just now',
     projectId: p.id,
-    confidencePercent: 95.0,
     dataQuality: {
       score: 98,
-      freshness: 'Telemetry live',
+      freshness: 'PAIMANA Historical Dataset',
       status: 'Verified',
     },
     metrics: [
@@ -74,11 +79,11 @@ You can inquire about:
       { label: 'Forecast Cost', value: `₹${p.forecastCostCr.toLocaleString('en-IN')} Cr`, color: 'text-slate-800 dark:text-slate-200' },
     ],
     actions: [
-      { label: 'Why is it high risk? (SHAP)', actionType: 'FILTER', target: 'Why is this project high risk?' },
+      { label: 'Why is it high risk? (Risk Drivers)', actionType: 'FILTER', target: 'Why is this project high risk?' },
       { label: 'View Recommended Actions', actionType: 'FILTER', target: 'What are the recommended actions?' },
       { label: 'Open Project Intelligence', actionType: 'NAVIGATE', target: `/projects/${p.id}` },
     ],
-    sourceCitations: ['Infrastructure Telemetry Core', 'Central Monitoring System', 'TreeSHAP v2.4'],
+    sourceCitations: ['PAIMANA Risk Assessment Engine', 'Official MoSPI Flash Reports', 'Central Monitoring System'],
   });
 
   const [messages, setMessages] = useState<AssistantMessage[]>([buildInitialWelcomeMessage(activeProject)]);
@@ -108,10 +113,9 @@ You can inquire about:
       const switchNotice: AssistantMessage = {
         id: `sys-${Date.now()}`,
         sender: 'assistant',
-        content: `**Telemetry Context Switched to ${targetPrj.name} (${targetPrj.code})**.\n\n• **Sector / Agency:** ${targetPrj.sector} | ${targetPrj.implementingAgency}\n• **Health Score:** ${targetPrj.healthScore}/100 (${targetPrj.riskLevel})\n• **Forecast Delay:** +${targetPrj.predictedDelayMonths} Mos | **Overrun:** +₹${targetPrj.predictedCostOverrunCr} Cr\n\nAll subsequent questions will analyze this package's parameters.`,
+        content: `**Context Switched to ${targetPrj.name} (${targetPrj.code})**.\n\n• **Sector / Agency:** ${targetPrj.sector} | ${targetPrj.implementingAgency}\n• **Health Score:** ${targetPrj.healthScore}/100 (${targetPrj.riskLevel})\n• **Forecast Delay:** +${targetPrj.predictedDelayMonths} Mos | **Overrun:** +₹${targetPrj.predictedCostOverrunCr} Cr\n\nAll subsequent questions will analyze this package's parameters.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         projectId: targetPrj.id,
-        confidencePercent: 94.0,
         metrics: [
           { label: 'Health Score', value: `${targetPrj.healthScore}/100`, color: targetPrj.healthScore < 60 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400' },
           { label: 'Delay Forecast', value: `+${targetPrj.predictedDelayMonths} Mos`, color: 'text-amber-600 dark:text-amber-400' },
@@ -121,7 +125,7 @@ You can inquire about:
           { label: 'Why is it at risk?', actionType: 'FILTER', target: 'Why is this project high risk?' },
           { label: 'Full Project Dossier', actionType: 'NAVIGATE', target: `/projects/${targetPrj.id}` },
         ],
-        sourceCitations: ['Active Context Switch', 'Live Telemetry Stream'],
+        sourceCitations: ['Active Context Switch', 'PAIMANA Project Indicators'],
       };
       setMessages((prev) => [...prev, switchNotice]);
     }
@@ -144,7 +148,7 @@ You can inquire about:
 
     setTimeout(() => {
       try {
-        const botResponse = generateAssistantResponse(query, activeProject, projects);
+        const botResponse = generateAssistantResponse(query, activeProject, projects, currentRole);
         setMessages((prev) => [...prev, botResponse]);
       } catch {
         setMessages((prev) => [
@@ -193,16 +197,19 @@ You can inquire about:
               <Bot className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                   INFRA-ASSIST AI
                 </h1>
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full border neo-raised bg-blue-50 dark:bg-blue-950/60 text-[#1557D6] dark:text-blue-400 border-blue-200 dark:border-blue-800">
+                  AI Decision Assistant • Role: {currentRole}
+                </span>
                 <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   Operational Intelligence Active
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
                 Grounded conversational intelligence for national infrastructure risk triage, root-cause attribution & briefings.
               </p>
             </div>
@@ -241,7 +248,7 @@ You can inquire about:
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-xs font-bold font-mono text-slate-700 dark:text-slate-200 uppercase tracking-wide">
-                Grounding: Telemetry & ML Models
+                Grounding: PAIMANA Historical Indicators & Risk Engine
               </span>
               <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono hidden sm:inline">
                 ({projects.length} Monitored Projects Connected)
@@ -285,19 +292,15 @@ You can inquire about:
                     )}
                   >
                     {/* Header Badges if available */}
-                    {!isUser && (msg.confidencePercent || msg.dataQuality) && (
+                    {!isUser && msg.dataQuality && (
                       <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-slate-200/70 dark:border-slate-800">
-                        {msg.confidencePercent && (
-                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                            Confidence: {msg.confidencePercent}%
-                          </span>
-                        )}
-                        {msg.dataQuality && (
-                          <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
-                            <CheckCircle2 className="w-2.5 h-2.5" />
-                            {msg.dataQuality.status} ({msg.dataQuality.score}% Integrity)
-                          </span>
-                        )}
+                        <span className="text-[10px] font-semibold font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                          PAIMANA Indicator Analysis
+                        </span>
+                        <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+                          <CheckCircle2 className="w-2.5 h-2.5" />
+                          {msg.dataQuality.status} ({msg.dataQuality.freshness})
+                        </span>
                       </div>
                     )}
 
@@ -306,11 +309,11 @@ You can inquire about:
                       {msg.content}
                     </div>
 
-                    {/* SHAP Factor Breakdown Cards if present */}
+                    {/* Factor Breakdown Cards if present */}
                     {msg.shapBreakdown && msg.shapBreakdown.length > 0 && (
                       <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 font-mono block">
-                          TreeSHAP Feature Contributions
+                          Explainable Risk Drivers & Contributing Factors
                         </span>
                         <div className="space-y-1.5">
                           {msg.shapBreakdown.map((item, idx) => {
@@ -460,9 +463,9 @@ You can inquire about:
           {/* Quick Prompt Chips */}
           <div className="p-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-[#0B1F3A]/40 flex items-center gap-2 overflow-x-auto">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-amber-500" /> Prompts:
+              <Sparkles className="w-3 h-3 text-amber-500" /> {currentRole} Prompts:
             </span>
-            {PROMPT_CHIPS.map((chip) => (
+            {roleChips.map((chip) => (
               <button
                 key={chip.id}
                 type="button"
@@ -484,7 +487,7 @@ You can inquire about:
           >
             <input
               type="text"
-              placeholder="Ask Infra-Assist about project risk, delays, SHAP, cost overruns, or peers..."
+              placeholder="Ask Infra-Assist about project risk, delays, risk drivers, cost overruns, or peers..."
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               className="flex-1 bg-slate-50 dark:bg-[#0B1F3A] border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-900 dark:text-white rounded-xl px-4 py-2.5 focus:outline-none focus:border-indigo-500"

@@ -16,7 +16,9 @@ import {
   ChevronDown,
   ShieldCheck,
   AlertTriangle,
+  Lock,
 } from 'lucide-react';
+import { roleHasPermission } from '../../config/roles';
 import { Button } from '../ui/Button';
 import { useToast } from '../../hooks/useToast';
 import { useProjectStore } from '../../store/projectStore';
@@ -84,6 +86,28 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
   }, []);
 
   if (!isOpen) return null;
+
+  if (!roleHasPermission(user?.role || 'Senior Decision Maker', 'ingest:data')) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+        <div className="bg-[var(--neo-surface,#F1F5F9)] max-w-md w-full p-6 rounded-2xl border border-amber-200 shadow-2xl text-center space-y-4">
+          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+            <Lock className="w-6 h-6" />
+          </div>
+          <h3 className="text-lg font-bold text-[var(--neo-text-primary,#0F172A)]">
+            Data Ingestion Restricted
+          </h3>
+          <p className="text-xs text-[var(--neo-text-secondary,#475569)] leading-relaxed">
+            Your active role (<strong>{user?.role}</strong>) does not have data ingestion or mutation privileges.
+            In accordance with Government RBAC policy, this action is restricted to Administrators.
+          </p>
+          <Button variant="primary" onClick={onClose} className="w-full py-2">
+            Return to Dashboard
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   const handleReset = () => {
     setSelectedFile(null);

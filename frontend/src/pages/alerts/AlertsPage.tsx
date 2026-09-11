@@ -132,10 +132,10 @@ export const AlertsPage: React.FC = () => {
 
         <div className="flex items-center gap-2">
           <button
-            onClick={() => alert('Triggering real-time sensor & data pipeline refresh...')}
+            onClick={() => alert('Refreshing historical data indicators...')}
             className="neo-raised px-3.5 py-2 text-xs font-semibold text-[var(--neo-text-primary)] hover:text-[#1557D6] rounded-xl transition-all cursor-pointer"
           >
-            Refresh Telemetry
+            Refresh Indicators
           </button>
           <button
             onClick={() => alert('Generating PMG Cabinet Summary Note...')}
@@ -422,7 +422,7 @@ export const AlertsPage: React.FC = () => {
                     onClick={() => navigate(`/explainability?project=${alert.projectId}`)}
                     className="neo-raised px-3 py-1 text-xs font-semibold text-[#1557D6] rounded-lg transition-all cursor-pointer hover:translate-y-[-1px]"
                   >
-                    View SHAP Attribution &rarr;
+                    View Risk Drivers &rarr;
                   </button>
                   <button
                     onClick={() => navigate(`/projects/${alert.projectId}`)}

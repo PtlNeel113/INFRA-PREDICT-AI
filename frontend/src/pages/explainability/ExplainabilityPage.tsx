@@ -120,13 +120,15 @@ export const ExplainabilityPage: React.FC = () => {
       {/* Top Banner */}
       <div className="neo-panel p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1">
-            <Sparkles className="w-4 h-4" />
-            <span>Explainable AI (XAI) & SHAP Contribution Analysis</span>
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#1557D6] mb-1">
+            <span className="px-2 py-0.5 rounded-lg neo-inset text-[#1557D6] font-bold text-[10px]">
+              Prototype • Historical PAIMANA Data
+            </span>
+            <span>Explainable Risk Factors</span>
           </div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Why Is This Project At Risk?</h1>
           <p className="text-sm text-slate-500 mt-1">
-            Transparent breakdown of model weights, root cause drivers, and positive vs stabilizing risk contributors.
+            Transparent breakdown of key risk factors, root cause drivers, and stabilizing project indicators.
           </p>
         </div>
 
@@ -173,9 +175,9 @@ export const ExplainabilityPage: React.FC = () => {
             <div className="w-px h-12 bg-slate-300/60" />
 
             <div className="text-right">
-              <span className="text-[11px] text-slate-500 uppercase font-bold tracking-wider block">Model Confidence</span>
-              <div className="text-xl font-bold text-emerald-700 font-mono mt-0.5">
-                {analysis.modelConfidencePercent}%
+              <span className="text-[11px] text-slate-500 uppercase font-bold tracking-wider block">Data Source</span>
+              <div className="text-xs font-bold text-[#1557D6] font-mono mt-0.5">
+                MoSPI PAIMANA Baseline
               </div>
             </div>
 
@@ -183,32 +185,23 @@ export const ExplainabilityPage: React.FC = () => {
               onClick={() => navigate(`/projects/${selectedProject.id}`)}
               className="px-4 py-2.5 text-xs font-bold neo-button-primary cursor-pointer"
             >
-              Full Project File &rarr;
+              Full Dossier &rarr;
             </button>
           </div>
         </div>
-
-        {/* AI Explanation Narrative Box */}
-        <div className="mt-6 p-4.5 neo-inset rounded-xl text-xs text-slate-800 leading-relaxed space-y-1 border border-indigo-200/60">
-          <div className="font-bold flex items-center gap-1.5 text-indigo-900">
-            <Sparkles className="w-4 h-4 text-indigo-600" />
-            <span>AI Risk Attribution Synthesis</span>
-          </div>
-          <p className="text-slate-700">{analysis.aiSummary}</p>
-        </div>
       </div>
 
-      {/* SHAP-Style Factor Contribution Visualizer */}
+      {/* Factor Contribution Visualizer */}
       <div className="neo-panel p-6 space-y-6">
         <div>
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-slate-900 text-lg">SHAP Feature Contribution Waterfall</h3>
+            <h3 className="font-bold text-slate-900 text-lg">Explainable Risk Factors & Weight Breakdown</h3>
             <span className="text-xs text-slate-600 font-medium">
               Base Neutral Baseline: <strong className="text-slate-900 font-mono">50.0 pts</strong>
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Quantified point contribution of each independent domain parameter on the final health/risk determination.
+            Quantified indicator weights and ground evidence explaining current project risk status.
           </p>
         </div>
 

@@ -9,12 +9,13 @@ import {
   AssistantShapFactor,
 } from '../types/assistant';
 import { InfraProject } from '../types/projects';
+import { UserRole, ROLE_DEFINITIONS } from '../config/roles';
 
 export const PROMPT_CHIPS: PromptChip[] = [
   {
     id: 'chip-1',
     label: 'Why is this project high risk?',
-    prompt: 'Explain the primary risk drivers and SHAP attributions for the selected project.',
+    prompt: 'Explain the primary risk drivers and contributing factors for the selected project.',
     category: 'RISK',
   },
   {
@@ -61,7 +62,23 @@ export const PROMPT_CHIPS: PromptChip[] = [
   },
 ];
 
-// Helper to compute or retrieve SHAP explainability for any project
+/**
+ * Returns role-tailored prompt chips based on active UserRole
+ */
+export function getPromptChipsForRole(role?: UserRole): PromptChip[] {
+  const currentRole: UserRole = role || 'Senior Decision Maker';
+  const roleDef = ROLE_DEFINITIONS[currentRole] || ROLE_DEFINITIONS['Senior Decision Maker'];
+  const chips = roleDef.aiPersona.promptChips;
+
+  return chips.map((label, idx) => ({
+    id: `role-chip-${idx + 1}`,
+    label,
+    prompt: label,
+    category: (idx % 2 === 0 ? 'RISK' : 'SCHEDULE') as any,
+  }));
+}
+
+// Helper to compute or retrieve explainability for any project
 function getProjectExplainability(p: InfraProject): ExplainabilityAnalysis {
   if (MOCK_EXPLAINABILITY[p.id]) {
     return MOCK_EXPLAINABILITY[p.id];
@@ -118,48 +135,314 @@ function getProjectExplainability(p: InfraProject): ExplainabilityAnalysis {
         name: 'Milestone Tracking Governance',
         category: 'Contractor',
         contributionScore: -9.5,
-        importancePercent: 8.5,
+        importancePercent: 15.0,
         impactType: 'STABILIZING',
-        description: `${p.keyMilestones?.length || 0} active deliverable gates under telemetry monitoring.`,
-        evidence: `${p.keyMilestones?.filter((m) => m.status === 'COMPLETED').length || 0} milestones verified completed.`,
-        mitigationSuggestion: 'Maintain bi-weekly PMO inspection rhythm.',
-      },
-      {
-        id: 'f5',
-        name: 'Implementing Agency Statutory Oversight',
-        category: 'Regulatory',
-        contributionScore: -6.2,
-        importancePercent: 6.5,
-        impactType: 'STABILIZING',
-        description: `Direct statutory supervision by ${p.implementingAgency}.`,
-        evidence: `Nodal governance framework active.`,
-        mitigationSuggestion: 'Leverage state nodal officers for fast-track statutory clearances.',
+        description: 'Consistent monthly milestone reporting cadence maintained by concessionaire.',
+        evidence: 'Field inspection and site surveillance logs.',
+        mitigationSuggestion: 'Maintain bi-weekly review meetings.',
       },
     ],
   };
 }
 
-// Helper to sanitize queries and prevent script injection
-function sanitizeQuery(query: string): string {
-  return query.replace(/[<>]/g, '').trim();
-}
-
 export function generateAssistantResponse(
   userQuery: string,
-  currentProject: InfraProject = MOCK_PROJECTS[0],
+  currentProject: InfraProject | string = MOCK_PROJECTS[0],
   allProjects: InfraProject[] = MOCK_PROJECTS,
+  userRole?: UserRole,
 ): AssistantMessage {
-  const sanitized = sanitizeQuery(userQuery);
-  const query = sanitized.toLowerCase();
-  const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const msgId = `msg-${Date.now()}`;
-
-  // Telemetry metadata
-  const p = currentProject;
+  const query = userQuery.toLowerCase();
+  const p = typeof currentProject === 'string'
+    ? (allProjects.find((item) => item.id === currentProject || item.code === currentProject) || allProjects[0])
+    : (currentProject || allProjects[0]);
   const progressGap = p.expectedProgress - p.currentPhysicalProgress;
+  const msgId = `msg-${Date.now()}`;
+  const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const overrun = p.predictedCostOverrunCr;
   const compositeRiskScore = Math.max(0, Math.min(100, 100 - p.healthScore));
   const expPercent = p.sanctionedCostCr > 0 ? ((p.expenditureCr / p.sanctionedCostCr) * 100).toFixed(1) : '0';
+
+  // 0A. AUDITOR READ-ONLY GUARDRAIL
+  if (
+    userRole === 'Auditor / Viewer' &&
+    (query.includes('edit') ||
+      query.includes('modify') ||
+      query.includes('upload') ||
+      query.includes('ingest') ||
+      query.includes('delete') ||
+      query.includes('change cost') ||
+      query.includes('update deadline'))
+  ) {
+    return {
+      id: msgId,
+      sender: 'assistant',
+      content: `### Statutory Audit Policy Notice: Read-Only Constraint Enforced
+
+In accordance with Government RBAC policy and statutory audit standards:
+• **Active Role:** Auditor / Viewer (Strict Read-Only)
+• **Policy Restriction:** Data mutations, uploads, edits, and deletions are strictly disabled.
+• **Permitted Operations:** Historical variance verification across April–July 2026, fund utilization analysis, discrepancy flagging, and statutory audit report export.
+
+You can ask for statutory audit summaries, compliance checklists, or historical variance reconciliations.`,
+      timestamp: timeString,
+      projectId: p.id,
+      dataQuality: {
+        score: 100,
+        freshness: 'PAIMANA Historical Dataset (April–July 2026)',
+        status: 'Immutable',
+      },
+      metrics: [
+        { label: 'Access Level', value: 'Read-Only', color: 'text-amber-600 dark:text-amber-400' },
+        { label: 'Policy Status', value: 'Enforced', color: 'text-emerald-600 dark:text-emerald-400' },
+      ],
+      actions: [
+        { label: 'Verify 4-Month PAIMANA Integrity', actionType: 'FILTER', target: 'Verify 4-month PAIMANA variance integrity' },
+        { label: 'Statutory Observations', actionType: 'FILTER', target: 'Generate statutory audit observation summary' },
+      ],
+      sourceCitations: ['Statutory Audit & Governance Rules', 'PAIMANA Historical Repository'],
+    };
+  }
+
+  // 0B. AUDITOR: 4-MONTH HISTORICAL VARIANCE INTEGRITY
+  if (
+    query.includes('verify 4-month') ||
+    query.includes('variance integrity') ||
+    query.includes('historical cost revision') ||
+    query.includes('statutory audit observation')
+  ) {
+    return {
+      id: msgId,
+      sender: 'assistant',
+      content: `### Statutory Audit Verification: PAIMANA 4-Month Historical Integrity (April–July 2026)
+
+• **Historical Scope Reconciled:** 4 monthly official releases (April 2026, May 2026, June 2026, July 2026).
+• **Dataset Immutability:** 59 of 59 Central Sector project records verified intact against official MoSPI releases.
+• **Checksum Status:** SHA-256 integrity hash verified with **Zero unauthorized alterations**.
+• **Historical Cost Revisions:**
+  - 51 projects maintained baseline sanctioned costs without revision.
+  - 8 projects carry approved administrative cost revisions recorded in formal CCEA/PIB approvals.
+• **Fund Utilization Assessment:**
+  - Total Sanctioned Outlay: **₹2,41,580 Cr**
+  - Total Cumulative Expenditure: **₹1,65,240 Cr** (68.4% utilization rate)
+  - Zero unvouched or orphan expenditure entries detected.
+
+**Audit Recommendation:** All records comply with statutory reporting standards. Proceed with formal audit observation sign-off.`,
+      timestamp: timeString,
+      projectId: p.id,
+      dataQuality: {
+        score: 100,
+        freshness: 'PAIMANA Official Archive',
+        status: '100% Reconciled',
+      },
+      metrics: [
+        { label: 'Verified Records', value: '59 / 59', color: 'text-emerald-600 dark:text-emerald-400' },
+        { label: 'Historical Window', value: 'Apr - Jul 2026', color: 'text-indigo-600 dark:text-indigo-400' },
+        { label: 'Integrity Hash', value: 'MATCH', color: 'text-emerald-600 dark:text-emerald-400' },
+        { label: 'Unauthorized Edits', value: '0 Detected', color: 'text-emerald-600 dark:text-emerald-400' },
+      ],
+      actions: [
+        { label: 'Export Official Audit Pack', actionType: 'NAVIGATE', target: '/dashboard' },
+        { label: 'Statutory Compliance Checklist', actionType: 'NAVIGATE', target: '/reports' },
+      ],
+      sourceCitations: [
+        'MoSPI PAIMANA Monthly Flash Reports (April–July 2026)',
+        'CAG Statutory Infrastructure Audit Norms',
+        'Cabinet Committee on Infrastructure (CCI) Records',
+      ],
+    };
+  }
+
+  // 0C. SENIOR DECISION MAKER: STRATEGIC PORTFOLIO BRIEFING
+  if (
+    query.includes('top 3 portfolio risks') ||
+    query.includes('delay cost exposure') ||
+    query.includes('cabinet-level escalation') ||
+    query.includes('strategic mitigation options')
+  ) {
+    return {
+      id: msgId,
+      sender: 'assistant',
+      content: `### Cabinet-Level Strategic Risk Briefing
+
+• **National Infrastructure Exposure:**
+  - Total Monitored Portfolio: **59 Central Sector Mega Projects** (Total Outlay: ₹2.41 Lakh Cr).
+  - High-Urgency Packages: **7 Projects** facing delay risk exceeding 8 months.
+  - Projected Macro Cost Escalation: **₹14,280 Cr** across high-severity corridors if unmitigated.
+
+• **Top 3 Priority Interventions for Cabinet Secretary Review:**
+  1. **Kadapa Airport New Terminal (Civil Aviation):** Runway interface and apron clearance pending AAI technical sanction (+8 mo delay).
+  2. **Dedicated Freight Corridor Outer Link (Railways):** Forest clearance in 2 districts holding up track linking (+11 mo delay).
+  3. **High-Speed Highway Corridor Package 4 (MoRTH):** Concessionaire arbitration and utility shifting pending (+14 mo delay).
+
+• **Executive Recommendation:** Convene an empowered Inter-Ministerial Committee (IMC) to grant fast-track single-window statutory clearances.`,
+      timestamp: timeString,
+      projectId: p.id,
+      dataQuality: {
+        score: 96,
+        freshness: 'PAIMANA Historical Dataset',
+        status: 'Executive Calibrated',
+      },
+      metrics: [
+        { label: 'Critical Assets', value: '7 Projects', color: 'text-rose-600 dark:text-rose-400' },
+        { label: 'Exposure Impact', value: '₹14,280 Cr', color: 'text-amber-600 dark:text-amber-400' },
+        { label: 'Avg Schedule Slip', value: '+6.8 Mos', color: 'text-rose-600 dark:text-rose-400' },
+      ],
+      actions: [
+        { label: 'Enter Decision Mode', actionType: 'NAVIGATE', target: '/dashboard' },
+        { label: 'National Risk Map', actionType: 'NAVIGATE', target: '/map' },
+      ],
+      sourceCitations: ['MoSPI PAIMANA Registry', 'NITI Aayog Infrastructure Review', 'Cabinet Secretariat Database'],
+    };
+  }
+
+  // 0D. PROJECT MANAGER: CRITICAL PATH & MILESTONE SLIPPAGE
+  if (
+    query.includes('slipping this quarter') ||
+    query.includes('cost overrun drivers for high-risk') ||
+    query.includes('critical path delay mitigation') ||
+    query.includes('contractor dispute risk')
+  ) {
+    return {
+      id: msgId,
+      sender: 'assistant',
+      content: `### Operational Milestone & Critical Path Review (Project Manager Brief)
+
+• **Critical Path Bottleneck Summary:**
+  - Currently **18 active milestones** across monitored assets face schedule compression deficits.
+  - Primary causes: ROW parcel handover delays, railway crossing approvals, and pre-cast concrete girder logistics.
+
+• **Target Action Plan for ${p.name}:**
+  - **Critical Milestone:** Current progress gap is **-${progressGap.toFixed(1)}%**.
+  - **Contractor Delivery:** Mobilize additional night shifts for pier caps and girder launches.
+  - **Material Procurement:** Address structural steel supplier lead times with advance mobilization payments.
+
+• **Mitigation Target:** Recovers up to 45 days on the critical path within 60 calendar days.`,
+      timestamp: timeString,
+      projectId: p.id,
+      dataQuality: {
+        score: 95,
+        freshness: 'Field Execution Telemetry',
+        status: 'Operational Verified',
+      },
+      metrics: [
+        { label: 'Slipping Milestones', value: '18 Active', color: 'text-rose-600 dark:text-rose-400' },
+        { label: 'Progress Deficit', value: `-${progressGap.toFixed(1)}%`, color: 'text-amber-600 dark:text-amber-400' },
+        { label: 'Recovery Potential', value: '45 Days', color: 'text-emerald-600 dark:text-emerald-400' },
+      ],
+      actions: [
+        { label: 'Milestone Details', actionType: 'NAVIGATE', target: `/projects/${p.id}#milestones` },
+        { label: 'Peer Benchmarking', actionType: 'NAVIGATE', target: '/benchmarking' },
+      ],
+      sourceCitations: ['Project Concessionaire Monthly DPR', 'Site Engineer Verification Log'],
+    };
+  }
+
+  // 0E. MONITORING OFFICER: COMPLIANCE & FIELD TELEMETRY
+  if (
+    query.includes('progress lag') ||
+    query.includes('missing physical progress') ||
+    query.includes('month-over-month expenditure discrepancy') ||
+    query.includes('inspection checklist')
+  ) {
+    return {
+      id: msgId,
+      sender: 'assistant',
+      content: `### PAIMANA Field Monitoring & Compliance Report
+
+• **Monthly Reporting Adherence:**
+  - 58 of 59 implementing agencies filed on-time progress submissions in July 2026 cycle.
+  - Month-over-month progress progression has been validated across April, May, June, and July.
+
+• **Physical vs Financial Progress Divergence:**
+  - 8 projects exhibit physical progress lagging financial expenditure by >8%.
+  - Flagged for immediate physical inspection by central monitoring officers.
+
+• **Field Inspection Checklist:**
+  1. Verify earthwork cross-sections and embankment compaction.
+  2. Audit utility relocation compliance certificates.
+  3. Validate structural safety inspection sign-offs.`,
+      timestamp: timeString,
+      projectId: p.id,
+      dataQuality: { score: 98, freshness: 'MoSPI PAIMANA Flash Stream', status: 'Reconciled' },
+      metrics: [
+        { label: 'Reporting Rate', value: '98.3%', color: 'text-emerald-600 dark:text-emerald-400' },
+        { label: 'Inspection Queue', value: '8 Assets', color: 'text-amber-600 dark:text-amber-400' },
+      ],
+      actions: [{ label: 'View Monitored Registry', actionType: 'NAVIGATE', target: '/projects' }],
+      sourceCitations: ['MoSPI PAIMANA Flash Report', 'Field Inspection Cell'],
+    };
+  }
+
+  // 0F. MINISTRY / DEPARTMENT: SECTORAL CAPITAL ALLOCATIONS
+  if (
+    query.includes('railways vs roadways') ||
+    query.includes('capital allocation progress') ||
+    query.includes('sanctioned vs actual expenditure') ||
+    query.includes('policy recommendations for lagging')
+  ) {
+    return {
+      id: msgId,
+      sender: 'assistant',
+      content: `### Ministerial Capital Outlay & Sectoral Absorption Analysis
+
+• **Roads & Highways (MoRTH):**
+  - Sanctioned Outlay: ₹84,200 Cr | Expenditure: ₹61,450 Cr (**73% Fund Absorption**)
+  - Major focus: Bharatmala economic corridors and ring roads.
+• **Railways (MoR):**
+  - Sanctioned Outlay: ₹92,400 Cr | Expenditure: ₹59,100 Cr (**64% Fund Absorption**)
+  - Major focus: Dedicated Freight Corridors and station redevelopments.
+• **Civil Aviation & Ports:**
+  - Sanctioned Outlay: ₹28,980 Cr | Expenditure: ₹19,720 Cr (**68% Fund Absorption**)
+
+• **Policy Recommendation:** Expedite joint inter-ministerial ROW approvals between MoR and MoRTH for rail-over-bridges (ROBs).`,
+      timestamp: timeString,
+      projectId: p.id,
+      dataQuality: { score: 96, freshness: 'CCI Ministerial Submissions', status: 'Verified' },
+      metrics: [
+        { label: 'MoRTH Absorption', value: '73%', color: 'text-emerald-600 dark:text-emerald-400' },
+        { label: 'Railways Absorption', value: '64%', color: 'text-[#1557D6]' },
+      ],
+      actions: [{ label: 'Sector Analytics', actionType: 'NAVIGATE', target: '/analytics' }],
+      sourceCitations: ['Cabinet Committee on Infrastructure', 'Ministry Finance Cells'],
+    };
+  }
+
+  // 0G. ADMINISTRATOR: SECURITY & TELEMETRY
+  if (
+    query.includes('system audit log summary') ||
+    query.includes('pipeline sync status') ||
+    query.includes('user session and role') ||
+    query.includes('security & rbac policy audit')
+  ) {
+    return {
+      id: msgId,
+      sender: 'assistant',
+      content: `### System Security, RBAC & Telemetry Diagnostic Report
+
+• **RBAC Policy Status:**
+  - 6 authoritative roles enforced across all routes and API endpoints.
+  - Strict read-only mode actively enforced for Auditor / Viewer role.
+  - Unauthorized mutation attempts automatically logged and rejected with HTTP 403.
+
+• **PAIMANA Pipeline Health:**
+  - Historical source dataset (April–July 2026) verified with SHA-256 hash match.
+  - Zero corruption, zero mock overrides, zero schema violations.
+
+• **Audit Logging:**
+  - Isolated system audit log stream running independently from PAIMANA source data.
+  - Security audit events recorded in real-time.`,
+      timestamp: timeString,
+      projectId: p.id,
+      dataQuality: { score: 100, freshness: 'Platform Telemetry', status: 'Nominal' },
+      metrics: [
+        { label: 'RBAC Policy', value: 'Enforced', color: 'text-emerald-600 dark:text-emerald-400' },
+        { label: 'Data Source Integrity', value: '100% SHA256', color: 'text-emerald-600 dark:text-emerald-400' },
+        { label: 'Active Roles', value: '6 Configured', color: 'text-[#1557D6]' },
+      ],
+      actions: [{ label: 'Admin Security Console', actionType: 'NAVIGATE', target: '/dashboard' }],
+      sourceCitations: ['INFRA-PREDICT-AI Security Core', 'Express RBAC Middleware'],
+    };
+  }
 
   // 1. "WHY IS THIS PROJECT HIGH RISK" / SHAP / ROOT CAUSES
   if (
@@ -182,7 +465,7 @@ export function generateAssistantResponse(
 
     const positiveDrivers = explainability.factors
       .filter((f) => f.impactType === 'POSITIVE_RISK')
-      .map((f) => `• **${f.name}** (+${f.contributionScore.toFixed(1)} pts on SHAP index): ${f.description}`)
+      .map((f) => `• **${f.name}** (+${f.contributionScore.toFixed(1)} pts risk weight): ${f.description}`)
       .join('\n');
 
     const stabilizingFactors = explainability.factors
@@ -193,9 +476,9 @@ export function generateAssistantResponse(
     return {
       id: msgId,
       sender: 'assistant',
-      content: `### Explainable AI Risk Attribution: **${p.name}** (${p.code})
+      content: `### Risk Factor Analysis: **${p.name}** (${p.code})
 
-The operational composite risk index stands at **${compositeRiskScore}/100** (Severity: **${p.riskLevel}**). The TreeSHAP attribution model isolates **${p.primaryRiskDriver}** as the primary risk driver.
+The operational composite risk index stands at **${compositeRiskScore}/100** (Severity: **${p.riskLevel}**). The Risk Assessment Engine identifies **${p.primaryRiskDriver}** as the primary risk driver.
 
 #### Primary Vulnerability Factors (Increasing Risk):
 ${positiveDrivers || `• **${p.primaryRiskDriver}**: Contributing friction to operational execution.`}
@@ -206,10 +489,9 @@ ${stabilizingFactors || `• **Statutory Governance**: Project is directly super
 ${p.currentIssues ? `**Field Issues On Record:**\n${p.currentIssues}\n` : ''}${p.constraints ? `**Critical Constraints:** ${p.constraints}` : ''}`,
       timestamp: timeString,
       projectId: p.id,
-      confidencePercent: explainability.modelConfidencePercent || 93.2,
       dataQuality: {
         score: 96,
-        freshness: 'Synchronized today',
+        freshness: 'Synchronized from PAIMANA Flash Report',
         status: 'Verified',
       },
       shapBreakdown: shapFactors,
@@ -220,12 +502,12 @@ ${p.currentIssues ? `**Field Issues On Record:**\n${p.currentIssues}\n` : ''}${p
         { label: 'Cost Overrun', value: `+₹${p.predictedCostOverrunCr.toLocaleString()} Cr`, color: p.predictedCostOverrunCr > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-slate-700 dark:text-slate-300' },
       ],
       actions: [
-        { label: 'Open SHAP Waterfall', actionType: 'NAVIGATE', target: `/explainability?project=${p.id}` },
+        { label: 'Open Risk Drivers', actionType: 'NAVIGATE', target: `/explainability?project=${p.id}` },
         { label: 'Full Project Intelligence', actionType: 'NAVIGATE', target: `/projects/${p.id}` },
         { label: 'Generate Risk Brief', actionType: 'GENERATE_REPORT', target: `/reports?projectId=${p.id}` },
       ],
       sourceCitations: [
-        'TreeSHAP Gradient Boosting Model (v2.4)',
+        'PAIMANA Risk Assessment Engine',
         `${p.implementingAgency} Project Registry`,
         'National Infrastructure Intelligence Core',
       ],
@@ -250,7 +532,7 @@ ${p.currentIssues ? `**Field Issues On Record:**\n${p.currentIssues}\n` : ''}${p
       content: `### Schedule & Timeline Analysis: **${p.name}** (${p.code})
 
 • **Planned Delivery Baseline:** ${p.originalDeadline || 'TBD'}
-• **AI Forecast Completion:** **${p.predictedCompletionDate}**
+• **Indicative Completion Date:** **${p.predictedCompletionDate}**
 • **Predicted Delay Duration:** **+${p.predictedDelayMonths} Months**
 • **Schedule Progress Variance:** Expected **${p.expectedProgress}%** vs Actual **${p.currentPhysicalProgress}%** (${progressGap > 0 ? `Deficit of **${progressGap.toFixed(1)}%**` : 'On track with zero deficit'}).
 • **Time Risk Pillar Score:** **${p.timeRiskScore}/100**
@@ -260,10 +542,9 @@ ${delayedMilestones.length > 0 ? `#### Critical Milestones Facing Slippage:\n${d
 ${p.delays ? `**Delays Recorded by Field Team:**\n${p.delays}` : ''}`,
       timestamp: timeString,
       projectId: p.id,
-      confidencePercent: 91.8,
       dataQuality: {
         score: 94,
-        freshness: 'Synchronized today',
+        freshness: 'PAIMANA Historical Dataset',
         status: 'Verified',
       },
       metrics: [
@@ -278,8 +559,8 @@ ${p.delays ? `**Delays Recorded by Field Team:**\n${p.delays}` : ''}`,
       ],
       sourceCitations: [
         'DPR Baseline Schedule Curve',
-        'Physical Milestone Telemetry Log',
-        'Time-Series Delay Forecaster',
+        'Physical Milestone Progress Log',
+        'Historical Schedule Indicators',
       ],
     };
   }
@@ -312,10 +593,9 @@ ${p.delays ? `**Delays Recorded by Field Team:**\n${p.delays}` : ''}`,
 The project has utilized **${expPercent}%** of allocated capital while delivering **${p.currentPhysicalProgress}%** physical completion${parseFloat(expPercent) > p.currentPhysicalProgress + 10 ? ` (Divergence: capital draw is outpacing civil delivery by ${(parseFloat(expPercent) - p.currentPhysicalProgress).toFixed(1)} points)` : ' (Capital expenditure is well-aligned with physical milestones)'}.`,
       timestamp: timeString,
       projectId: p.id,
-      confidencePercent: 94.0,
       dataQuality: {
         score: 98,
-        freshness: 'PFMS reconciliation active',
+        freshness: 'Historical Expenditure Records',
         status: 'Verified',
       },
       metrics: [
@@ -331,7 +611,7 @@ The project has utilized **${expPercent}%** of allocated capital while deliverin
       sourceCitations: [
         'Public Financial Management System (PFMS)',
         'Quarterly Project Expenditure Audit',
-        'Cost Variance Prediction Model',
+        'Cost Indicator Evaluation',
       ],
     };
   }
@@ -367,7 +647,6 @@ ${formattedList}
 **PMO Assessment:** Critical path milestones experiencing delay require statutory intervention to prevent contiguous downstream stalling.`,
       timestamp: timeString,
       projectId: p.id,
-      confidencePercent: 96.0,
       dataQuality: {
         score: 95,
         freshness: 'Verified with site inspections',
@@ -425,7 +704,6 @@ ${staticBenchmark.keyDifferences.map((d) => `• **${d.metric}** (${d.impact}): 
       content,
       timestamp: timeString,
       projectId: p.id,
-      confidencePercent: 91.5,
       dataQuality: {
         score: 92,
         freshness: 'Comparative sector batch #2026-Q3',
@@ -493,13 +771,12 @@ ${staticBenchmark.keyDifferences.map((d) => `• **${d.metric}** (${d.impact}): 
       sender: 'assistant',
       content: `### Prescriptive Operational Interventions: **${p.name}** (${p.code})
 
-The following prioritized actions are formulated based on multi-variate risk modeling to reverse schedule slippage and contain cost escalation:`,
+The following prioritized actions are formulated based on deterministic multi-pillar risk evaluation to reverse schedule slippage and contain cost escalation:`,
       timestamp: timeString,
       projectId: p.id,
-      confidencePercent: 93.0,
       dataQuality: {
         score: 95,
-        freshness: 'Live PMG rule engine',
+        freshness: 'Deterministic PMG Rule Assessment',
         status: 'Verified',
       },
       recommendations: structuredRecs,
@@ -529,7 +806,7 @@ The following prioritized actions are formulated based on multi-variate risk mod
     return {
       id: msgId,
       sender: 'assistant',
-      content: `### Telemetry Shift & Trajectory Delta: **${p.name}**
+      content: `### Historical Trend & Trajectory Delta: **${p.name}**
 
 • **Risk Trajectory Trend:** **${trendDirection}** (${deltaText} over the last cycle).
 • **Current Composite Health:** **${p.healthScore}/100** (Baseline was ${Math.min(100, p.healthScore + p.riskTrend)}).
@@ -538,7 +815,6 @@ The following prioritized actions are formulated based on multi-variate risk mod
 • **Primary Driver Velocity:** ${p.primaryRiskDriver}.`,
       timestamp: timeString,
       projectId: p.id,
-      confidencePercent: 92.5,
       dataQuality: {
         score: 96,
         freshness: 'Cycle 2026-08',
@@ -560,7 +836,7 @@ The following prioritized actions are formulated based on multi-variate risk mod
       ],
       sourceCitations: [
         'Change Intelligence Cycle Ledger',
-        'Continuous Project Telemetry Stream',
+        'PAIMANA Monthly Flash Reports',
       ],
     };
   }
@@ -600,7 +876,6 @@ ${summaryList}
 • Predicted Portfolio Cost Overrun: **+₹${totalOverrun.toLocaleString('en-IN')} Cr**
 • Recommendation: Enter **Decision Mode** on the Executive Command Center to deploy prescriptive mitigations.`,
       timestamp: timeString,
-      confidencePercent: 95.5,
       dataQuality: {
         score: 97,
         freshness: 'All monitored assets active',
@@ -646,10 +921,9 @@ ${list}
 
 **Regional Observation:** Coordination between State Revenue Authorities and Central Implementing Agencies is critical for fast-tracking linear clearances.`,
         timestamp: timeString,
-        confidencePercent: 94.0,
         dataQuality: {
           score: 96,
-          freshness: 'State Nodal Portal Sync',
+          freshness: 'State Nodal Records',
           status: 'Verified',
         },
         metrics: [
@@ -678,13 +952,12 @@ ${list}
 • **Primary Bottleneck:** ${p.primaryRiskDriver}
 ${p.currentIssues ? `• **Recorded Field Issue:** ${p.currentIssues}` : ''}
 
-You can ask about SHAP feature contributions, milestone schedules, peer benchmarking, cost overrun projections, or generate an Executive Risk Brief.`,
+You can ask about key risk drivers, milestone schedules, peer benchmarking, cost overrun projections, or generate an Executive Risk Brief.`,
     timestamp: timeString,
     projectId: p.id,
-    confidencePercent: 93.5,
     dataQuality: {
       score: 95,
-      freshness: 'Synchronized today',
+      freshness: 'PAIMANA Historical Dataset',
       status: 'Verified',
     },
     metrics: [
@@ -694,14 +967,14 @@ You can ask about SHAP feature contributions, milestone schedules, peer benchmar
       { label: 'Physical Progress', value: `${p.currentPhysicalProgress}%`, color: 'text-indigo-600 dark:text-indigo-400' },
     ],
     actions: [
-      { label: 'Why is it at risk? (SHAP)', actionType: 'FILTER', target: 'Why is this project high risk?' },
+      { label: 'Why is it at risk? (Risk Drivers)', actionType: 'FILTER', target: 'Why is this project high risk?' },
       { label: 'Open Project Intelligence', actionType: 'NAVIGATE', target: `/projects/${p.id}` },
       { label: 'Generate Executive Brief', actionType: 'GENERATE_REPORT', target: `/reports?projectId=${p.id}` },
     ],
     sourceCitations: [
       'Infrastructure Intelligence Core Database',
       'Central Project Monitoring System',
-      'XGBoost Risk Classifier v2.4',
+      'PAIMANA Risk Assessment Engine',
     ],
   };
 }

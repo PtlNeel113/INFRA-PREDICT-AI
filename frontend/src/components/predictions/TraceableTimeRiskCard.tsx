@@ -388,13 +388,12 @@ export const TraceableTimeRiskCard: React.FC<TraceableTimeRiskCardProps> = ({ pr
           </div>
 
           {/* Data Provenance & Methodology Badges */}
-          <div className="flex items-center gap-2 flex-wrap text-[11px]">
             <span className="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 font-mono flex items-center gap-1.5 border border-slate-700">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-              <span>Source: {sourceType === 'BACKEND_API' ? 'MoSPI Flash API' : 'Deterministic Engine'}</span>
+              <span>Source: {sourceType === 'BACKEND_API' ? 'PAIMANA Historical Dataset' : 'Deterministic Risk Engine'}</span>
             </span>
             <span className="px-2.5 py-1 rounded-md bg-amber-950/70 text-amber-300 border border-amber-800/80 font-mono text-[10px]">
-              No Fake ML
+              Deterministic Derived Assessment
             </span>
           </div>
         </div>

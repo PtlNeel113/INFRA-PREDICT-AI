@@ -118,7 +118,7 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
               WHERE SHOULD WE ACT FIRST?
             </h1>
             <p className="text-xs md:text-sm text-[var(--neo-text-secondary)] font-normal leading-relaxed">
-              Real-time multi-dimensional prioritization ranking packages by{' '}
+              Multi-dimensional prioritization ranking packages by{' '}
               <strong className="text-[var(--neo-text-primary)]">Health Score Vulnerability</strong>,{' '}
               <strong className="text-[var(--neo-text-primary)]">Rate of Deterioration</strong>, and{' '}
               <strong className="text-[var(--neo-text-primary)]">Capital Impact</strong>.
@@ -129,7 +129,7 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
             <button
               type="button"
               onClick={() => {
-                toast.info('Prioritization Refreshed', 'Re-ranked packages against latest contractor updates.');
+                toast.info('Prioritization Refreshed', 'Re-ranked packages against latest indicator updates.');
               }}
               className="px-4 py-2.5 rounded-xl neo-button-secondary text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
             >

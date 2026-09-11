@@ -62,7 +62,7 @@ export const WhatChangedFeed: React.FC<WhatChangedFeedProps> = ({ onSelectProjec
             </h3>
           </div>
           <p className="text-xs text-[var(--neo-text-secondary)] mt-1">
-            Real-time variance signals, milestone breaches, and budget adjustments.
+            Variance signals, milestone breaches, and budget adjustments across reporting cycles.
           </p>
         </div>
 

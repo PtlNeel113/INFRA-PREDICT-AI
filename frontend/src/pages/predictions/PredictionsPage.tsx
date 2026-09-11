@@ -85,15 +85,21 @@ export const PredictionsPage: React.FC = () => {
       <div className="neo-panel p-5 sm:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#1557D6] mb-1.5">
-            <Sparkles className="w-4 h-4 text-[#1557D6]" />
-            <span>AI Predictive & Prescriptive Intelligence</span>
+            <span className="px-2.5 py-0.5 rounded-lg neo-inset text-[#1557D6] font-bold text-[10px]">
+              Prototype • Historical PAIMANA Data
+            </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-[var(--neo-text-primary)] tracking-tight">
-            Infrastructure Predictive Intelligence
+            Predictive Risk Assessment — Prototype
           </h1>
           <p className="text-xs sm:text-sm text-[var(--neo-text-secondary)] mt-1 max-w-3xl">
-            Deterministic risk synthesis grounded in official MoSPI PAIMANA baseline records.
+            Derived from historical PAIMANA project indicators. Risk assessment based on available project cost, expenditure, physical progress and schedule indicators.
           </p>
+          <div className="mt-2 text-[11px] text-[var(--neo-text-tertiary)] flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span>Source: Official PAIMANA Flash Reports, April–July 2026</span>
+            <span className="hidden sm:inline">•</span>
+            <span>Prototype assessment using available historical project records</span>
+          </div>
         </div>
 
         {/* Segmented Sub-Feature Navigation (Tab 1 vs Tab 2) */}
@@ -121,7 +127,7 @@ export const PredictionsPage: React.FC = () => {
             }`}
           >
             <TrendingUp className="w-3.5 h-3.5 text-[#1557D6]" />
-            <span>Forward Risk Outlook</span>
+            <span>Forward Risk Outlook — Prototype</span>
           </button>
         </div>
       </div>
@@ -167,6 +173,14 @@ export const PredictionsPage: React.FC = () => {
           onBackToRiskIntelligence={handleSwitchToRiskIntelligence}
         />
       )}
+
+      {/* Methodological Disclaimer Note */}
+      <div className="p-4 sm:p-5 rounded-2xl neo-inset text-xs text-[var(--neo-text-secondary)] space-y-1.5 mt-6 border border-[rgba(200,212,226,0.45)]">
+        <div className="font-bold text-[var(--neo-text-primary)] text-xs uppercase tracking-wider">Methodological Note:</div>
+        <p className="leading-relaxed">
+          This prototype derives project risk indicators from available historical PAIMANA project data. Production-grade predictive modelling would require a larger historical dataset, validated training labels, model evaluation and authorized live data integration.
+        </p>
+      </div>
 
     </div>
   );

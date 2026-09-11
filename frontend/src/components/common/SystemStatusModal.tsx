@@ -22,20 +22,20 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
 
   const services = [
     {
-      name: 'DATA INGESTION',
-      status: 'Connected',
+      name: 'HISTORICAL DATASET',
+      status: 'Loaded',
       statusColor: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800',
       icon: Database,
-      details: 'API Node • Sync Cycle: Hourly • Latency: 14ms',
-      uptime: '99.98%',
+      details: 'Official PAIMANA Flash Reports • April–July 2026 Dataset',
+      uptime: '100.00%',
     },
     {
-      name: 'AI RISK & FORECAST ENGINE',
+      name: 'DERIVED RISK ASSESSMENT ENGINE',
       status: 'Operational',
       statusColor: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800',
       icon: Cpu,
-      details: 'Ensemble XGBoost + LightGBM + TreeSHAP • Inference Time: 42ms',
-      uptime: '99.95%',
+      details: 'Deterministic Multi-Pillar Risk Rules • Cost, Schedule & Execution',
+      uptime: '100.00%',
     },
     {
       name: 'NATIONAL PROJECT DATABASE',

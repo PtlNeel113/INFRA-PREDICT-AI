@@ -121,7 +121,7 @@ export function generateSignedPdf({
     format === 'SECTOR_DRILLDOWN'
       ? 'SECTORAL DEEP-DIVE & VARIANCE AUDIT'
       : format === 'EARLY_WARNING_LOG'
-      ? '90-DAY EARLY WARNING MITIGATION MATRIX'
+      ? 'EARLY WARNING MITIGATION MATRIX'
       : 'EXECUTIVE RISK BRIEF & CABINET INTERVENTION DOSSIER';
 
   doc.text(formatTitle, margin + 4, currentY + 7);
@@ -206,20 +206,20 @@ export function generateSignedPdf({
 
   const diagnosisText =
     activeProject.aiSummary ||
-    `Machine learning ensemble models (XGBoost + TreeSHAP) have identified acute delivery risk on ${activeProject.name}. Physical execution exhibits an acute divergence of ${activeProject.progressGap}% from the approved baseline schedule. With critical path activities impeded, the project is modeled to incur a slippage of +${activeProject.predictedDelayMonths} months and an estimated fiscal overrun of +INR ${activeProject.predictedCostOverrunCr} Cr beyond the sanctioned expenditure. Immediate Cabinet Secretariat escalation is advised.`;
+    `Evaluation of historical PAIMANA project indicators identifies acute delivery risk on ${activeProject.name}. Physical execution exhibits an acute divergence of ${activeProject.progressGap}% from the approved baseline schedule. With critical path activities impeded, the project indicates an anticipated slippage of +${activeProject.predictedDelayMonths} months and an estimated fiscal overrun of +INR ${activeProject.predictedCostOverrunCr} Cr beyond the sanctioned expenditure. Immediate nodal escalation is advised.`;
 
   const splitDiagnosis = doc.splitTextToSize(diagnosisText, contentWidth - 4);
   doc.text(splitDiagnosis, margin + 2, currentY);
   currentY += splitDiagnosis.length * 3.8 + 5;
 
-  // Section 2: SHAP Feature Attribution Matrix
+  // Section 2: Key Risk Drivers Matrix
   if (includeSHAP) {
     doc.setFillColor(254, 243, 199);
     doc.rect(margin, currentY, contentWidth, 6, 'F');
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8.5);
     doc.setTextColor(180, 83, 9);
-    doc.text('2.0 AI ROOT-CAUSE ATTRIBUTION (SHAP WEIGHTED SENSITIVITY)', margin + 3, currentY + 4.2);
+    doc.text('2.0 EXPLAINABLE ROOT-CAUSE & RISK DRIVERS', margin + 3, currentY + 4.2);
 
     currentY += 8;
 
@@ -231,7 +231,7 @@ export function generateSignedPdf({
         [
           { content: 'Severity', styles: { fontStyle: 'bold', fontSize: 7.5, fillColor: [241, 245, 249], textColor: [15, 23, 42] } },
           { content: 'Identified Delay Driver', styles: { fontStyle: 'bold', fontSize: 7.5, fillColor: [241, 245, 249], textColor: [15, 23, 42] } },
-          { content: 'SHAP Impact', styles: { fontStyle: 'bold', fontSize: 7.5, fillColor: [241, 245, 249], textColor: [15, 23, 42] } },
+          { content: 'Risk Weight Impact', styles: { fontStyle: 'bold', fontSize: 7.5, fillColor: [241, 245, 249], textColor: [15, 23, 42] } },
           { content: 'Operational Bottleneck & Inter-Agency Context', styles: { fontStyle: 'bold', fontSize: 7.5, fillColor: [241, 245, 249], textColor: [15, 23, 42] } },
         ],
       ],
@@ -468,7 +468,7 @@ export function generateSignedPdf({
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(8.5);
     doc.setTextColor(6, 95, 70);
-    doc.text('6.0 PRESCRIPTIVE 90-DAY MINISTERIAL INTERVENTION ROADMAP', margin + 3, currentY + 4.2);
+    doc.text('6.0 PRESCRIPTIVE MINISTERIAL INTERVENTION ROADMAP', margin + 3, currentY + 4.2);
 
     currentY += 8;
 

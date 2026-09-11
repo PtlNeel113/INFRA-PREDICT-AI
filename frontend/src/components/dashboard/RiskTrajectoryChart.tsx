@@ -24,17 +24,17 @@ export const RiskTrajectoryChart: React.FC = () => {
     <div className="neo-panel p-5 sm:p-6 flex flex-col justify-between">
       {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[rgba(200,212,226,0.45)]">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#1557D6]" />
-            <h3 className="text-base sm:text-lg font-black text-[var(--neo-text-primary)] tracking-tight">
-              Risk Trajectory & Predictive Forecast
-            </h3>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#1557D6]" />
+              <h3 className="text-base sm:text-lg font-black text-[var(--neo-text-primary)] tracking-tight">
+                Risk Trajectory & Historical Trend
+              </h3>
+            </div>
+            <p className="text-xs text-[var(--neo-text-secondary)] mt-1">
+              Historical risk trajectory derived from official PAIMANA reporting cycles with indicative forward outlook.
+            </p>
           </div>
-          <p className="text-xs text-[var(--neo-text-secondary)] mt-1">
-            Historical risk trajectory with AI-projected forecast and confidence bounds.
-          </p>
-        </div>
 
         {/* Time Horizon Selector (30d, 90d, 1y) */}
         <div className="flex items-center neo-inset-sm p-1 rounded-xl gap-1">
@@ -98,11 +98,11 @@ export const RiskTrajectoryChart: React.FC = () => {
                       )}
                       {d.projectedRisk && (
                         <p className="text-red-400 font-bold">
-                          AI Projected Risk: {d.projectedRisk}%
+                          Indicative Outlook: {d.projectedRisk}%
                         </p>
                       )}
                       <p className="text-[10px] text-slate-400 font-mono">
-                        90% Confidence Interval: [{d.p10Lower}% - {d.p90Upper}%]
+                        Indicative Range: [{d.p10Lower}% - {d.p90Upper}%]
                       </p>
                     </div>
                   );
@@ -116,7 +116,7 @@ export const RiskTrajectoryChart: React.FC = () => {
             <Area
               type="monotone"
               dataKey="p90Upper"
-              name="Upper Confidence (P90)"
+              name="Indicative Upper Bound"
               stroke="transparent"
               fill="#155EEF"
               fillOpacity={0.08}
@@ -136,7 +136,7 @@ export const RiskTrajectoryChart: React.FC = () => {
             <Line
               type="monotone"
               dataKey="projectedRisk"
-              name="Projected Risk Trajectory (AI Forecast)"
+              name="Forward Risk Outlook — Prototype"
               stroke="#DC2626"
               strokeWidth={3}
               strokeDasharray="5 5"
@@ -149,12 +149,12 @@ export const RiskTrajectoryChart: React.FC = () => {
       {/* Bottom Summary Callout */}
       <div className="p-3 neo-inset-sm rounded-xl flex items-center justify-between text-xs mt-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-[#1557D6]" />
+          <Activity className="w-4 h-4 text-[#1557D6]" />
           <span className="text-[var(--neo-text-primary)] font-semibold">
             Risk Trend:
           </span>
           <span className="text-[var(--neo-text-secondary)] hidden sm:inline">
-            Risk momentum is accelerating at +3.2% per quarter without prescriptive intervention.
+            Historical trajectory reflects a +3.2% velocity shift across reporting cycles.
           </span>
         </div>
         <span className="text-xs font-mono font-bold text-red-600">

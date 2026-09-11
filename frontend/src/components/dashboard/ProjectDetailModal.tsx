@@ -185,7 +185,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           <div className="p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-2">
             <h4 className="text-xs font-black text-[#0B1F3A] uppercase tracking-wider flex items-center gap-1.5">
               <SearchCode className="w-4 h-4 text-[#155EEF]" />
-              <span>Explainable AI (SHAP Root-Cause)</span>
+              <span>Explainable Risk Drivers & Root Cause</span>
             </h4>
             <div className="p-3 rounded-lg bg-white border border-slate-200 space-y-1">
               <span className="text-[10px] font-bold text-red-600 uppercase">Primary Driver</span>

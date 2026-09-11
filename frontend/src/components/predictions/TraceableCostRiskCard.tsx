@@ -851,7 +851,7 @@ export const TraceableCostRiskCard: React.FC<TraceableCostRiskCardProps> = ({ pr
         <div className="flex flex-wrap items-center justify-between gap-2 pt-2 text-[11px] text-slate-500">
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>Audited against MoSPI PAIMANA Flash Reports &bull; Zero synthetic SHAP interpolations</span>
+            <span>Audited against MoSPI PAIMANA Flash Reports &bull; Deterministic indicator evaluation without synthetic interpolations</span>
           </span>
           <span className="font-mono text-slate-400">
             Source: Ministry of Statistics and Programme Implementation (MoSPI)

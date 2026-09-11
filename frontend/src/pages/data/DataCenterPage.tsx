@@ -140,7 +140,7 @@ export const DataCenterPage: React.FC = () => {
                     Drag & Drop CSV / Excel dataset here, or click to upload
               </p>
               <p className="text-[11px] text-slate-400 mt-1">
-                Automatic schema mapping • SHA-256 integrity verification • Instant SHAP recalculation
+                Automatic schema mapping • SHA-256 integrity verification • Risk indicator recalculation
               </p>
 
               <button

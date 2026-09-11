@@ -1,10 +1,6 @@
-export type UserRole =
-  | 'Monitoring Officer'
-  | 'Ministry / Department'
-  | 'Project Manager'
-  | 'Senior Decision Maker'
-  | 'Auditor / Viewer'
-  | 'Administrator';
+import { UserRole, Permission, RoleDefinition } from '../config/roles';
+
+export type { UserRole, Permission, RoleDefinition };
 
 export interface UserProfile {
   id: string;
@@ -17,6 +13,8 @@ export interface UserProfile {
   isProfileComplete: boolean;
   avatarUrl?: string;
   lastLoginAt: string;
+  permissions?: Permission[];
+  roleDetails?: RoleDefinition;
 }
 
 export interface AuthState {
