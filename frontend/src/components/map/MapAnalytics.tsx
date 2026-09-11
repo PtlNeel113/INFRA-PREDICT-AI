@@ -45,28 +45,28 @@ export const MapAnalytics: React.FC<MapAnalyticsProps> = ({ reportingPeriod }) =
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {/* 1. Risk by Sector (Step 13) */}
-      <div className="bg-white dark:bg-[#0F1D2E] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs">
+      <div className="neo-panel p-5">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-black text-[#0B1F3A] dark:text-white uppercase tracking-wider flex items-center gap-2">
-              <Layers className="w-4 h-4 text-[#155EEF]" />
+            <h3 className="text-sm font-black text-[var(--neo-text-primary)] uppercase tracking-wider flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#1557D6]" />
               <span>Risk Concentration by Sector</span>
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-[var(--neo-text-secondary)] mt-0.5">
               MoSPI PAIMANA portfolio breakdown across key infrastructure segments
             </p>
           </div>
           <div className="flex items-center gap-3 text-[11px] font-bold">
-            <span className="flex items-center gap-1 text-slate-600 dark:text-slate-300">
-              <span className="w-2.5 h-2.5 rounded bg-red-600" />
+            <span className="flex items-center gap-1 text-[var(--neo-text-secondary)]">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-600 shadow-xs" />
               Critical
             </span>
-            <span className="flex items-center gap-1 text-slate-600 dark:text-slate-300">
-              <span className="w-2.5 h-2.5 rounded bg-orange-500" />
+            <span className="flex items-center gap-1 text-[var(--neo-text-secondary)]">
+              <span className="w-2.5 h-2.5 rounded-full bg-orange-500 shadow-xs" />
               High
             </span>
-            <span className="flex items-center gap-1 text-slate-600 dark:text-slate-300">
-              <span className="w-2.5 h-2.5 rounded bg-amber-500" />
+            <span className="flex items-center gap-1 text-[var(--neo-text-secondary)]">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-xs" />
               Watch
             </span>
           </div>
@@ -140,24 +140,24 @@ export const MapAnalytics: React.FC<MapAnalyticsProps> = ({ reportingPeriod }) =
         </div>
       </div>
 
-      {/* 2. National Risk Trajectory (Step 14) */}
-      <div className="bg-white dark:bg-[#0F1D2E] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs">
+      {/* 2. Risk Trajectory Timeline (Step 14) */}
+      <div className="neo-panel p-5">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-black text-[#0B1F3A] dark:text-white uppercase tracking-wider flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#155EEF]" />
-              <span>National Portfolio Risk Trajectory</span>
+            <h3 className="text-sm font-black text-[var(--neo-text-primary)] uppercase tracking-wider flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#1557D6]" />
+              <span>National Risk Trajectory & Outlook</span>
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-[var(--neo-text-secondary)] mt-0.5">
               Historical observed monthly scores vs predictive AI escalation forecast
             </p>
           </div>
           <div className="flex items-center gap-3 text-[11px] font-bold">
-            <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
-              <span className="w-3 h-1 bg-[#155EEF] rounded" />
+            <span className="flex items-center gap-1.5 text-[var(--neo-text-secondary)]">
+              <span className="w-3 h-1 bg-[#1557D6] rounded" />
               Observed (Apr–Jul)
             </span>
-            <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
+            <span className="flex items-center gap-1.5 text-[var(--neo-text-secondary)]">
               <span className="w-3 h-1 border-t-2 border-dashed border-amber-500" />
               Predicted (Aug–Sep)
             </span>

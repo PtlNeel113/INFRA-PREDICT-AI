@@ -130,7 +130,7 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
     <div className="space-y-6 max-w-7xl mx-auto" id="forward-risk-outlook-tab">
       
       {/* Current Project Risk Summary Header */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="neo-panel p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1">
             <span className="w-2 h-2 rounded-full bg-indigo-600" />
@@ -152,7 +152,7 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
           <button
             type="button"
             onClick={onBackToRiskIntelligence}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold neo-button-secondary cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Risk Intelligence</span>
@@ -164,26 +164,26 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         
         {/* CARD A: COST OUTLOOK */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between space-y-4">
+        <div className="neo-panel p-5 flex flex-col justify-between space-y-4">
           <div className="space-y-3">
-            <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-300/60">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
+                <div className="w-8 h-8 rounded-lg neo-inset flex items-center justify-center text-rose-600">
                   <DollarSign className="w-4 h-4" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">Cost Outlook</h3>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Financial Trajectory</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Financial Trajectory</span>
                 </div>
               </div>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border neo-raised ${
                 costPressureOutlook === 'HIGH' ? 'bg-rose-100 text-rose-700 border-rose-200' : costPressureOutlook === 'MEDIUM' ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-emerald-100 text-emerald-800 border-emerald-200'
               }`}>
                 {costPressureOutlook} PRESSURE
               </span>
             </div>
 
-            <div className="bg-slate-50/80 rounded-xl p-3 border border-slate-100 space-y-2 text-xs">
+            <div className="neo-inset rounded-xl p-3.5 space-y-2 text-xs">
               <div className="flex justify-between items-center">
                 <span className="text-slate-600">Current Cost Position</span>
                 <span className="font-mono font-bold text-slate-900">
@@ -217,26 +217,26 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
         </div>
 
         {/* CARD B: TIME OUTLOOK */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between space-y-4">
+        <div className="neo-panel p-5 flex flex-col justify-between space-y-4">
           <div className="space-y-3">
-            <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-300/60">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
+                <div className="w-8 h-8 rounded-lg neo-inset flex items-center justify-center text-amber-700">
                   <Clock className="w-4 h-4" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">Time Outlook</h3>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Commissioning Horizon</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Commissioning Horizon</span>
                 </div>
               </div>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border neo-raised ${
                 delayRiskOutlook === 'HIGH' ? 'bg-rose-100 text-rose-700 border-rose-200' : delayRiskOutlook === 'MEDIUM' ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-emerald-100 text-emerald-800 border-emerald-200'
               }`}>
                 {delayRiskOutlook} DELAY RISK
               </span>
             </div>
 
-            <div className="bg-slate-50/80 rounded-xl p-3 border border-slate-100 space-y-2 text-xs">
+            <div className="neo-inset rounded-xl p-3.5 space-y-2 text-xs">
               <div className="flex justify-between items-center">
                 <span className="text-slate-600">Current Revised DoC</span>
                 <span className="font-mono font-bold text-amber-800">
@@ -270,24 +270,24 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
         </div>
 
         {/* CARD C: EXECUTION OUTLOOK */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between space-y-4">
+        <div className="neo-panel p-5 flex flex-col justify-between space-y-4">
           <div className="space-y-3">
-            <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-300/60">
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700">
+                <div className="w-8 h-8 rounded-lg neo-inset flex items-center justify-center text-blue-700">
                   <Activity className="w-4 h-4" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900">Execution Outlook</h3>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Field Momentum</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Field Momentum</span>
                 </div>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded border bg-blue-50 text-blue-800 border-blue-200">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg border neo-raised bg-blue-50 text-blue-800 border-blue-200">
                 {executionMomentum}
               </span>
             </div>
 
-            <div className="bg-slate-50/80 rounded-xl p-3 border border-slate-100 space-y-2 text-xs">
+            <div className="neo-inset rounded-xl p-3.5 space-y-2 text-xs">
               <div className="flex justify-between items-center">
                 <span className="text-slate-600">Current Progress Trend</span>
                 <span className="font-mono font-bold text-emerald-700">
@@ -327,10 +327,10 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
       </div>
 
       {/* 10. FORWARD EARLY WARNINGS */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-3.5" id="forward-early-warnings">
-        <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 font-bold text-xs shadow-2xs">
+      <div className="neo-panel p-5 space-y-3.5" id="forward-early-warnings">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-300/60">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg neo-raised flex items-center justify-center text-amber-700 font-bold text-xs">
               <AlertTriangle className="w-4 h-4" />
             </div>
             <div>
@@ -342,7 +342,7 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
               </p>
             </div>
           </div>
-          <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-mono">
+          <span className="text-[11px] px-2.5 py-1 rounded-lg neo-inset text-slate-700 font-mono font-bold">
             {earlyWarnings.length} Active Triggers
           </span>
         </div>
@@ -351,12 +351,12 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
           {earlyWarnings.map((warning, idx) => (
             <div
               key={idx}
-              className={`p-3.5 rounded-xl border space-y-1.5 ${
+              className={`p-4 neo-card rounded-xl space-y-1.5 ${
                 warning.severity === 'HIGH'
-                  ? 'bg-rose-50/50 border-rose-200'
+                  ? 'border-l-4 border-l-rose-500'
                   : warning.severity === 'MEDIUM'
-                  ? 'bg-amber-50/50 border-amber-200'
-                  : 'bg-slate-50 border-slate-200'
+                  ? 'border-l-4 border-l-amber-500'
+                  : 'border-l-4 border-l-slate-400'
               }`}
             >
               <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
@@ -374,10 +374,10 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
       </div>
 
       {/* 11. RECOMMENDED DECISION ACTION */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4" id="recommended-decision-action">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700 font-bold text-xs shadow-2xs">
+      <div className="neo-panel p-5 space-y-4" id="recommended-decision-action">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-300/60">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg neo-raised flex items-center justify-center text-indigo-700 font-bold text-xs">
               <CheckCircle2 className="w-4 h-4" />
             </div>
             <div>
@@ -391,7 +391,7 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
           </div>
 
           <span
-            className={`text-xs font-extrabold px-3 py-1 rounded-lg border ${
+            className={`text-xs font-extrabold px-3 py-1.5 rounded-xl border neo-raised ${
               recommendedAction.priority === 'HIGH'
                 ? 'bg-rose-100 text-rose-700 border-rose-200'
                 : recommendedAction.priority === 'MEDIUM'
@@ -403,15 +403,15 @@ export const ForwardRiskOutlookTab: React.FC<ForwardRiskOutlookTabProps> = ({
           </span>
         </div>
 
-        <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/40 space-y-2">
+        <div className="p-4 rounded-xl neo-inset space-y-2 border border-indigo-200/50">
           <div className="flex items-start gap-2">
             <span className="text-indigo-700 font-bold mt-0.5 text-sm">→</span>
             <div>
               <h4 className="text-sm font-bold text-slate-900">
                 {recommendedAction.action}
               </h4>
-              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                <strong className="text-slate-800 font-semibold">Causal Rationale:</strong>{' '}
+              <p className="text-xs text-slate-700 mt-1 leading-relaxed">
+                <strong className="text-slate-900 font-semibold">Causal Rationale:</strong>{' '}
                 {recommendedAction.rationale}
               </p>
             </div>

@@ -17,15 +17,15 @@ export const GlassCard: React.FC<GlassCardProps> = ({
   onClick,
 }) => {
   const variantStyles = {
-    card: 'glass-card',
-    panel: 'glass-panel',
-    surface: 'glass-surface',
+    card: 'neo-card',
+    panel: 'neo-panel',
+    surface: 'neo-surface',
   };
 
   return (
     <div
       className={cn(
-        'rounded-xl',
+        'rounded-2xl',
         variantStyles[variant],
         hover && 'hover-lift cursor-pointer',
         onClick && 'cursor-pointer',

@@ -55,14 +55,14 @@ export const OverallRiskSummaryCard: React.FC<OverallRiskSummaryCardProps> = ({
   const style = getRiskStyle(riskLevel);
 
   return (
-    <div className={`rounded-2xl border p-5 shadow-xs space-y-4 bg-white ${style.bg}`} id="overall-risk-summary">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+    <div className={`neo-panel p-5 space-y-4 ${style.bg}`} id="overall-risk-summary">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-300/60">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-800 shadow-2xs">
+          <div className="w-10 h-10 rounded-xl neo-raised flex items-center justify-center text-slate-800">
             <ShieldAlert className="w-5 h-5 text-indigo-600" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
+            <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
               Synthesized Current Project Analysis
             </span>
             <h3 className="text-lg font-bold text-slate-900 tracking-tight">
@@ -72,7 +72,7 @@ export const OverallRiskSummaryCard: React.FC<OverallRiskSummaryCardProps> = ({
         </div>
 
         <div className="flex items-center gap-3 self-start lg:self-auto">
-          <span className={`text-sm font-extrabold px-3 py-1 rounded-lg border flex items-center gap-2 ${style.badge}`}>
+          <span className={`text-sm font-extrabold px-3 py-1.5 rounded-xl border neo-raised flex items-center gap-2 ${style.badge}`}>
             <span className={`w-2 h-2 rounded-full ${style.dot}`} />
             <span>OVERALL RISK: {riskLevel}</span>
           </span>
@@ -82,8 +82,8 @@ export const OverallRiskSummaryCard: React.FC<OverallRiskSummaryCardProps> = ({
       {/* Grid of Key Summary KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
         {/* Health Score */}
-        <div className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-1">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+        <div className="p-3.5 neo-card rounded-xl space-y-1">
+          <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">
             Health Score
           </span>
           <div className="flex items-baseline gap-1.5">
@@ -92,9 +92,9 @@ export const OverallRiskSummaryCard: React.FC<OverallRiskSummaryCardProps> = ({
             </span>
             <span className="text-xs text-slate-400 font-mono">/ 100</span>
           </div>
-          <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+          <div className="w-full neo-inset rounded-full h-2 overflow-hidden p-0.5">
             <div
-              className={`h-1.5 rounded-full ${
+              className={`h-full rounded-full ${
                 healthScore >= 75 ? 'bg-emerald-500' : healthScore >= 50 ? 'bg-amber-500' : 'bg-rose-500'
               }`}
               style={{ width: `${Math.min(100, healthScore)}%` }}
@@ -103,8 +103,8 @@ export const OverallRiskSummaryCard: React.FC<OverallRiskSummaryCardProps> = ({
         </div>
 
         {/* Risk Trend */}
-        <div className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-1">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+        <div className="p-3.5 neo-card rounded-xl space-y-1">
+          <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">
             Risk Trend
           </span>
           <div className="flex items-baseline gap-1">
@@ -121,8 +121,8 @@ export const OverallRiskSummaryCard: React.FC<OverallRiskSummaryCardProps> = ({
         </div>
 
         {/* Top Risk Driver */}
-        <div className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-1">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+        <div className="p-3.5 neo-card rounded-xl space-y-1">
+          <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">
             Top Risk Driver
           </span>
           <div className="text-xs font-semibold text-slate-900 line-clamp-2" title={topRiskDriver}>
@@ -135,15 +135,15 @@ export const OverallRiskSummaryCard: React.FC<OverallRiskSummaryCardProps> = ({
       </div>
 
       {/* Short Explanation & Bottom CTA Button to switch to PART 2 */}
-      <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-slate-200">
-        <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
+      <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 neo-inset p-3.5 rounded-xl">
+        <p className="text-xs text-slate-700 leading-relaxed max-w-2xl">
           <strong className="text-slate-900 font-semibold">Summary:</strong> Project risk is primarily driven by schedule pressure and execution momentum across civil works and milestone dependencies.
         </p>
 
         <button
           type="button"
           onClick={onViewForwardOutlook}
-          className="flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-xs shrink-0 cursor-pointer"
+          className="flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold neo-button-primary shrink-0 cursor-pointer"
         >
           <span>View Forward Risk Outlook</span>
           <ArrowRight className="w-4 h-4" />

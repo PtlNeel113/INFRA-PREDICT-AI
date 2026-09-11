@@ -64,23 +64,23 @@ export const GenerateBriefModal: React.FC<GenerateBriefModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#060F1D]/70 backdrop-blur-xs">
-      <div className="w-full max-w-lg bg-white rounded-[20px] border border-[#E2E8F0] gov-shadow p-6 sm:p-7 space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs select-none">
+      <div className="w-full max-w-lg neo-panel rounded-[22px] p-6 sm:p-7 space-y-5 border border-slate-300/80 shadow-2xl text-slate-900">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#ECFEFF] text-[#0E7490] flex items-center justify-center">
+        <div className="flex items-center justify-between border-b border-slate-300/60 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl neo-raised text-indigo-700 flex items-center justify-center">
               <FileSpreadsheet className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-black text-[#0B1F3A]">Generate Executive Risk Brief</h3>
-              <p className="text-[11px] text-slate-500">Cabinet & Ministerial Intelligence Dossier</p>
+              <h3 className="text-base font-black text-slate-900">Generate Executive Risk Brief</h3>
+              <p className="text-[11px] text-slate-500 font-medium">Cabinet & Ministerial Intelligence Dossier</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-slate-800 rounded-lg cursor-pointer transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -88,19 +88,19 @@ export const GenerateBriefModal: React.FC<GenerateBriefModalProps> = ({
 
         {/* Target Infrastructure Package Select */}
         <div className="space-y-1.5">
-          <label className="text-xs font-bold text-[#0B1F3A] flex items-center justify-between">
+          <label className="text-xs font-bold text-slate-800 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-[#155EEF]" />
+              <Building2 className="w-3.5 h-3.5 text-indigo-700" />
               <span>Target Infrastructure Package</span>
             </span>
-            <span className="text-[11px] font-mono text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">
+            <span className="text-[11px] font-mono text-indigo-700 font-bold neo-inset px-2.5 py-0.5 rounded-lg">
               {currentProject.code}
             </span>
           </label>
           <select
             value={selectedProjectId}
             onChange={(e) => setSelectedProjectId(e.target.value)}
-            className="w-full text-xs font-bold bg-[#F8FAFC] border border-slate-200 rounded-xl p-2.5 text-[#0B1F3A] focus:outline-none focus:border-[#155EEF] transition-all cursor-pointer"
+            className="w-full text-xs font-bold neo-input rounded-xl p-2.5 text-slate-900 focus:outline-none transition-all cursor-pointer"
           >
             {MOCK_INFRA_PROJECTS.map((p) => (
               <option key={p.id} value={p.id}>
@@ -118,7 +118,7 @@ export const GenerateBriefModal: React.FC<GenerateBriefModalProps> = ({
 
         {/* Template Select */}
         <div className="space-y-2">
-          <label className="text-xs font-bold text-[#0B1F3A]">Select Briefing Format</label>
+          <label className="text-xs font-bold text-slate-800">Select Briefing Format</label>
           <div className="space-y-2">
             {[
               {
@@ -139,47 +139,51 @@ export const GenerateBriefModal: React.FC<GenerateBriefModalProps> = ({
             ].map((tpl) => (
               <div
                 key={tpl.id}
-                onClick={() => setReportType(tpl.id)}
-                className={`p-3 rounded-xl border cursor-pointer transition-all ${
+                onClick={() => setReportType(tpl.id as BriefFormat)}
+                className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
                   reportType === tpl.id
-                    ? 'border-[#155EEF] bg-blue-50/50'
-                    : 'border-slate-200 hover:border-slate-300 bg-[#F8FAFC]'
+                    ? 'neo-raised bg-indigo-50/80 border-indigo-300'
+                    : 'neo-card hover:bg-slate-100/60 border-transparent'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#0B1F3A]">{tpl.title}</span>
+                  <span className="text-xs font-bold text-slate-900">{tpl.title}</span>
                   {reportType === tpl.id && (
-                    <CheckCircle2 className="w-4 h-4 text-[#155EEF]" />
+                    <CheckCircle2 className="w-4 h-4 text-indigo-700" />
                   )}
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1 leading-snug">{tpl.desc}</p>
+                <p className="text-[11px] text-slate-600 mt-1 leading-snug">{tpl.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* AI Synthesis Notice */}
-        <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-800">
+        <div className="p-3.5 rounded-xl neo-card border-l-4 border-l-amber-500 flex items-start gap-2.5 text-xs text-amber-950">
           <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-          <p className="text-[11px] leading-relaxed">
+          <p className="text-[11px] leading-relaxed text-slate-700">
             AI synthesis engine automatically correlates monitored projects, attributing top SHAP delay factors for official inter-ministerial review meetings.
           </p>
         </div>
 
         {/* Actions */}
-        <div className="pt-2 border-t border-slate-100 flex items-center justify-end gap-2.5">
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            size="sm"
-            isLoading={isGenerating}
-            onClick={handleDownload}
-            leftIcon={<Download className="w-3.5 h-3.5" />}
+        <div className="pt-2 border-t border-slate-300/60 flex items-center justify-end gap-2.5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-xs font-bold neo-button-secondary cursor-pointer"
           >
-            Export Signed PDF Brief
-          </Button>
+            Cancel
+          </button>
+          <button
+            type="button"
+            disabled={isGenerating}
+            onClick={handleDownload}
+            className="px-4 py-2 text-xs font-bold neo-button-primary flex items-center gap-1.5 cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>{isGenerating ? 'Generating...' : 'Export Signed PDF Brief'}</span>
+          </button>
         </div>
       </div>
     </div>

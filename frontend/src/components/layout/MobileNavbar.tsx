@@ -28,7 +28,7 @@ export const MobileNavbar: React.FC<MobileNavbarProps> = ({ onOpenMenu }) => {
   ];
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-[#0B1F3A] border-t border-slate-200 dark:border-slate-800 px-2 py-1.5 flex items-center justify-around select-none shadow-xl print:hidden">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--neo-surface)] border-t border-[rgba(200,212,226,0.5)] px-2 py-1.5 flex items-center justify-around select-none shadow-[0_-4px_14px_rgba(166,180,200,0.2)] print:hidden">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive =
@@ -40,13 +40,13 @@ export const MobileNavbar: React.FC<MobileNavbarProps> = ({ onOpenMenu }) => {
             key={item.to}
             to={item.to}
             className={cn(
-              'flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[10px] font-bold transition-all min-w-[56px]',
+              'flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-[10px] font-bold transition-all min-w-[56px]',
               isActive
-                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white',
+                ? 'text-[#1557D6] neo-active border border-[rgba(21,87,214,0.25)] shadow-[inset_1px_1px_3px_rgba(166,180,200,0.35)]'
+                : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]',
             )}
           >
-            <Icon className={cn('w-4 h-4 mb-0.5', isActive && 'scale-110')} />
+            <Icon className={cn('w-4 h-4 mb-0.5', isActive && 'scale-110 text-[#1557D6]')} />
             <span>{item.label}</span>
           </NavLink>
         );

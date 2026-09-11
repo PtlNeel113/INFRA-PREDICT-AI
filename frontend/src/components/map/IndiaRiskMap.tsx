@@ -130,7 +130,7 @@ export const IndiaRiskMap: React.FC<IndiaRiskMapProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-[520px] sm:h-[600px] lg:h-[660px] bg-slate-50 dark:bg-[#091524] rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex items-center justify-center select-none ${className}`}
+      className={`relative w-full h-[520px] sm:h-[600px] lg:h-[660px] bg-[#EEF2F6] dark:bg-[#091524] rounded-2xl neo-panel overflow-hidden flex items-center justify-center select-none ${className}`}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={() => {
@@ -139,24 +139,24 @@ export const IndiaRiskMap: React.FC<IndiaRiskMapProps> = ({
       }}
     >
       {/* Background cartographic grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(#94A3B8_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#94A3B8_1px,transparent_1px)] [background-size:24px_24px] opacity-20 pointer-events-none" />
 
       {/* Floating State Info Header (if a state is selected) */}
       {selectedSummary && (
-        <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-white/95 dark:bg-[#0F1D2E]/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 shadow-md">
+        <div className="absolute top-4 left-4 z-20 flex items-center gap-2 neo-raised px-3.5 py-2 rounded-xl">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#155EEF] animate-pulse" />
-            <span className="text-xs font-black text-[#0B1F3A] dark:text-white uppercase tracking-wider">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1557D6] animate-pulse" />
+            <span className="text-xs font-black text-[var(--neo-text-primary)] uppercase tracking-wider">
               Selected: {selectedSummary.name}
             </span>
-            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
+            <span className="text-[11px] font-bold text-[var(--neo-text-secondary)]">
               ({selectedSummary.projectCount} projects)
             </span>
           </div>
           <button
             type="button"
             onClick={() => onSelectState(null)}
-            className="ml-2 p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors cursor-pointer"
+            className="ml-2 p-1 rounded-md hover:bg-slate-200/60 text-[var(--neo-text-tertiary)] hover:text-[var(--neo-text-primary)] transition-colors cursor-pointer"
             title="Deselect state"
           >
             <X className="w-3.5 h-3.5" />
@@ -165,12 +165,12 @@ export const IndiaRiskMap: React.FC<IndiaRiskMapProps> = ({
       )}
 
       {/* Map Zoom & Pan Control Bar */}
-      <div className="absolute top-4 right-4 z-20 flex flex-col gap-1.5 bg-white/95 dark:bg-[#0F1D2E]/95 backdrop-blur-md p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-md">
+      <div className="absolute top-4 right-4 z-20 flex flex-col gap-1.5 neo-raised p-1.5 rounded-xl">
         <button
           type="button"
           onClick={handleZoomIn}
           title="Zoom in"
-          className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+          className="p-2 rounded-lg hover:bg-slate-200/60 text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)] transition-colors cursor-pointer"
         >
           <ZoomIn className="w-4 h-4" />
         </button>
@@ -178,7 +178,7 @@ export const IndiaRiskMap: React.FC<IndiaRiskMapProps> = ({
           type="button"
           onClick={handleZoomOut}
           title="Zoom out"
-          className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+          className="p-2 rounded-lg hover:bg-slate-200/60 text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)] transition-colors cursor-pointer"
         >
           <ZoomOut className="w-4 h-4" />
         </button>
@@ -186,7 +186,7 @@ export const IndiaRiskMap: React.FC<IndiaRiskMapProps> = ({
           type="button"
           onClick={handleResetZoom}
           title="Reset map view"
-          className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+          className="p-2 rounded-lg hover:bg-slate-200/60 text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)] transition-colors cursor-pointer"
         >
           <Maximize2 className="w-4 h-4" />
         </button>

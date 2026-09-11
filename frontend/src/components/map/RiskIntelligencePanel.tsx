@@ -105,13 +105,13 @@ export const RiskIntelligencePanel: React.FC<RiskIntelligencePanelProps> = ({
       )}
 
       {/* Risk Distribution Breakdown */}
-      <div className="bg-white dark:bg-[#0F1D2E] rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-xs">
+      <div className="neo-panel p-4">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xs font-black text-[#0B1F3A] dark:text-white uppercase tracking-wider flex items-center gap-2">
-            <ShieldAlert className="w-4 h-4 text-[#155EEF]" />
+          <h3 className="text-xs font-black text-[var(--neo-text-primary)] uppercase tracking-wider flex items-center gap-2">
+            <ShieldAlert className="w-4 h-4 text-[#1557D6]" />
             <span>Risk Intelligence</span>
           </h3>
-          <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">
+          <span className="text-[10px] font-mono font-bold text-[var(--neo-text-tertiary)]">
             {reportingPeriod}
           </span>
         </div>
@@ -123,8 +123,8 @@ export const RiskIntelligencePanel: React.FC<RiskIntelligencePanelProps> = ({
             onClick={() => onSelectRiskFilter && onSelectRiskFilter('CRITICAL')}
             className={`w-full flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
               activeRiskFilter === 'CRITICAL'
-                ? 'bg-red-100 dark:bg-red-950/80 border-red-500 ring-1 ring-red-500'
-                : 'bg-red-50/70 dark:bg-red-950/30 border-red-200/80 dark:border-red-900/60 hover:bg-red-100/80'
+                ? 'neo-inset border-red-400/80 bg-red-50/50'
+                : 'neo-card hover:translate-y-[-1px] border-l-4 border-l-red-600'
             }`}
           >
             <div className="flex items-center gap-2.5">
@@ -151,8 +151,8 @@ export const RiskIntelligencePanel: React.FC<RiskIntelligencePanelProps> = ({
             onClick={() => onSelectRiskFilter && onSelectRiskFilter('HIGH')}
             className={`w-full flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
               activeRiskFilter === 'HIGH'
-                ? 'bg-orange-100 dark:bg-orange-950/80 border-orange-500 ring-1 ring-orange-500'
-                : 'bg-orange-50/70 dark:bg-orange-950/30 border-orange-200/80 dark:border-orange-900/60 hover:bg-orange-100/80'
+                ? 'neo-inset border-orange-400/80 bg-orange-50/50'
+                : 'neo-card hover:translate-y-[-1px] border-l-4 border-l-orange-500'
             }`}
           >
             <div className="flex items-center gap-2.5">
@@ -179,8 +179,8 @@ export const RiskIntelligencePanel: React.FC<RiskIntelligencePanelProps> = ({
             onClick={() => onSelectRiskFilter && onSelectRiskFilter('WATCH')}
             className={`w-full flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
               activeRiskFilter === 'WATCH'
-                ? 'bg-amber-100 dark:bg-amber-950/80 border-amber-500 ring-1 ring-amber-500'
-                : 'bg-amber-50/70 dark:bg-amber-950/30 border-amber-200/80 dark:border-amber-900/60 hover:bg-amber-100/80'
+                ? 'neo-inset border-amber-400/80 bg-amber-50/50'
+                : 'neo-card hover:translate-y-[-1px] border-l-4 border-l-amber-500'
             }`}
           >
             <div className="flex items-center gap-2.5">
@@ -207,8 +207,8 @@ export const RiskIntelligencePanel: React.FC<RiskIntelligencePanelProps> = ({
             onClick={() => onSelectRiskFilter && onSelectRiskFilter('STABLE')}
             className={`w-full flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
               activeRiskFilter === 'STABLE'
-                ? 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-500 ring-1 ring-emerald-500'
-                : 'bg-emerald-50/70 dark:bg-emerald-950/30 border-emerald-200/80 dark:border-emerald-900/60 hover:bg-emerald-100/80'
+                ? 'neo-inset border-emerald-400/80 bg-emerald-50/50'
+                : 'neo-card hover:translate-y-[-1px] border-l-4 border-l-emerald-500'
             }`}
           >
             <div className="flex items-center gap-2.5">
@@ -232,12 +232,12 @@ export const RiskIntelligencePanel: React.FC<RiskIntelligencePanelProps> = ({
       </div>
 
       {/* Dynamically Calculated Top Risk States (Step 15) */}
-      <div className="bg-white dark:bg-[#0F1D2E] rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-xs">
+      <div className="neo-panel p-4">
         <div className="flex items-center justify-between mb-3">
-          <h4 className="text-xs font-black text-[#0B1F3A] dark:text-white uppercase tracking-wider">
+          <h4 className="text-xs font-black text-[var(--neo-text-primary)] uppercase tracking-wider">
             Top Risk States
           </h4>
-          <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
+          <span className="text-[10px] font-bold text-[var(--neo-text-tertiary)]">
             By High Priority
           </span>
         </div>
@@ -275,8 +275,8 @@ export const RiskIntelligencePanel: React.FC<RiskIntelligencePanelProps> = ({
                 }}
                 className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-blue-50 dark:bg-blue-950/60 border-[#155EEF] ring-1 ring-[#155EEF]'
-                    : 'bg-slate-50 dark:bg-slate-900 border-slate-200/80 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/80'
+                    ? 'neo-inset text-[#1557D6]'
+                    : 'neo-card hover:translate-y-[-1px]'
                 }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0">

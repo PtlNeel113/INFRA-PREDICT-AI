@@ -37,22 +37,22 @@ export const PriorityProjectsSection: React.FC<PriorityProjectsSectionProps> = (
   };
 
   return (
-    <div className="bg-white dark:bg-[#0F1D2E] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs">
+    <div className="neo-panel p-5">
       {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800 mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[rgba(200,212,226,0.45)] mb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-base font-black text-[#0B1F3A] dark:text-white uppercase tracking-tight flex items-center gap-2">
+            <h3 className="text-base font-black text-[var(--neo-text-primary)] uppercase tracking-tight flex items-center gap-2">
               <ShieldAlert className="w-5 h-5 text-rose-600" />
               <span>Critical & High Priority Projects for Executive Review</span>
             </h3>
             {selectedStateName && (
-              <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-[#155EEF] border border-blue-200">
+              <span className="px-2 py-0.5 rounded-full text-xs font-bold neo-inset text-[#1557D6]">
                 Filtered: {selectedStateName}
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-[var(--neo-text-secondary)] mt-0.5">
             Ranked by composite risk exposure, physical milestone slippage, and budget variance
           </p>
         </div>
@@ -61,7 +61,7 @@ export const PriorityProjectsSection: React.FC<PriorityProjectsSectionProps> = (
           <button
             type="button"
             onClick={onClearStateFilter}
-            className="text-xs font-bold text-[#155EEF] hover:underline cursor-pointer self-start sm:self-auto"
+            className="text-xs font-bold text-[#1557D6] hover:underline cursor-pointer self-start sm:self-auto"
           >
             Show All India Projects
           </button>
@@ -70,14 +70,14 @@ export const PriorityProjectsSection: React.FC<PriorityProjectsSectionProps> = (
 
       {/* Projects Table / Cards */}
       {projects.length === 0 ? (
-        <div className="py-12 text-center text-slate-500 dark:text-slate-400 text-sm">
+        <div className="py-12 text-center text-[var(--neo-text-secondary)] text-sm">
           No projects found matching the active filter criteria.
         </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-200 dark:border-slate-800 text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-[rgba(200,212,226,0.45)] text-[11px] font-black text-[var(--neo-text-tertiary)] uppercase tracking-wider">
                 <th className="py-3 px-3">Project & Code</th>
                 <th className="py-3 px-3">State & Sector</th>
                 <th className="py-3 px-3">Risk Level</th>
@@ -86,12 +86,12 @@ export const PriorityProjectsSection: React.FC<PriorityProjectsSectionProps> = (
                 <th className="py-3 px-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs">
+            <tbody className="divide-y divide-[rgba(200,212,226,0.3)] text-xs">
               {projects.slice(0, 8).map((project, idx) => (
                 <tr
                   key={`${project.id}-${project.code || idx}`}
                   onClick={() => handleOpenProject(project.id)}
-                  className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group"
+                  className="hover:bg-slate-200/30 transition-colors cursor-pointer group"
                 >
                   {/* Project Name & Code */}
                   <td className="py-3.5 px-3 min-w-[220px]">

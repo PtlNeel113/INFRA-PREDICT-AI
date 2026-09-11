@@ -238,10 +238,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl bg-white dark:bg-[#0F1D2E] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden z-10 flex flex-col max-h-[80vh] text-slate-900 dark:text-slate-100">
+      <div className="relative w-full max-w-2xl neo-panel rounded-2xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[80vh] text-slate-900 border border-slate-300/80">
         {/* Search Header Input */}
-        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3 bg-slate-50/50 dark:bg-[#0B1F3A]/50">
-          <Search className="w-5 h-5 text-slate-400 shrink-0" />
+        <div className="p-4 border-b border-slate-300/60 flex items-center gap-3 neo-inset m-3 rounded-xl">
+          <Search className="w-5 h-5 text-slate-500 shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -252,16 +252,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               setSelectedIndex(0);
             }}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent text-sm font-bold placeholder:text-slate-400 focus:outline-none"
+            className="flex-1 bg-transparent text-sm font-bold text-slate-900 placeholder:text-slate-400 focus:outline-none"
           />
           <div className="flex items-center gap-1.5 shrink-0">
-            <kbd className="px-1.5 py-0.5 text-[10px] font-mono font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded border border-slate-300 dark:border-slate-700">
+            <kbd className="px-2 py-0.5 text-[10px] font-mono font-bold neo-raised text-slate-700 rounded-md border border-slate-300/80">
               ESC
             </kbd>
             <button
               type="button"
               onClick={onClose}
-              className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+              className="p-1 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-200/60 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -269,10 +269,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
         </div>
 
         {/* Results List */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+        <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1.5">
           {filteredItems.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
-              No matching commands or projects found for <strong className="text-slate-800 dark:text-white">"{query}"</strong>.
+            <div className="p-8 text-center text-xs text-slate-500">
+              No matching commands or projects found for <strong className="text-slate-900">"{query}"</strong>.
             </div>
           ) : (
             filteredItems.map((item, idx) => {
@@ -286,8 +286,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                   className={cn(
                     'p-3 rounded-xl flex items-center justify-between cursor-pointer transition-all',
                     isSelected
-                      ? 'bg-indigo-50/90 dark:bg-indigo-950/70 text-indigo-950 dark:text-indigo-200 shadow-2xs'
-                      : 'hover:bg-slate-50 dark:hover:bg-slate-850 text-slate-700 dark:text-slate-300',
+                      ? 'neo-raised bg-indigo-50/90 text-indigo-950 border border-indigo-200 font-medium'
+                      : 'neo-card hover:bg-slate-100/70 text-slate-700 border-transparent',
                   )}
                 >
                   <div className="flex items-center gap-3 min-w-0">
@@ -295,8 +295,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                       className={cn(
                         'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
                         isSelected
-                          ? 'bg-indigo-600 text-white'
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400',
+                          ? 'neo-raised bg-indigo-600 text-white'
+                          : 'neo-inset text-slate-600',
                       )}
                     >
                       <Icon className="w-4 h-4" />
@@ -307,13 +307,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                           {item.title}
                         </span>
                         {item.badge && (
-                          <span className="text-[9px] font-bold font-mono px-1.5 py-0.2 rounded bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+                          <span className="text-[9px] font-bold font-mono px-1.5 py-0.2 rounded neo-inset text-slate-800">
                             {item.badge}
                           </span>
                         )}
                       </div>
                       {item.subtitle && (
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate leading-tight mt-0.5">
+                        <p className="text-[11px] text-slate-500 truncate leading-tight mt-0.5">
                           {item.subtitle}
                         </p>
                       )}
@@ -327,7 +327,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                     <ArrowRight
                       className={cn(
                         'w-3.5 h-3.5',
-                        isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-300 dark:text-slate-600',
+                        isSelected ? 'text-indigo-600 font-bold' : 'text-slate-400',
                       )}
                     />
                   </div>
@@ -338,19 +338,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
         </div>
 
         {/* Footer Navigation Hints */}
-        <div className="p-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-[#07111F] text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+        <div className="p-3 border-t border-slate-300/60 neo-inset text-[11px] text-slate-500 flex items-center justify-between m-3 rounded-xl">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.2 text-[9px] font-mono bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded">↑</kbd>
-              <kbd className="px-1 py-0.2 text-[9px] font-mono bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded">↓</kbd>
+              <kbd className="px-1.5 py-0.5 text-[9px] font-mono neo-raised text-slate-700 rounded">↑</kbd>
+              <kbd className="px-1.5 py-0.5 text-[9px] font-mono neo-raised text-slate-700 rounded">↓</kbd>
               <span>to navigate</span>
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.2 text-[9px] font-mono bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded">↵</kbd>
+              <kbd className="px-1.5 py-0.5 text-[9px] font-mono neo-raised text-slate-700 rounded">↵</kbd>
               <span>to select</span>
             </span>
           </div>
-          <span className="font-mono text-[10px] text-slate-400 font-semibold">
+          <span className="font-mono text-[10px] text-slate-500 font-bold">
             INFRA-PREDICT Core
           </span>
         </div>

@@ -99,33 +99,29 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
   });
 
   return (
-    <div className="space-y-6 animate-fadeIn select-none">
-      {/* DECISION MODE HEADER BANNER */}
-      <div className="bg-gradient-to-r from-rose-950 via-slate-900 to-indigo-950 text-white rounded-2xl p-6 md:p-8 border border-rose-600/30 shadow-2xl relative overflow-hidden">
-        {/* Background Grid & Ambient Glow */}
-        <div className="absolute inset-0 infra-grid-pattern opacity-30 pointer-events-none" />
-        <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-rose-600/15 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="space-y-6 max-w-7xl mx-auto select-none pb-12">
+      {/* DECISION MODE HERO BANNER */}
+      <div className="neo-panel p-6 md:p-8 relative overflow-hidden text-[var(--neo-text-primary)] border border-rose-200/80">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2.5">
-              <span className="px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-widest bg-rose-600 text-white flex items-center gap-1.5 shadow-sm shadow-rose-600/50">
+              <span className="px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-widest bg-rose-600 text-white flex items-center gap-1.5 shadow-2xs">
                 <ShieldAlert className="w-3.5 h-3.5" />
                 ACTIVE DECISION MODE
               </span>
-              <span className="text-xs font-mono text-rose-300 font-semibold">
+              <span className="text-xs font-mono text-rose-600 font-bold">
                 Priority Action Engine
               </span>
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-[var(--neo-text-primary)]">
               WHERE SHOULD WE ACT FIRST?
             </h1>
-            <p className="text-xs md:text-sm text-slate-300 font-normal leading-relaxed">
+            <p className="text-xs md:text-sm text-[var(--neo-text-secondary)] font-normal leading-relaxed">
               Real-time multi-dimensional prioritization ranking packages by{' '}
-              <strong className="text-white">Health Score Vulnerability</strong>,{' '}
-              <strong className="text-white">Rate of Deterioration</strong>, and{' '}
-              <strong className="text-white">Capital Impact</strong>.
+              <strong className="text-[var(--neo-text-primary)]">Health Score Vulnerability</strong>,{' '}
+              <strong className="text-[var(--neo-text-primary)]">Rate of Deterioration</strong>, and{' '}
+              <strong className="text-[var(--neo-text-primary)]">Capital Impact</strong>.
             </p>
           </div>
 
@@ -135,27 +131,27 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
               onClick={() => {
                 toast.info('Prioritization Refreshed', 'Re-ranked packages against latest contractor updates.');
               }}
-              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center gap-2 border border-white/15 cursor-pointer"
+              className="px-4 py-2.5 rounded-xl neo-button-secondary text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-rose-300" />
+              <RotateCcw className="w-3.5 h-3.5 text-rose-600" />
               <span>Re-rank Portfolio</span>
             </button>
 
             <button
               type="button"
               onClick={onExitDecisionMode}
-              className="px-5 py-2.5 rounded-xl bg-white text-slate-900 hover:bg-slate-100 text-xs font-black transition-all flex items-center gap-2 shadow-lg cursor-pointer hover:scale-105 active:scale-95"
+              className="px-5 py-2.5 rounded-xl neo-button-primary text-white text-xs font-black transition-all flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95"
             >
               <span>Exit Decision Mode</span>
-              <ArrowRight className="w-4 h-4 text-slate-900" />
+              <ArrowRight className="w-4 h-4 text-white" />
             </button>
           </div>
         </div>
 
         {/* Sector Quick Filter Strip */}
-        <div className="relative z-10 mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+        <div className="relative z-10 mt-6 pt-5 border-t border-[rgba(200,212,226,0.45)] flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2 overflow-x-auto">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mr-2 flex items-center gap-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--neo-text-tertiary)] mr-2 flex items-center gap-1">
               <Filter className="w-3 h-3" /> Sector Filter:
             </span>
             {['ALL', 'Roads & Highways', 'Railways', 'Urban Transport', 'Power'].map((sector) => (
@@ -166,8 +162,8 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
                 className={cn(
                   'px-3 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer',
                   selectedSector === sector
-                    ? 'bg-rose-600 text-white shadow-xs'
-                    : 'bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white',
+                    ? 'bg-rose-600 text-white shadow-2xs'
+                    : 'neo-inset-sm text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]',
                 )}
               >
                 {sector === 'ALL' ? 'All Sectors' : sector}
@@ -175,7 +171,7 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
             ))}
           </div>
 
-          <div className="text-xs text-rose-300 font-mono font-bold">
+          <div className="text-xs text-rose-600 font-mono font-bold">
             Showing Top {filteredItems.length} High-Urgency Packages
           </div>
         </div>
@@ -192,10 +188,10 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
               key={project.id}
               className={cn(
                 'rounded-2xl p-5 md:p-6 transition-all duration-200 border relative overflow-hidden group',
-                'bg-white dark:bg-[#0F1D2E] text-slate-900 dark:text-slate-100',
+                'neo-card text-[var(--neo-text-primary)]',
                 isTopPriority
-                  ? 'border-rose-500/80 shadow-lg dark:shadow-rose-950/20 ring-2 ring-rose-500/20'
-                  : 'border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 shadow-sm',
+                  ? 'border-rose-400/80 shadow-md ring-2 ring-rose-500/20'
+                  : 'border-[rgba(200,212,226,0.5)]',
               )}
             >
               {/* Top Accent Bar for Priority 1 */}
@@ -281,18 +277,18 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
                 <div className="lg:w-72 shrink-0 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 pt-4 lg:pt-0 lg:pl-6 space-y-4">
                   {/* KPI Summary */}
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-center">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block">
+                    <div className="p-2.5 rounded-xl neo-inset-sm text-center">
+                      <span className="text-[10px] font-bold text-[var(--neo-text-tertiary)] uppercase block">
                         Health Score
                       </span>
                       <strong
                         className={cn(
                           'text-xl font-black font-mono block mt-0.5',
                           project.healthScore < 50
-                            ? 'text-rose-600 dark:text-rose-400'
+                            ? 'text-rose-600'
                             : project.healthScore < 70
-                            ? 'text-amber-600 dark:text-amber-400'
-                            : 'text-emerald-600 dark:text-emerald-400',
+                            ? 'text-amber-600'
+                            : 'text-emerald-600',
                         )}
                       >
                         {project.healthScore}
@@ -300,30 +296,30 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
                       </strong>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-center">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block">
+                    <div className="p-2.5 rounded-xl neo-inset-sm text-center">
+                      <span className="text-[10px] font-bold text-[var(--neo-text-tertiary)] uppercase block">
                         Predicted Delay
                       </span>
-                      <strong className="text-xl font-black font-mono text-rose-600 dark:text-rose-400 block mt-0.5">
+                      <strong className="text-xl font-black font-mono text-rose-600 block mt-0.5">
                         +{project.predictedDelayMonths}
                         <span className="text-xs text-slate-400 font-normal"> Mos</span>
                       </strong>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-center">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block">
+                    <div className="p-2.5 rounded-xl neo-inset-sm text-center">
+                      <span className="text-[10px] font-bold text-[var(--neo-text-tertiary)] uppercase block">
                         Cost Outlay
                       </span>
-                      <strong className="text-xs font-black font-mono text-slate-800 dark:text-slate-200 block mt-1">
+                      <strong className="text-xs font-black font-mono text-[var(--neo-text-primary)] block mt-1">
                         ₹{project.sanctionedCostCr.toLocaleString('en-IN')} Cr
                       </strong>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-center">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block">
+                    <div className="p-2.5 rounded-xl neo-inset-sm text-center">
+                      <span className="text-[10px] font-bold text-[var(--neo-text-tertiary)] uppercase block">
                         Overrun Exposure
                       </span>
-                      <strong className="text-xs font-black font-mono text-rose-600 dark:text-rose-400 block mt-1">
+                      <strong className="text-xs font-black font-mono text-rose-600 block mt-1">
                         +₹{project.predictedCostOverrunCr} Cr
                       </strong>
                     </div>
@@ -334,7 +330,7 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
                     <button
                       type="button"
                       onClick={() => navigate(`/projects/${project.id}`)}
-                      className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer"
+                      className="w-full py-2.5 px-4 rounded-xl neo-button-primary text-white text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
                     >
                       <span>Investigate Project Intelligence</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -343,9 +339,9 @@ export const DecisionModeView: React.FC<DecisionModeViewProps> = ({ onExitDecisi
                     <button
                       type="button"
                       onClick={() => navigate(`/reports?projectId=${project.id}`)}
-                      className="w-full py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                      className="w-full py-2 px-4 rounded-xl neo-button-secondary text-[var(--neo-text-primary)] text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
                     >
-                      <FileSpreadsheet className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                      <FileSpreadsheet className="w-3.5 h-3.5 text-[#1557D6]" />
                       <span>Generate Risk Brief</span>
                     </button>
                   </div>

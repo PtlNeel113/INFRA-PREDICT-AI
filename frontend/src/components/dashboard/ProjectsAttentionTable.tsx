@@ -126,20 +126,20 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-[18px] border border-[#E2E8F0] gov-shadow p-5 sm:p-6 space-y-4">
+    <div className="neo-panel p-5 sm:p-6 space-y-4">
       {/* Table Section Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[rgba(200,212,226,0.45)]">
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#DC2626] animate-pulse" />
-            <h3 className="text-base sm:text-lg font-black text-[#0B1F3A] tracking-tight">
+            <h3 className="text-base sm:text-lg font-black text-[var(--neo-text-primary)] tracking-tight">
               Projects Requiring Attention
             </h3>
-            <span className="text-[10px] font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded uppercase">
+            <span className="text-[10px] font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded-md uppercase">
               {filteredProjects.length} Actionable
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[var(--neo-text-secondary)] mt-1">
             Prioritized by SHAP root-cause sensitivity, schedule slippage, and capital overrun.
           </p>
         </div>
@@ -148,7 +148,7 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Active State Filter Chip */}
           {selectedStateFilter && (
-            <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-[#155EEF] text-xs font-bold shadow-2xs">
+            <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl neo-inset-sm text-[#1557D6] text-xs font-bold">
               <span>State: {selectedStateFilter}</span>
               <button
                 type="button"
@@ -163,7 +163,7 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
 
           {/* Active KPI Filter Chip */}
           {activeKpiFilter && activeKpiFilter !== 'ALL' && (
-            <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold shadow-2xs">
+            <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl neo-inset-sm text-amber-800 text-xs font-bold">
               <span>Filter: {activeKpiFilter}</span>
             </div>
           )}
@@ -176,7 +176,7 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
               placeholder="Filter table..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#155EEF] text-xs text-[#0B1F3A] placeholder:text-slate-400 rounded-xl pl-8 pr-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 font-medium w-44 sm:w-56"
+              className="neo-input text-xs text-[var(--neo-text-primary)] placeholder:text-slate-400 rounded-xl pl-8 pr-3 py-1.5 focus:outline-none w-44 sm:w-56"
             />
           </div>
 
@@ -184,7 +184,7 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
           <select
             value={sectorFilter}
             onChange={(e) => setSectorFilter(e.target.value)}
-            className="bg-[#F8FAFC] border border-[#E2E8F0] text-xs text-[#0B1F3A] font-semibold rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer"
+            className="neo-input text-xs text-[var(--neo-text-primary)] font-semibold rounded-xl px-3 py-1.5 focus:outline-none cursor-pointer"
           >
             <option value="ALL">All Sectors</option>
             {availableSectors.filter((s) => s !== 'ALL').map((sec) => (
@@ -198,7 +198,7 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
           <select
             value={riskFilter}
             onChange={(e) => setRiskFilter(e.target.value)}
-            className="bg-[#F8FAFC] border border-[#E2E8F0] text-xs text-[#0B1F3A] font-semibold rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer"
+            className="neo-input text-xs text-[var(--neo-text-primary)] font-semibold rounded-xl px-3 py-1.5 focus:outline-none cursor-pointer"
           >
             <option value="ALL">All Risks</option>
             <option value="CRITICAL">Critical Risk</option>
@@ -210,10 +210,10 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
       </div>
 
       {/* Main Table */}
-      <div className="overflow-x-auto rounded-xl border border-[#E2E8F0]">
+      <div className="overflow-x-auto rounded-xl border border-[rgba(200,212,226,0.6)] neo-card p-0">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[10px] font-bold uppercase text-slate-500 tracking-wider select-none">
+            <tr className="bg-[var(--neo-surface-inset)] border-b border-[rgba(200,212,226,0.5)] text-[10px] font-bold uppercase text-[var(--neo-text-tertiary)] tracking-wider select-none">
               <th className="py-3 px-4">Project & Implementing Agency</th>
               <th className="py-3 px-3">Ministry</th>
               <th className="py-3 px-3">Sector</th>
@@ -255,27 +255,27 @@ export const ProjectsAttentionTable: React.FC<ProjectsAttentionTableProps> = ({
                   <tr
                     key={project.id}
                     onClick={() => onSelectProject(project)}
-                    className="hover:bg-slate-50/80 transition-colors cursor-pointer group"
+                    className="hover:bg-[var(--neo-surface-inset)] transition-colors cursor-pointer group border-b border-[rgba(200,212,226,0.35)]"
                   >
                     {/* Project & Agency */}
                     <td className="py-3 px-4 min-w-[260px]">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <span className="font-mono text-[10px] font-bold text-[#155EEF] bg-[#EBF2FF] px-1.5 py-0.2 rounded">
+                        <span className="font-mono text-[10px] font-bold text-[#1557D6] neo-inset-sm px-1.5 py-0.5 rounded-md">
                           {project.code}
                         </span>
                         <RiskBadge level={project.riskLevel} />
                       </div>
-                      <p className="font-bold text-[#0B1F3A] group-hover:text-[#155EEF] transition-colors leading-snug line-clamp-1">
+                      <p className="font-bold text-[var(--neo-text-primary)] group-hover:text-[#1557D6] transition-colors leading-snug line-clamp-1">
                         {project.name}
                       </p>
-                      <p className="text-[10px] text-slate-500 mt-0.5 truncate">
+                      <p className="text-[10px] text-[var(--neo-text-tertiary)] mt-0.5 truncate">
                         {project.implementingAgency}
                       </p>
                     </td>
 
                     {/* Ministry */}
                     <td className="py-3 px-3 whitespace-nowrap">
-                      <span className="font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded text-[11px]">
+                      <span className="font-bold text-[var(--neo-text-secondary)] neo-inset-sm px-2 py-0.5 rounded-md text-[11px]">
                         {project.ministry || 'Infrastructure'}
                       </span>
                     </td>

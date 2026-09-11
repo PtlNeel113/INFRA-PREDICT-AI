@@ -82,45 +82,45 @@ export const PredictionsPage: React.FC = () => {
     <div className="space-y-6 pb-20 max-w-7xl mx-auto" id="predictive-intelligence-page">
       
       {/* Top Header & Segmented Sub-Feature Switcher */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+      <div className="neo-panel p-5 sm:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1.5">
-            <Sparkles className="w-4 h-4 text-indigo-600" />
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#1557D6] mb-1.5">
+            <Sparkles className="w-4 h-4 text-[#1557D6]" />
             <span>AI Predictive & Prescriptive Intelligence</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-[var(--neo-text-primary)] tracking-tight">
             Infrastructure Predictive Intelligence
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-3xl">
+          <p className="text-xs sm:text-sm text-[var(--neo-text-secondary)] mt-1 max-w-3xl">
             Deterministic risk synthesis grounded in official MoSPI PAIMANA baseline records.
           </p>
         </div>
 
         {/* Segmented Sub-Feature Navigation (Tab 1 vs Tab 2) */}
-        <div className="flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200/80 self-start md:self-auto shrink-0 shadow-2xs">
+        <div className="flex items-center p-1.5 neo-inset rounded-2xl self-start md:self-auto shrink-0 gap-1">
           <button
             type="button"
             onClick={() => setActiveTab('risk_intelligence')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === 'risk_intelligence'
-                ? 'bg-white text-indigo-900 shadow-2xs border border-slate-200/60'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'neo-raised text-[#1557D6] font-black shadow-[2px_2px_5px_rgba(166,180,200,0.45),-2px_-2px_5px_rgba(255,255,255,0.9)]'
+                : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
             }`}
           >
-            <ShieldAlert className="w-3.5 h-3.5 text-indigo-600" />
+            <ShieldAlert className="w-3.5 h-3.5 text-[#1557D6]" />
             <span>Project Risk Intelligence</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('forward_outlook')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === 'forward_outlook'
-                ? 'bg-white text-indigo-900 shadow-2xs border border-slate-200/60'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'neo-raised text-[#1557D6] font-black shadow-[2px_2px_5px_rgba(166,180,200,0.45),-2px_-2px_5px_rgba(255,255,255,0.9)]'
+                : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
             }`}
           >
-            <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />
+            <TrendingUp className="w-3.5 h-3.5 text-[#1557D6]" />
             <span>Forward Risk Outlook</span>
           </button>
         </div>

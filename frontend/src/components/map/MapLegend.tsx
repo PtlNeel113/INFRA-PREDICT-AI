@@ -23,16 +23,16 @@ export const MapLegend: React.FC<MapLegendProps> = ({
   ];
 
   return (
-    <div className="bg-white/95 dark:bg-[#0B1F3A]/95 backdrop-blur-md rounded-xl shadow-xl border border-slate-200 dark:border-slate-700/80 p-3.5 max-w-[210px] select-none">
-      <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
-        <span className="text-[11px] font-black text-[#0B1F3A] dark:text-white uppercase tracking-wider">
+    <div className="neo-panel p-3.5 max-w-[210px] select-none shadow-[4px_4px_12px_rgba(166,180,200,0.35),-3px_-3px_10px_rgba(255,255,255,0.9)]">
+      <div className="flex items-center justify-between gap-2 mb-2.5 pb-2 border-b border-[rgba(200,212,226,0.45)]">
+        <span className="text-[11px] font-black text-[var(--neo-text-primary)] uppercase tracking-wider">
           State Risk Severity
         </span>
         {activeRiskFilter !== 'ALL' && onSelectRiskFilter && (
           <button
             type="button"
             onClick={() => onSelectRiskFilter('ALL')}
-            className="text-[10px] font-bold text-[#155EEF] dark:text-blue-400 hover:underline cursor-pointer"
+            className="text-[10px] font-bold text-[#1557D6] hover:underline cursor-pointer"
           >
             Clear
           </button>
@@ -47,24 +47,24 @@ export const MapLegend: React.FC<MapLegendProps> = ({
               key={item.label}
               type="button"
               onClick={() => onSelectRiskFilter && onSelectRiskFilter(item.label)}
-              className={`w-full flex items-center justify-between px-2 py-1 rounded-md text-left transition-all ${
+              className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left transition-all ${
                 isSelected
-                  ? 'bg-slate-100 dark:bg-slate-800 ring-1 ring-[#155EEF]'
-                  : 'hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                  ? 'neo-inset text-[#1557D6] font-black'
+                  : 'hover:bg-slate-200/40 text-[var(--neo-text-primary)]'
               } cursor-pointer`}
               title={item.description}
             >
               <div className="flex items-center gap-2">
                 <span
-                  className="w-3 h-3 rounded-full flex-shrink-0 shadow-xs"
+                  className="w-2.5 h-2.5 rounded-full flex-shrink-0 shadow-xs"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">
+                <span className="text-[11px] font-bold">
                   {item.label}
                 </span>
               </div>
               {isSelected && (
-                <span className="text-[9px] font-black text-[#155EEF] dark:text-blue-400 uppercase">
+                <span className="text-[9px] font-black text-[#1557D6] uppercase tracking-wider">
                   Active
                 </span>
               )}
@@ -73,18 +73,18 @@ export const MapLegend: React.FC<MapLegendProps> = ({
         })}
       </div>
 
-      <div className="mt-3 pt-2.5 border-t border-slate-200 dark:border-slate-800">
+      <div className="mt-3 pt-2.5 border-t border-[rgba(200,212,226,0.45)]">
         <div className="flex items-center justify-between text-[10px]">
-          <span className="text-slate-500 dark:text-slate-400 font-semibold">Total Projects</span>
-          <span className="font-mono font-black text-[#0B1F3A] dark:text-white">{totalProjects.toLocaleString()}</span>
+          <span className="text-[var(--neo-text-tertiary)] font-semibold">Total Projects</span>
+          <span className="font-mono font-black text-[var(--neo-text-primary)]">{totalProjects.toLocaleString()}</span>
         </div>
         <div className="flex items-center justify-between text-[10px] mt-1">
-          <span className="text-slate-500 dark:text-slate-400 font-semibold">Source</span>
-          <span className="font-bold text-slate-700 dark:text-slate-300">PAIMANA / MoSPI</span>
+          <span className="text-[var(--neo-text-tertiary)] font-semibold">Source</span>
+          <span className="font-bold text-[var(--neo-text-secondary)]">PAIMANA / MoSPI</span>
         </div>
         <div className="flex items-center justify-between text-[10px] mt-1">
-          <span className="text-slate-500 dark:text-slate-400 font-semibold">Reporting</span>
-          <span className="font-mono font-bold text-[#155EEF] dark:text-blue-400">{reportingPeriod}</span>
+          <span className="text-[var(--neo-text-tertiary)] font-semibold">Reporting</span>
+          <span className="font-mono font-bold text-[#1557D6]">{reportingPeriod}</span>
         </div>
       </div>
     </div>

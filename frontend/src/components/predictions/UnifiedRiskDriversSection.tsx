@@ -143,28 +143,28 @@ export const UnifiedRiskDriversSection: React.FC<UnifiedRiskDriversSectionProps>
   };
 
   return (
-    <section className="space-y-3" id="risk-drivers-section">
-      <div className="flex items-center justify-between pb-1 border-b border-slate-200">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700 font-bold text-xs shadow-2xs">
+    <section className="space-y-4" id="risk-drivers-section">
+      <div className="flex items-center justify-between pb-2 border-b border-[rgba(200,212,226,0.45)]">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl neo-inset flex items-center justify-center text-[#1557D6] font-black text-xs">
             03
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-900 tracking-tight">
+            <h3 className="text-base font-black text-[var(--neo-text-primary)] tracking-tight">
               Why Is This Project At Risk?
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[var(--neo-text-secondary)]">
               Strongest quantified risk drivers synthesized across Cost, Time, and Execution dimensions.
             </p>
           </div>
         </div>
-        <span className="text-[11px] px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 font-mono font-medium">
+        <span className="text-[11px] px-2.5 py-1 rounded-lg neo-raised text-[var(--neo-text-secondary)] font-mono font-bold">
           Deterministic Risk Drivers
         </span>
       </div>
 
       {/* Unified Driver Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {rankedDrivers.map((driver) => {
           const isHigh = driver.severity === 'HIGH';
           const isMed = driver.severity === 'MEDIUM';
@@ -172,33 +172,32 @@ export const UnifiedRiskDriversSection: React.FC<UnifiedRiskDriversSectionProps>
           return (
             <div
               key={driver.rank}
-              className={`rounded-xl border p-4 flex flex-col justify-between space-y-3 transition-all ${
+              className={`neo-card p-4 flex flex-col justify-between space-y-3 transition-all hover:translate-y-[-1px] ${
                 isHigh
-                  ? 'bg-rose-50/40 border-rose-200 shadow-2xs'
+                  ? 'border-l-4 border-l-rose-600'
                   : isMed
-                  ? 'bg-amber-50/40 border-amber-200 shadow-2xs'
-                  : 'bg-emerald-50/40 border-emerald-200'
+                  ? 'border-l-4 border-l-amber-500'
+                  : 'border-l-4 border-l-emerald-600'
               }`}
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
-                    <span className="w-5 h-5 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-800 shadow-2xs">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-5 h-5 rounded-md neo-raised flex items-center justify-center text-[10px] font-black text-[var(--neo-text-primary)]">
                       #{driver.rank}
                     </span>
-                    <span className="flex items-center gap-1">
+                    <span className="text-[11px] font-bold text-[var(--neo-text-secondary)] flex items-center gap-1">
                       {getCategoryIcon(driver.category)}
-                      {driver.category}
+                      {driver.category} Pillar
                     </span>
                   </div>
-
                   <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-lg neo-raised ${
                       isHigh
-                        ? 'bg-rose-100 text-rose-700 border-rose-200'
+                        ? 'text-rose-600'
                         : isMed
-                        ? 'bg-amber-100 text-amber-800 border-amber-200'
-                        : 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                        ? 'text-amber-600'
+                        : 'text-emerald-600'
                     }`}
                   >
                     {driver.severity}
@@ -206,17 +205,26 @@ export const UnifiedRiskDriversSection: React.FC<UnifiedRiskDriversSectionProps>
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 leading-snug">
+                  <h4 className="text-xs font-bold text-[var(--neo-text-primary)] leading-snug">
                     {driver.title}
                   </h4>
-                  <div className="mt-1 font-mono font-bold text-xs text-slate-900 bg-white/80 px-2 py-1 rounded border border-slate-200/80 inline-block">
-                    {driver.actualValue}
-                  </div>
+                  <p className="text-[11px] text-[var(--neo-text-secondary)] mt-1 leading-relaxed">
+                    {driver.impactDescription}
+                  </p>
                 </div>
+              </div>
 
-                <p className="text-[11px] text-slate-600 leading-relaxed">
-                  {driver.impactDescription}
-                </p>
+              <div className="pt-2 border-t border-[rgba(200,212,226,0.3)] flex items-center justify-between text-xs">
+                <span className="text-[10px] uppercase font-bold text-[var(--neo-text-tertiary)] tracking-wider">
+                  Observed Variance
+                </span>
+                <span
+                  className={`font-mono font-bold ${
+                    isHigh ? 'text-rose-600' : isMed ? 'text-amber-600' : 'text-emerald-600'
+                  }`}
+                >
+                  {driver.actualValue}
+                </span>
               </div>
             </div>
           );

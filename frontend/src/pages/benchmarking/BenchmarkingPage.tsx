@@ -170,13 +170,13 @@ export const BenchmarkingPage: React.FC = () => {
   return (
     <div className="space-y-6 pb-16" id="peer-benchmarking-page">
       {/* Top Banner */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="neo-panel p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1">
             <BarChart3 className="w-4 h-4" />
             <span>Peer Comparison Engine</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Peer Benchmarking & Sector Parity</h1>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Peer Benchmarking & Sector Parity</h1>
           <p className="text-sm text-slate-500 mt-1">
             Comparative performance analytics against peer projects in the same sector, budget bracket, and terrain archetype.
           </p>
@@ -184,12 +184,12 @@ export const BenchmarkingPage: React.FC = () => {
 
         {/* Project Selector */}
         <div className="flex items-center gap-3">
-          <label className="text-xs font-semibold text-slate-600 whitespace-nowrap">Select Target Project:</label>
+          <label className="text-xs font-bold text-slate-600 whitespace-nowrap">Select Target Project:</label>
           <select
             id="benchmark-project-select"
             value={selectedProjectId}
             onChange={(e) => setSelectedProjectId(e.target.value)}
-            className="px-3 py-2 text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-xs truncate"
+            className="px-3.5 py-2 text-xs font-bold text-slate-800 neo-input rounded-xl focus:outline-none max-w-xs truncate cursor-pointer"
           >
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -201,30 +201,30 @@ export const BenchmarkingPage: React.FC = () => {
       </div>
 
       {/* Target Project Summary Header */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="neo-panel p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">
+          <span className="text-xs font-mono font-bold text-indigo-700 neo-inset px-2.5 py-1 rounded-lg">
             {selectedProject.code}
           </span>
-          <h2 className="text-xl font-bold text-slate-900 mt-1">{selectedProject.name}</h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Benchmark Cohort: <strong>{benchmark.sector} (Active Peer Sample: 42 Projects)</strong>
+          <h2 className="text-xl font-bold text-slate-900 mt-2">{selectedProject.name}</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Benchmark Cohort: <strong className="text-slate-800">{benchmark.sector} (Active Peer Sample: 42 Projects)</strong>
           </p>
         </div>
 
         <button
           onClick={() => navigate(`/projects/${selectedProject.id}`)}
-          className="px-3.5 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors shadow-sm self-start md:self-auto"
+          className="px-4 py-2.5 text-xs font-bold neo-button-primary self-start md:self-auto cursor-pointer"
         >
           View Project File &rarr;
         </button>
       </div>
 
       {/* 6 Key Metric Comparison Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
         {/* Cost Risk */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Cost Risk</span>
+        <div className="neo-card p-4 rounded-xl space-y-1">
+          <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">Cost Risk</span>
           <div className="text-2xl font-extrabold text-rose-700 font-mono">
             {benchmark.metrics.costRisk.project}
           </div>
@@ -234,8 +234,8 @@ export const BenchmarkingPage: React.FC = () => {
         </div>
 
         {/* Time Risk */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Time Risk</span>
+        <div className="neo-card p-4 rounded-xl space-y-1">
+          <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">Time Risk</span>
           <div className="text-2xl font-extrabold text-amber-700 font-mono">
             {benchmark.metrics.timeRisk.project}
           </div>
@@ -245,8 +245,8 @@ export const BenchmarkingPage: React.FC = () => {
         </div>
 
         {/* Progress % */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Progress</span>
+        <div className="neo-card p-4 rounded-xl space-y-1">
+          <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">Progress</span>
           <div className="text-2xl font-extrabold text-indigo-700 font-mono">
             {benchmark.metrics.progress.project}%
           </div>
@@ -256,8 +256,8 @@ export const BenchmarkingPage: React.FC = () => {
         </div>
 
         {/* Health Score */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Health Score</span>
+        <div className="neo-card p-4 rounded-xl space-y-1">
+          <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">Health Score</span>
           <div className="text-2xl font-extrabold text-slate-900 font-mono">
             {benchmark.metrics.healthScore.project}
           </div>
@@ -267,8 +267,8 @@ export const BenchmarkingPage: React.FC = () => {
         </div>
 
         {/* Duration Months */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Duration</span>
+        <div className="neo-card p-4 rounded-xl space-y-1">
+          <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">Duration</span>
           <div className="text-2xl font-extrabold text-slate-800 font-mono">
             {benchmark.metrics.durationMonths.project} mo
           </div>
@@ -278,8 +278,8 @@ export const BenchmarkingPage: React.FC = () => {
         </div>
 
         {/* Expenditure Velocity */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
-          <span className="text-[10px] uppercase font-bold text-slate-400 block">Exp. Velocity</span>
+        <div className="neo-card p-4 rounded-xl space-y-1">
+          <span className="text-[10px] uppercase font-bold text-slate-500 block tracking-wider">Exp. Velocity</span>
           <div className="text-xl font-extrabold text-emerald-700 font-mono">
             ₹{benchmark.metrics.expenditureVelocityCrPerMonth.project} Cr
           </div>
@@ -292,8 +292,8 @@ export const BenchmarkingPage: React.FC = () => {
       {/* Multi-way Visual Comparison Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Radar Chart: Multidimensional Parity Polygon */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div className="neo-panel p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-300/60">
             <div>
               <h3 className="font-bold text-slate-900 text-base">Multidimensional Parity Radar</h3>
               <p className="text-xs text-slate-500">Normalized performance envelope across 5 critical axes</p>
@@ -303,7 +303,7 @@ export const BenchmarkingPage: React.FC = () => {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData}>
-                <PolarGrid stroke="#e2e8f0" />
+                <PolarGrid stroke="#cbd5e1" />
                 <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: '#475569' }} />
                 <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 10, fill: '#94a3b8' }} />
                 <Radar name="This Project" dataKey="Project" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.4} />
@@ -317,8 +317,8 @@ export const BenchmarkingPage: React.FC = () => {
         </div>
 
         {/* Grouped Bar Chart: Direct Metric Comparison */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div className="neo-panel p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-300/60">
             <div>
               <h3 className="font-bold text-slate-900 text-base">Grouped Metric Comparison</h3>
               <p className="text-xs text-slate-500">This Project vs Peer Median vs Sector Baseline</p>
@@ -328,14 +328,14 @@ export const BenchmarkingPage: React.FC = () => {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} />
                 <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#64748b' }} />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="Project" fill="#4f46e5" />
-                <Bar dataKey="Peer Median" fill="#10b981" />
-                <Bar dataKey="Sector Avg" fill="#cbd5e1" />
+                <Bar dataKey="Project" fill="#4f46e5" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Peer Median" fill="#10b981" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Sector Avg" fill="#cbd5e1" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -343,14 +343,14 @@ export const BenchmarkingPage: React.FC = () => {
       </div>
 
       {/* AI Benchmark Explanation & Key Differences */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+      <div className="neo-panel p-6 space-y-6">
         <div>
           <div className="flex items-center gap-2 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-1">
             <Sparkles className="w-4 h-4" />
             <span>AI Sector Parity Synthesis</span>
           </div>
-          <h3 className="text-xl font-bold text-slate-900">Why This Project Differs From Peers</h3>
-          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+          <h3 className="text-xl font-bold text-slate-900 tracking-tight">Why This Project Differs From Peers</h3>
+          <p className="text-xs text-slate-600 mt-1 leading-relaxed">
             {benchmark.aiComparisonSummary}
           </p>
         </div>
@@ -360,19 +360,19 @@ export const BenchmarkingPage: React.FC = () => {
           {benchmark.keyDifferences.map((diff, index) => (
             <div
               key={index}
-              className={`p-4 rounded-xl border space-y-2 ${
+              className={`p-4.5 neo-card rounded-xl space-y-2 ${
                 diff.impact === 'UNFAVORABLE'
-                  ? 'bg-rose-50/40 border-rose-200'
-                  : 'bg-emerald-50/40 border-emerald-200'
+                  ? 'border-l-4 border-l-rose-500'
+                  : 'border-l-4 border-l-emerald-500'
               }`}
             >
               <div className="flex items-center justify-between">
                 <h4 className="font-bold text-slate-900 text-xs">{diff.metric}</h4>
                 <span
-                  className={`px-2 py-0.5 text-[10px] font-bold rounded ${
+                  className={`px-2 py-0.5 text-[10px] font-bold rounded-lg neo-raised border ${
                     diff.impact === 'UNFAVORABLE'
-                      ? 'bg-rose-100 text-rose-800'
-                      : 'bg-emerald-100 text-emerald-800'
+                      ? 'bg-rose-50 text-rose-800 border-rose-200'
+                      : 'bg-emerald-50 text-emerald-800 border-emerald-200'
                   }`}
                 >
                   {diff.difference}

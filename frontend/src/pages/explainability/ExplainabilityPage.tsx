@@ -118,13 +118,13 @@ export const ExplainabilityPage: React.FC = () => {
   return (
     <div className="space-y-6 pb-16" id="explainability-intelligence-page">
       {/* Top Banner */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="neo-panel p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1">
             <Sparkles className="w-4 h-4" />
             <span>Explainable AI (XAI) & SHAP Contribution Analysis</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Why Is This Project At Risk?</h1>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Why Is This Project At Risk?</h1>
           <p className="text-sm text-slate-500 mt-1">
             Transparent breakdown of model weights, root cause drivers, and positive vs stabilizing risk contributors.
           </p>
@@ -132,12 +132,12 @@ export const ExplainabilityPage: React.FC = () => {
 
         {/* Project Selector */}
         <div className="flex items-center gap-3">
-          <label className="text-xs font-semibold text-slate-600 whitespace-nowrap">Select Target Project:</label>
+          <label className="text-xs font-bold text-slate-600 whitespace-nowrap">Select Target Project:</label>
           <select
             id="explainability-project-select"
             value={selectedProject.id}
             onChange={(e) => setSelectedProjectId(e.target.value)}
-            className="px-3 py-2 text-xs font-semibold text-slate-800 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 max-w-xs truncate"
+            className="px-3.5 py-2 text-xs font-bold text-slate-800 neo-input rounded-xl focus:outline-none max-w-xs truncate cursor-pointer"
           >
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -149,39 +149,39 @@ export const ExplainabilityPage: React.FC = () => {
       </div>
 
       {/* Overview & Project Health Strip */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+      <div className="neo-panel p-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div className="space-y-1">
-            <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">
+            <span className="text-xs font-mono font-bold text-indigo-700 neo-inset px-2.5 py-1 rounded-lg">
               {selectedProject.code}
             </span>
-            <h2 className="text-xl font-bold text-slate-900 mt-1">{selectedProject.name}</h2>
+            <h2 className="text-xl font-bold text-slate-900 mt-2">{selectedProject.name}</h2>
             <div className="text-xs text-slate-500">
-              Agency: <strong>{selectedProject.implementingAgency}</strong> • Location: <strong>{selectedProject.state}</strong>
+              Agency: <strong className="text-slate-700">{selectedProject.implementingAgency}</strong> • Location: <strong className="text-slate-700">{selectedProject.state}</strong>
             </div>
           </div>
 
           <div className="flex items-center gap-6">
             <div className="text-right">
-              <span className="text-[11px] text-slate-500 uppercase font-semibold block">Composite Health</span>
+              <span className="text-[11px] text-slate-500 uppercase font-bold tracking-wider block">Composite Health</span>
               <div className="flex items-baseline gap-1 mt-0.5">
-                <span className="text-3xl font-extrabold text-slate-900">{selectedProject.healthScore}</span>
-                <span className="text-xs text-slate-400 font-semibold">/ 100</span>
+                <span className="text-3xl font-extrabold text-slate-900 font-mono">{selectedProject.healthScore}</span>
+                <span className="text-xs text-slate-400 font-mono font-semibold">/ 100</span>
               </div>
             </div>
 
-            <div className="w-px h-12 bg-slate-200" />
+            <div className="w-px h-12 bg-slate-300/60" />
 
             <div className="text-right">
-              <span className="text-[11px] text-slate-500 uppercase font-semibold block">Model Confidence</span>
-              <div className="text-xl font-bold text-emerald-700 mt-0.5">
+              <span className="text-[11px] text-slate-500 uppercase font-bold tracking-wider block">Model Confidence</span>
+              <div className="text-xl font-bold text-emerald-700 font-mono mt-0.5">
                 {analysis.modelConfidencePercent}%
               </div>
             </div>
 
             <button
               onClick={() => navigate(`/projects/${selectedProject.id}`)}
-              className="px-3 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors"
+              className="px-4 py-2.5 text-xs font-bold neo-button-primary cursor-pointer"
             >
               Full Project File &rarr;
             </button>
@@ -189,22 +189,22 @@ export const ExplainabilityPage: React.FC = () => {
         </div>
 
         {/* AI Explanation Narrative Box */}
-        <div className="mt-6 p-4 bg-indigo-50/70 border border-indigo-200 rounded-xl text-xs text-indigo-950 leading-relaxed space-y-1">
+        <div className="mt-6 p-4.5 neo-inset rounded-xl text-xs text-slate-800 leading-relaxed space-y-1 border border-indigo-200/60">
           <div className="font-bold flex items-center gap-1.5 text-indigo-900">
             <Sparkles className="w-4 h-4 text-indigo-600" />
             <span>AI Risk Attribution Synthesis</span>
           </div>
-          <p>{analysis.aiSummary}</p>
+          <p className="text-slate-700">{analysis.aiSummary}</p>
         </div>
       </div>
 
       {/* SHAP-Style Factor Contribution Visualizer */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+      <div className="neo-panel p-6 space-y-6">
         <div>
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-slate-900 text-lg">SHAP Feature Contribution Waterfall</h3>
-            <span className="text-xs text-slate-500">
-              Base Neutral Baseline: <strong>50.0 pts</strong>
+            <span className="text-xs text-slate-600 font-medium">
+              Base Neutral Baseline: <strong className="text-slate-900 font-mono">50.0 pts</strong>
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1">
@@ -216,9 +216,11 @@ export const ExplainabilityPage: React.FC = () => {
         <div className="space-y-6">
           {/* Section 1: Positive Risk Contributors */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between text-xs font-bold text-rose-800 uppercase tracking-wide border-b border-rose-100 pb-1.5">
-              <div className="flex items-center gap-1.5">
-                <TrendingUp className="w-4 h-4 text-rose-600" />
+            <div className="flex items-center justify-between text-xs font-bold text-rose-800 uppercase tracking-wide border-b border-rose-200/60 pb-2">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-lg neo-raised flex items-center justify-center text-rose-600">
+                  <TrendingUp className="w-3.5 h-3.5" />
+                </div>
                 <span>Positive Risk Contributors (Elevating Project Vulnerability)</span>
               </div>
               <span>Point Impact</span>
@@ -228,18 +230,18 @@ export const ExplainabilityPage: React.FC = () => {
               {positiveFactors.map((factor) => (
                 <div
                   key={factor.id}
-                  className="p-4 bg-rose-50/40 border border-rose-100 rounded-xl space-y-2 hover:bg-rose-50/70 transition-colors"
+                  className="p-4.5 neo-card rounded-xl space-y-2 border-l-4 border-l-rose-500 hover:shadow-md transition-all"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-slate-900 text-xs">{factor.name}</span>
-                      <span className="px-2 py-0.5 text-[10px] font-semibold bg-rose-100 text-rose-800 rounded">
+                      <span className="px-2 py-0.5 text-[10px] font-bold neo-raised bg-rose-50 text-rose-800 rounded-md border border-rose-200">
                         {factor.category}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <div className="w-36 h-2.5 bg-slate-200 rounded-full overflow-hidden hidden sm:block">
+                      <div className="w-36 h-2.5 neo-inset rounded-full overflow-hidden p-0.5 hidden sm:block">
                         <div
                           className="h-full bg-rose-600 rounded-full"
                           style={{ width: `${Math.min((factor.contributionScore / 30) * 100, 100)}%` }}
@@ -253,14 +255,14 @@ export const ExplainabilityPage: React.FC = () => {
 
                   <p className="text-xs text-slate-700 leading-relaxed">{factor.description}</p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-rose-100/80 text-[11px]">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-slate-300/40 text-[11px]">
                     <div>
-                      <span className="text-slate-500 font-medium">Ground Evidence:</span>
+                      <span className="text-slate-500 font-semibold">Ground Evidence:</span>
                       <p className="text-slate-800 font-medium mt-0.5">{factor.evidence}</p>
                     </div>
                     <div>
-                      <span className="text-indigo-800 font-medium">Prescriptive Action:</span>
-                      <p className="text-indigo-950 font-medium mt-0.5">{factor.mitigationSuggestion}</p>
+                      <span className="text-indigo-800 font-semibold">Prescriptive Action:</span>
+                      <p className="text-slate-800 font-medium mt-0.5">{factor.mitigationSuggestion}</p>
                     </div>
                   </div>
                 </div>
@@ -270,9 +272,11 @@ export const ExplainabilityPage: React.FC = () => {
 
           {/* Section 2: Stabilizing / Mitigating Factors */}
           <div className="space-y-3 pt-2">
-            <div className="flex items-center justify-between text-xs font-bold text-emerald-800 uppercase tracking-wide border-b border-emerald-100 pb-1.5">
-              <div className="flex items-center gap-1.5">
-                <TrendingDown className="w-4 h-4 text-emerald-600" />
+            <div className="flex items-center justify-between text-xs font-bold text-emerald-800 uppercase tracking-wide border-b border-emerald-200/60 pb-2">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-lg neo-raised flex items-center justify-center text-emerald-600">
+                  <TrendingDown className="w-3.5 h-3.5" />
+                </div>
                 <span>Stabilizing & Mitigating Assets (Reducing Risk Downside)</span>
               </div>
               <span>Deduction Impact</span>
@@ -282,18 +286,18 @@ export const ExplainabilityPage: React.FC = () => {
               {stabilizingFactors.map((factor) => (
                 <div
                   key={factor.id}
-                  className="p-4 bg-emerald-50/40 border border-emerald-100 rounded-xl space-y-2 hover:bg-emerald-50/70 transition-colors"
+                  className="p-4.5 neo-card rounded-xl space-y-2 border-l-4 border-l-emerald-500 hover:shadow-md transition-all"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-slate-900 text-xs">{factor.name}</span>
-                      <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-800 rounded">
+                      <span className="px-2 py-0.5 text-[10px] font-bold neo-raised bg-emerald-50 text-emerald-800 rounded-md border border-emerald-200">
                         {factor.category}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <div className="w-36 h-2.5 bg-slate-200 rounded-full overflow-hidden hidden sm:block">
+                      <div className="w-36 h-2.5 neo-inset rounded-full overflow-hidden p-0.5 hidden sm:block">
                         <div
                           className="h-full bg-emerald-600 rounded-full"
                           style={{ width: `${Math.min((Math.abs(factor.contributionScore) / 30) * 100, 100)}%` }}
@@ -307,14 +311,14 @@ export const ExplainabilityPage: React.FC = () => {
 
                   <p className="text-xs text-slate-700 leading-relaxed">{factor.description}</p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-emerald-100/80 text-[11px]">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2 border-t border-slate-300/40 text-[11px]">
                     <div>
-                      <span className="text-slate-500 font-medium">Observed Buffer:</span>
+                      <span className="text-slate-500 font-semibold">Observed Buffer:</span>
                       <p className="text-slate-800 font-medium mt-0.5">{factor.evidence}</p>
                     </div>
                     <div>
-                      <span className="text-emerald-800 font-medium">Recommended Safeguard:</span>
-                      <p className="text-emerald-950 font-medium mt-0.5">{factor.mitigationSuggestion}</p>
+                      <span className="text-emerald-800 font-semibold">Recommended Safeguard:</span>
+                      <p className="text-slate-800 font-medium mt-0.5">{factor.mitigationSuggestion}</p>
                     </div>
                   </div>
                 </div>

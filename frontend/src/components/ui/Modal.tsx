@@ -58,19 +58,19 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className={cn(
-              'relative w-full rounded-[18px] bg-white border border-[#E2E8F0] gov-shadow p-6 sm:p-7 z-10',
+              'relative w-full rounded-[22px] neo-floating p-6 sm:p-7 z-10 text-[var(--neo-text-primary)]',
               maxWMap[maxWidth],
             )}
           >
-            <div className="flex items-start justify-between pb-4 border-b border-slate-100">
+            <div className="flex items-start justify-between pb-4 border-b border-[rgba(200,212,226,0.5)]">
               <div>
-                <h3 className="text-lg font-bold text-[#0B1F3A]">{title}</h3>
+                <h3 className="text-lg font-bold text-[var(--neo-text-primary)]">{title}</h3>
                 {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
               </div>
               <button
                 type="button"
                 onClick={onClose}
-                className="text-slate-400 hover:text-slate-600 rounded-lg p-1.5 hover:bg-slate-100 transition-colors cursor-pointer"
+                className="text-slate-500 hover:text-slate-800 rounded-xl p-1.5 neo-button-interactive transition-colors cursor-pointer"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5" />

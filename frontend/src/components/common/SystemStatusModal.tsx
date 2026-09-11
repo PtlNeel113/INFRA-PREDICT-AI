@@ -64,18 +64,18 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
       />
 
       {/* Modal Card */}
-      <div className="relative w-full max-w-lg bg-white dark:bg-[#0F1D2E] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden z-10 text-slate-900 dark:text-slate-100">
+      <div className="relative w-full max-w-lg neo-panel rounded-2xl shadow-2xl overflow-hidden z-10 text-slate-900 border border-slate-300/80">
         {/* Header */}
-        <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-[#0B1F3A]/70">
+        <div className="p-5 border-b border-slate-300/60 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+            <div className="w-10 h-10 rounded-xl neo-raised flex items-center justify-center text-indigo-700">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-black uppercase tracking-wide">
+              <h2 className="text-sm font-black uppercase tracking-wide text-slate-900">
                 System Security & Service Status
               </h2>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+              <p className="text-[11px] text-slate-500 font-medium">
                 Infrastructure telemetry health monitor
               </p>
             </div>
@@ -84,7 +84,7 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-slate-800 rounded-lg hover:bg-slate-200/50 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -97,20 +97,20 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
             return (
               <div
                 key={srv.name}
-                className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-[#0B1F3A]/50 flex items-start gap-3"
+                className="p-3.5 rounded-xl neo-card flex items-start gap-3"
               >
-                <div className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-lg neo-inset flex items-center justify-center text-indigo-700 shrink-0 mt-0.5">
                   <Icon className="w-4 h-4" />
                 </div>
 
                 <div className="min-w-0 flex-1 space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-black tracking-tight font-mono">
+                    <span className="text-xs font-black tracking-tight font-mono text-slate-900">
                       {srv.name}
                     </span>
                     <span
                       className={cn(
-                        'text-[10px] font-black uppercase px-2 py-0.5 rounded-full border flex items-center gap-1',
+                        'text-[10px] font-black uppercase px-2.5 py-0.5 rounded-lg border neo-raised flex items-center gap-1.5',
                         srv.statusColor,
                       )}
                     >
@@ -119,13 +119,13 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
                     </span>
                   </div>
 
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400">
+                  <p className="text-[11px] text-slate-600">
                     {srv.details}
                   </p>
 
                   <div className="text-[10px] text-slate-400 font-mono flex items-center justify-between pt-1">
                     <span>Availability: {srv.uptime}</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">● Normal Baseline</span>
+                    <span className="text-emerald-700 font-bold">● Normal Baseline</span>
                   </div>
                 </div>
               </div>
@@ -134,14 +134,14 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({ isOpen, on
         </div>
 
         {/* Demo Notice Footer */}
-        <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/90 dark:bg-[#07111F] text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+        <div className="p-4 border-t border-slate-300/60 neo-inset text-[11px] text-slate-500 flex items-center justify-between m-4 rounded-xl">
           <div className="flex items-center gap-1.5">
-            <Lock className="w-3.5 h-3.5 text-indigo-500" />
-            <span className="font-mono text-[10px] uppercase font-bold text-indigo-600 dark:text-indigo-400">
+            <Lock className="w-3.5 h-3.5 text-indigo-600" />
+            <span className="font-mono text-[10px] uppercase font-bold text-indigo-700">
               Demo Environment Mode
             </span>
           </div>
-          <span className="text-[10px] text-slate-400">
+          <span className="text-[10px] text-slate-500 font-medium">
             <span>UI Demonstration Only</span>
           </span>
         </div>

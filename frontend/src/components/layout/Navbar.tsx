@@ -130,22 +130,22 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="h-16 glass-surface border-b border-[rgba(15,30,50,0.06)] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0 select-none">
+    <header className="h-16 bg-[var(--neo-surface)] border-b border-[rgba(200,212,226,0.5)] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0 select-none shadow-[0_3px_10px_rgba(166,180,200,0.15)]">
       {/* Left: Page Title & Breadcrumb */}
       <div className="flex items-center gap-3 min-w-0">
         <div className="flex flex-col">
           {getBreadcrumb() && (
-            <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8B95A8] mb-0.5">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--neo-text-tertiary)] mb-0.5">
               {getBreadcrumb()}
             </div>
           )}
-          <h1 className="text-lg sm:text-xl font-black text-[#0B1220] tracking-tight truncate">
+          <h1 className="text-lg sm:text-xl font-black text-[var(--neo-text-primary)] tracking-tight truncate">
             {getPageTitle()}
           </h1>
         </div>
         
         {isDemoMode && (
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-sm">
+          <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200/80 shadow-xs">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Operational Intelligence Active
           </span>
@@ -157,13 +157,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           type="button"
           onClick={onOpenCommandPalette}
-          className="w-full bg-white hover:bg-[rgba(21,87,214,0.02)] border border-[rgba(15,30,50,0.08)] hover:border-[rgba(21,87,214,0.15)] text-sm text-[#536174] rounded-xl pl-4 pr-3 py-2 flex items-center justify-between transition-all cursor-pointer group shadow-lifted"
+          className="w-full neo-inset rounded-xl pl-4 pr-3 py-2 flex items-center justify-between transition-all cursor-pointer group"
         >
           <span className="flex items-center gap-2.5 min-w-0">
-            <Search className="w-4 h-4 text-[#8B95A8] group-hover:text-[#1557D6] shrink-0" />
-            <span className="font-medium truncate whitespace-nowrap">Search projects, states, risks or commands...</span>
+            <Search className="w-4 h-4 text-[var(--neo-text-tertiary)] group-hover:text-[#1557D6] shrink-0" />
+            <span className="font-medium text-sm text-[var(--neo-text-secondary)] truncate whitespace-nowrap">Search projects, states, risks or commands...</span>
           </span>
-          <kbd className="px-2 py-0.5 text-[10px] font-mono font-bold bg-[#F7F8F5] border border-[rgba(15,30,50,0.08)] rounded text-[#536174] flex items-center gap-1 shrink-0 ml-2">
+          <kbd className="px-2 py-0.5 text-[10px] font-mono font-bold neo-raised-sm rounded text-[var(--neo-text-secondary)] flex items-center gap-1 shrink-0 ml-2">
             <Command className="w-2.5 h-2.5" />K
           </kbd>
         </button>
@@ -175,47 +175,47 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           type="button"
           onClick={onOpenNotifications}
-          className="relative p-2.5 text-[#536174] hover:text-[#1557D6] rounded-xl hover:bg-[rgba(21,87,214,0.04)] border border-transparent hover:border-[rgba(21,87,214,0.08)] transition-all cursor-pointer"
+          className="relative p-2.5 rounded-full neo-button-interactive text-[var(--neo-text-secondary)] hover:text-[#1557D6] transition-all cursor-pointer"
           title="Notifications"
           aria-label="View notifications"
         >
           <Bell className="w-4.5 h-4.5" />
           {unreadNotificationsCount > 0 && (
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#DC2626] ring-2 ring-white" />
+            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-[#DC2626] ring-2 ring-white" />
           )}
         </button>
 
-        <div className="h-8 w-px bg-[rgba(15,30,50,0.06)] hidden sm:block" />
+        <div className="h-8 w-px bg-[rgba(200,212,226,0.5)] hidden sm:block" />
 
         {/* User Profile Dropdown */}
         <div className="relative" ref={profileMenuRef}>
           <button
             type="button"
             onClick={() => setIsProfileOpen((prev) => !prev)}
-            className="flex items-center gap-2.5 sm:gap-3 p-1 sm:pl-2.5 sm:pr-2 rounded-xl hover:bg-[rgba(21,87,214,0.04)] dark:hover:bg-slate-800/70 border border-transparent hover:border-[rgba(21,87,214,0.08)] dark:hover:border-slate-700/60 transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-blue-500/20 select-none"
+            className="flex items-center gap-2.5 sm:gap-3 p-1 sm:pl-3 sm:pr-2.5 rounded-2xl neo-button-interactive transition-all cursor-pointer group select-none"
             aria-expanded={isProfileOpen}
             aria-haspopup="true"
             aria-label="User account menu"
           >
             <div className="text-right hidden sm:block">
-              <p className="text-xs font-bold text-[#0B1220] dark:text-slate-100 leading-tight group-hover:text-[#1557D6] dark:group-hover:text-blue-400 transition-colors">
+              <p className="text-xs font-bold text-[var(--neo-text-primary)] leading-tight group-hover:text-[#1557D6] transition-colors">
                 {user?.fullName || 'Dr. Vikram Malhotra'}
               </p>
-              <p className="text-[10px] text-[#536174] dark:text-slate-400 font-medium leading-tight">
+              <p className="text-[10px] text-[var(--neo-text-tertiary)] font-medium leading-tight">
                 {user?.role || 'Senior Decision Maker'}
               </p>
             </div>
             <div
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1557D6] to-[#0E7490] flex items-center justify-center text-white font-bold text-sm shadow-md relative ring-2 ring-white dark:ring-slate-900 group-hover:scale-105 transition-transform shrink-0"
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1557D6] to-[#0E7490] flex items-center justify-center text-white font-bold text-sm shadow-sm relative ring-2 ring-white group-hover:scale-105 transition-transform shrink-0"
               title={user?.email || 'vikram.malhotra@gov.in'}
             >
               {getInitials(user?.fullName)}
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#16A34A] ring-2 ring-white dark:ring-slate-900" />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#16A34A] ring-2 ring-white" />
             </div>
             <ChevronDown
               className={cn(
-                'w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-transform duration-200 hidden sm:block',
-                isProfileOpen && 'rotate-180 text-[#1557D6] dark:text-blue-400'
+                'w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-transform duration-200 hidden sm:block',
+                isProfileOpen && 'rotate-180 text-[#1557D6]'
               )}
             />
           </button>
@@ -228,10 +228,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 6 }}
                 transition={{ duration: 0.15, ease: 'easeOut' }}
-                className="absolute right-0 top-full mt-2 w-64 rounded-2xl bg-white dark:bg-[#0F1D2E] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-900/10 p-1.5 z-50 overflow-hidden text-slate-800 dark:text-slate-200"
+                className="absolute right-0 top-full mt-2 w-64 rounded-2xl neo-floating border border-white/80 p-2 z-50 overflow-hidden text-[var(--neo-text-primary)]"
               >
                 {/* Header Profile Summary */}
-                <div className="px-3 py-2.5 mb-1 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+                <div className="px-3 py-2.5 mb-1.5 rounded-xl neo-inset-sm">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1557D6] to-[#0E7490] flex items-center justify-center text-white font-bold text-xs shrink-0">
                       {getInitials(user?.fullName)}

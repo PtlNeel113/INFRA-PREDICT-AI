@@ -19,23 +19,20 @@ export const AIInsightCard: React.FC<AIInsightCardProps> = ({
   className,
 }) => {
   return (
-    <div className={cn('glass-panel p-8 relative overflow-hidden', className)}>
-      {/* AI Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#EBF5FF] via-transparent to-[#F2F9E8] opacity-40 pointer-events-none" />
-      
+    <div className={cn('neo-panel p-7 relative overflow-hidden', className)}>
       <div className="relative">
         {/* AI Indicator */}
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1557D6] to-[#8EDC35] flex items-center justify-center shadow-md">
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="w-8 h-8 rounded-xl neo-button-primary flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
-          <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#1557D6]">
+          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#1557D6]">
             {title}
           </div>
         </div>
         
         {/* Insight Text */}
-        <p className="text-lg leading-relaxed text-[#0B1220] font-medium mb-6">
+        <p className="text-base leading-relaxed text-[var(--neo-text-primary)] font-medium mb-6">
           {insight}
         </p>
         
@@ -46,9 +43,9 @@ export const AIInsightCard: React.FC<AIInsightCardProps> = ({
               <button
                 key={index}
                 onClick={action.onClick}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white hover:bg-[#EBF5FF] border border-[rgba(15,30,50,0.08)] text-sm font-semibold text-[#1557D6] transition-all hover-lift cursor-pointer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl neo-button-secondary text-sm font-semibold text-[#1557D6] transition-all cursor-pointer"
               >
-                {action.label}
+                <span>{action.label}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             ))}

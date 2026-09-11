@@ -21,23 +21,23 @@ export const RiskTrajectoryChart: React.FC = () => {
   const data = RISK_TRAJECTORY_DATA[timeHorizon];
 
   return (
-    <div className="bg-white rounded-[18px] border border-[#E2E8F0] gov-shadow p-5 sm:p-6 flex flex-col justify-between">
+    <div className="neo-panel p-5 sm:p-6 flex flex-col justify-between">
       {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[rgba(200,212,226,0.45)]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#155EEF]" />
-            <h3 className="text-base sm:text-lg font-black text-[#0B1F3A] tracking-tight">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1557D6]" />
+            <h3 className="text-base sm:text-lg font-black text-[var(--neo-text-primary)] tracking-tight">
               Risk Trajectory & Predictive Forecast
             </h3>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[var(--neo-text-secondary)] mt-1">
             Historical risk trajectory with AI-projected forecast and confidence bounds.
           </p>
         </div>
 
         {/* Time Horizon Selector (30d, 90d, 1y) */}
-        <div className="flex items-center bg-[#F8FAFC] border border-[#E2E8F0] p-1 rounded-xl gap-1">
+        <div className="flex items-center neo-inset-sm p-1 rounded-xl gap-1">
           {[
             { id: '30d', label: '30 Days' },
             { id: '90d', label: '90 Days' },
@@ -49,8 +49,8 @@ export const RiskTrajectoryChart: React.FC = () => {
               onClick={() => setTimeHorizon(item.id as any)}
               className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 timeHorizon === item.id
-                  ? 'bg-[#155EEF] text-white shadow-xs'
-                  : 'text-slate-600 hover:text-[#0B1F3A] hover:bg-slate-200/50'
+                  ? 'bg-[#1557D6] text-white shadow-xs'
+                  : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
               }`}
             >
               {item.label}
@@ -147,13 +147,13 @@ export const RiskTrajectoryChart: React.FC = () => {
       </div>
 
       {/* Bottom Summary Callout */}
-      <div className="p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl flex items-center justify-between text-xs">
+      <div className="p-3 neo-inset-sm rounded-xl flex items-center justify-between text-xs mt-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-[#155EEF]" />
-          <span className="text-[#0B1F3A] font-semibold">
+          <Sparkles className="w-4 h-4 text-[#1557D6]" />
+          <span className="text-[var(--neo-text-primary)] font-semibold">
             Risk Trend:
           </span>
-          <span className="text-slate-600 hidden sm:inline">
+          <span className="text-[var(--neo-text-secondary)] hidden sm:inline">
             Risk momentum is accelerating at +3.2% per quarter without prescriptive intervention.
           </span>
         </div>

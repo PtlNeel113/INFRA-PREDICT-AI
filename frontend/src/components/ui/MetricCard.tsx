@@ -24,14 +24,14 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   className,
 }) => {
   return (
-    <div className={cn('glass-card p-6 hover-lift', className)}>
+    <div className={cn('neo-card p-6', className)}>
       <div className="flex items-start justify-between mb-4">
-        <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#8B95A8]">
+        <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--neo-text-tertiary)]">
           {label}
         </div>
         {Icon && (
-          <div className="w-10 h-10 rounded-xl bg-[#EBF5FF] flex items-center justify-center">
-            <Icon className="w-5 h-5 text-[#1557D6]" />
+          <div className="w-10 h-10 rounded-xl neo-inset-sm flex items-center justify-center text-[#1557D6]">
+            <Icon className="w-5 h-5" />
           </div>
         )}
       </div>

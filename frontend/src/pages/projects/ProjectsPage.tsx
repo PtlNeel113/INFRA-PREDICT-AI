@@ -227,14 +227,14 @@ export const ProjectsPage: React.FC = () => {
       <AddProjectModal isOpen={showAddProjectModal} onClose={() => setShowAddProjectModal(false)} />
       <div className="space-y-6 pb-12" id="projects-intelligence-page">
       {/* Header Banner */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="neo-panel p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-700 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#1557D6] mb-1">
             <Layers className="w-4 h-4" />
             <span>National Infrastructure Directory</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Project Intelligence Layer</h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <h1 className="text-2xl font-black text-[var(--neo-text-primary)] tracking-tight">Project Intelligence Layer</h1>
+          <p className="text-sm text-[var(--neo-text-secondary)] mt-1">
             Multi-dimensional risk scoring, cost escalation forecasts, and milestone tracking across India's high-value infrastructure.
           </p>
         </div>
@@ -242,71 +242,65 @@ export const ProjectsPage: React.FC = () => {
         <div className="flex items-center gap-3">
           {/* Production-Ready Export CSV with Scope Menu */}
           <div className="relative">
-            <div className="inline-flex items-center rounded-lg shadow-sm border border-slate-200 bg-slate-50">
+            <div className="inline-flex items-center rounded-xl neo-raised">
               <button
                 id="export-projects-csv-btn"
                 type="button"
                 disabled={isExporting || filteredProjects.length === 0}
                 onClick={() => handleExportCsv(false)}
-                className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-50 rounded-l-lg hover:text-slate-900 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold text-[var(--neo-text-primary)] hover:text-[#1557D6] disabled:opacity-50 rounded-l-xl transition-colors cursor-pointer"
                 title={`Export ${filteredProjects.length} visible project(s) to CSV`}
               >
                 {isExporting ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-indigo-600" />
+                  <Loader2 className="w-4 h-4 animate-spin text-[#1557D6]" />
                 ) : (
-                  <Download className="w-4 h-4 text-slate-600" />
+                  <Download className="w-4 h-4 text-[var(--neo-text-secondary)]" />
                 )}
                 <span>Export CSV</span>
-                <span className="px-1.5 py-0.5 text-[10px] font-bold bg-slate-200/80 text-slate-700 rounded-full">
+                <span className="px-1.5 py-0.5 text-[10px] font-bold neo-inset text-[#1557D6] rounded-full">
                   {filteredProjects.length}
                 </span>
               </button>
               <button
                 type="button"
-                id="export-csv-dropdown-toggle"
-                disabled={isExporting}
                 onClick={() => setShowExportMenu(!showExportMenu)}
-                className="px-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 border-l border-slate-200 rounded-r-lg hover:text-slate-900 transition-colors cursor-pointer"
-                title="Choose export scope"
-                aria-label="Export options"
+                className="px-2 py-2 border-l border-[rgba(200,212,226,0.45)] text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)] rounded-r-xl transition-colors cursor-pointer"
+                title="Select CSV export scope"
               >
-                <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+                <ChevronDown className="w-3.5 h-3.5" />
               </button>
             </div>
 
             {showExportMenu && (
               <>
                 <div
-                  className="fixed inset-0 z-20"
+                  className="fixed inset-0 z-40"
                   onClick={() => setShowExportMenu(false)}
                 />
-                <div className="absolute right-0 mt-1.5 w-64 bg-white border border-slate-200 rounded-xl shadow-xl z-30 py-1.5 text-xs animate-in fade-in zoom-in-95 duration-100">
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-                    Export Options (RFC-4180 CSV)
-                  </div>
+                <div className="absolute right-0 mt-1.5 w-60 neo-floating p-1.5 z-50">
                   <button
                     type="button"
                     onClick={() => handleExportCsv(false)}
-                    className="w-full text-left px-3 py-2 text-slate-700 hover:bg-slate-50 flex items-center justify-between transition-colors cursor-pointer"
+                    className="w-full text-left px-3 py-2 text-[var(--neo-text-primary)] hover:bg-slate-200/40 rounded-lg flex items-center justify-between transition-colors cursor-pointer"
                   >
                     <div className="flex flex-col">
-                      <span className="font-semibold text-slate-800">Current Filtered View</span>
-                      <span className="text-[10px] text-slate-400">Respects search & active filters</span>
+                      <span className="font-semibold text-xs">Current Filtered View</span>
+                      <span className="text-[10px] text-[var(--neo-text-tertiary)]">Respects search & active filters</span>
                     </div>
-                    <span className="font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded text-[11px]">
+                    <span className="font-bold text-[var(--neo-text-primary)] neo-inset px-2 py-0.5 rounded text-[11px]">
                       {filteredProjects.length}
                     </span>
                   </button>
                   <button
                     type="button"
                     onClick={() => handleExportCsv(true)}
-                    className="w-full text-left px-3 py-2 text-slate-700 hover:bg-slate-50 flex items-center justify-between transition-colors cursor-pointer border-t border-slate-100"
+                    className="w-full text-left px-3 py-2 text-[var(--neo-text-primary)] hover:bg-slate-200/40 rounded-lg flex items-center justify-between transition-colors cursor-pointer border-t border-[rgba(200,212,226,0.45)] mt-1 pt-1.5"
                   >
                     <div className="flex flex-col">
-                      <span className="font-semibold text-slate-800">All Portfolio Projects</span>
-                      <span className="text-[10px] text-slate-400">Entire national directory</span>
+                      <span className="font-semibold text-xs">All Portfolio Projects</span>
+                      <span className="text-[10px] text-[var(--neo-text-tertiary)]">Entire national directory</span>
                     </div>
-                    <span className="font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded text-[11px]">
+                    <span className="font-bold text-[var(--neo-text-primary)] neo-inset px-2 py-0.5 rounded text-[11px]">
                       {projects.length}
                     </span>
                   </button>
@@ -318,7 +312,7 @@ export const ProjectsPage: React.FC = () => {
           <button
             id="add-project-btn"
             onClick={() => setShowAddProjectModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition-colors shadow-sm cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-all shadow-[3px_3px_8px_rgba(16,185,129,0.3),-2px_-2px_6px_rgba(255,255,255,0.8)] active:translate-y-px cursor-pointer"
           >
             <Building2 className="w-4 h-4" />
             <span>+ Add Project</span>
@@ -326,7 +320,7 @@ export const ProjectsPage: React.FC = () => {
           <button
             id="quick-risk-report-btn"
             onClick={() => navigate('/predictions')}
-            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-indigo-700 hover:bg-indigo-800 rounded-lg transition-colors shadow-sm cursor-pointer"
+            className="neo-button-primary inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl cursor-pointer"
           >
             <TrendingUp className="w-4 h-4" />
             <span>Predictive Intelligence</span>
@@ -335,11 +329,11 @@ export const ProjectsPage: React.FC = () => {
       </div>
 
       {/* Filter Control Bar */}
-      <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
+      <div className="neo-panel p-5 space-y-4">
         {/* Search & Top Action */}
         <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
           <div className="relative w-full sm:max-w-md">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--neo-text-tertiary)]" />
             <input
               id="project-search-input"
               type="text"
@@ -349,19 +343,19 @@ export const ProjectsPage: React.FC = () => {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-9 pr-4 py-2 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all placeholder:text-slate-400"
+              className="neo-input w-full pl-9 pr-4 py-2.5 text-xs text-[var(--neo-text-primary)] placeholder:text-[var(--neo-text-tertiary)]"
             />
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <span className="text-xs text-slate-500">
-              Showing <strong className="text-slate-800">{filteredProjects.length}</strong> of {projects.length} projects
+            <span className="text-xs text-[var(--neo-text-secondary)]">
+              Showing <strong className="text-[var(--neo-text-primary)]">{filteredProjects.length}</strong> of {projects.length} projects
             </span>
             {(searchQuery || selectedMinistry !== 'ALL' || selectedSector !== 'ALL' || selectedState !== 'ALL' || selectedRisk !== 'ALL' || selectedStage !== 'ALL' || costRange !== 'ALL') && (
               <button
                 id="reset-filters-btn"
                 onClick={resetFilters}
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-medium ml-2 underline"
+                className="text-xs text-[#1557D6] hover:underline font-bold ml-2 cursor-pointer"
               >
                 Clear all filters
               </button>
@@ -370,10 +364,10 @@ export const ProjectsPage: React.FC = () => {
         </div>
 
         {/* Multi-facet Filter Selectors */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-2 border-t border-slate-100">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-3 border-t border-[rgba(200,212,226,0.45)]">
           {/* Ministry */}
           <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">Ministry</label>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--neo-text-tertiary)] mb-1">Ministry</label>
             <select
               id="filter-ministry-select"
               value={selectedMinistry}
@@ -381,7 +375,7 @@ export const ProjectsPage: React.FC = () => {
                 setSelectedMinistry(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-2.5 py-1.5 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="neo-input w-full px-2.5 py-1.5 text-xs text-[var(--neo-text-primary)]"
             >
               <option value="ALL">All Ministries</option>
               {ministries.map((m) => (
@@ -392,7 +386,7 @@ export const ProjectsPage: React.FC = () => {
 
           {/* Sector */}
           <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">Sector</label>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--neo-text-tertiary)] mb-1">Sector</label>
             <select
               id="filter-sector-select"
               value={selectedSector}
@@ -400,7 +394,7 @@ export const ProjectsPage: React.FC = () => {
                 setSelectedSector(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-2.5 py-1.5 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="neo-input w-full px-2.5 py-1.5 text-xs text-[var(--neo-text-primary)]"
             >
               <option value="ALL">All Sectors</option>
               {sectors.map((s) => (
@@ -411,7 +405,7 @@ export const ProjectsPage: React.FC = () => {
 
           {/* State */}
           <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">State / UT</label>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--neo-text-tertiary)] mb-1">State / UT</label>
             <select
               id="filter-state-select"
               value={selectedState}
@@ -419,7 +413,7 @@ export const ProjectsPage: React.FC = () => {
                 setSelectedState(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-2.5 py-1.5 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="neo-input w-full px-2.5 py-1.5 text-xs text-[var(--neo-text-primary)]"
             >
               <option value="ALL">All States</option>
               {states.map((st) => (
@@ -430,7 +424,7 @@ export const ProjectsPage: React.FC = () => {
 
           {/* Risk Level */}
           <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">Risk Severity</label>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--neo-text-tertiary)] mb-1">Risk Severity</label>
             <select
               id="filter-risk-select"
               value={selectedRisk}
@@ -438,7 +432,7 @@ export const ProjectsPage: React.FC = () => {
                 setSelectedRisk(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-2.5 py-1.5 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="neo-input w-full px-2.5 py-1.5 text-xs text-[var(--neo-text-primary)]"
             >
               <option value="ALL">All Risk Levels</option>
               <option value="CRITICAL">Critical Risk</option>
@@ -451,7 +445,7 @@ export const ProjectsPage: React.FC = () => {
 
           {/* Project Stage */}
           <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">Project Stage</label>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--neo-text-tertiary)] mb-1">Project Stage</label>
             <select
               id="filter-stage-select"
               value={selectedStage}
@@ -459,7 +453,7 @@ export const ProjectsPage: React.FC = () => {
                 setSelectedStage(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-2.5 py-1.5 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="neo-input w-full px-2.5 py-1.5 text-xs text-[var(--neo-text-primary)]"
             >
               <option value="ALL">All Stages</option>
               {stages.map((stg) => (
@@ -470,7 +464,7 @@ export const ProjectsPage: React.FC = () => {
 
           {/* Cost Range */}
           <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">Sanctioned Outlay</label>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--neo-text-tertiary)] mb-1">Sanctioned Outlay</label>
             <select
               id="filter-cost-select"
               value={costRange}
@@ -478,7 +472,7 @@ export const ProjectsPage: React.FC = () => {
                 setCostRange(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-2.5 py-1.5 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="neo-input w-full px-2.5 py-1.5 text-xs text-[var(--neo-text-primary)]"
             >
               <option value="ALL">All Outlays</option>
               <option value="UNDER_2000">&lt; ₹2,000 Cr</option>
@@ -490,7 +484,7 @@ export const ProjectsPage: React.FC = () => {
       </div>
 
       {/* Main Project Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden" id="projects-table-container">
+      <div className="neo-panel overflow-hidden" id="projects-table-container">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
@@ -743,7 +737,7 @@ export const ProjectsPage: React.FC = () => {
                           e.stopPropagation();
                           navigate(`/projects/${project.id}`);
                         }}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-indigo-700 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-colors"
+                        className="neo-raised inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-[#1557D6] hover:translate-y-[-1px] rounded-lg transition-all cursor-pointer"
                       >
                         <span>Deep Dive</span>
                         <ExternalLink className="w-3 h-3" />
@@ -757,18 +751,18 @@ export const ProjectsPage: React.FC = () => {
         </div>
 
         {/* Pagination Footer */}
-        <div className="bg-slate-50 border-t border-slate-200 px-4 py-3 flex items-center justify-between">
-          <div className="text-xs text-slate-500">
-            Page <span className="font-semibold text-slate-700">{currentPage}</span> of{' '}
-            <span className="font-semibold text-slate-700">{totalPages}</span>
+        <div className="neo-surface border-t border-[rgba(200,212,226,0.45)] px-4 py-3 flex items-center justify-between">
+          <div className="text-xs text-[var(--neo-text-secondary)]">
+            Page <span className="font-bold text-[var(--neo-text-primary)]">{currentPage}</span> of{' '}
+            <span className="font-bold text-[var(--neo-text-primary)]">{totalPages}</span>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <button
               id="pagination-prev-btn"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-              className="px-3 py-1 text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-3 py-1.5 text-xs font-semibold text-[var(--neo-text-secondary)] neo-raised rounded-lg hover:text-[var(--neo-text-primary)] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
             >
               Previous
             </button>
@@ -776,10 +770,10 @@ export const ProjectsPage: React.FC = () => {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   currentPage === page
-                    ? 'bg-indigo-700 text-white font-bold'
-                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
+                    ? 'neo-inset text-[#1557D6]'
+                    : 'neo-raised text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
                 }`}
               >
                 {page}
@@ -789,7 +783,7 @@ export const ProjectsPage: React.FC = () => {
               id="pagination-next-btn"
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-              className="px-3 py-1 text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-3 py-1.5 text-xs font-semibold text-[var(--neo-text-secondary)] neo-raised rounded-lg hover:text-[var(--neo-text-primary)] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
             >
               Next
             </button>

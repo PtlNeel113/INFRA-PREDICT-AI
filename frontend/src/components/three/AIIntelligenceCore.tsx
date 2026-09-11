@@ -100,7 +100,7 @@ export const AIIntelligenceCore: React.FC<AIIntelligenceCoreProps> = ({ isTransi
             >
               <div className="relative">
                 {/* Metric Badge */}
-                <div className="px-2 py-1 bg-slate-800/90 backdrop-blur-sm border border-blue-400/50 rounded text-[10px] font-bold text-blue-300 whitespace-nowrap shadow-lg">
+                <div className="px-2 py-0.5 bg-[#FFFFFF]/95 backdrop-blur-sm border border-[rgba(190,205,222,0.6)] rounded-md text-[10px] font-black text-[#1557D6] whitespace-nowrap shadow-[2px_2px_6px_rgba(150,168,192,0.35)]">
                   {metric}
                 </div>
                 

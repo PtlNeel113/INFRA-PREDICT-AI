@@ -51,13 +51,13 @@ export const DecisionHeroPanel: React.FC = () => {
   };
 
   return (
-    <div className="glass-card p-8 flex flex-col gap-6">
+    <div className="neo-panel p-6 sm:p-8 flex flex-col gap-6">
       {/* Header */}
-      <div className="flex flex-col gap-3">
-        <h2 className="text-2xl sm:text-3xl font-black text-[#0B1220] tracking-tight uppercase">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-xl sm:text-2xl font-black text-[var(--neo-text-primary)] tracking-tight uppercase">
           {t('dashboard.hero.title')}
         </h2>
-        <p className="text-sm text-[#536174] leading-relaxed">
+        <p className="text-sm text-[var(--neo-text-secondary)] leading-relaxed">
           {t('dashboard.hero.description')}
         </p>
       </div>
@@ -72,16 +72,16 @@ export const DecisionHeroPanel: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="group relative flex flex-col bg-white border border-[rgba(15,30,50,0.08)] rounded-xl p-6 hover:shadow-elevated hover-lift transition-all"
+              className="group relative flex flex-col neo-card p-5.5 hover:translate-y-[-2px] transition-all"
             >
               {/* Rank Number & Risk Badge */}
-              <div className="flex items-start justify-between mb-5">
-                <span className="text-5xl font-black text-[rgba(11,18,32,0.08)] tracking-tighter leading-none group-hover:text-[#1557D6]/15 transition-colors font-mono">
+              <div className="flex items-start justify-between mb-4">
+                <span className="text-4xl font-black text-slate-300 tracking-tighter leading-none group-hover:text-[#1557D6]/20 transition-colors font-mono">
                   {rank.toString().padStart(2, '0')}
                 </span>
                 <span
                   className={cn(
-                    'text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase border shadow-sm',
+                    'text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase border shadow-2xs',
                     getRiskColor(severityRank)
                   )}
                 >
@@ -90,22 +90,22 @@ export const DecisionHeroPanel: React.FC = () => {
               </div>
 
               {/* Project Name */}
-              <div className="flex flex-col gap-2 mb-5 flex-grow">
-                <h3 className="text-base font-bold text-[#0B1220] line-clamp-2 leading-snug">
+              <div className="flex flex-col gap-2 mb-4 flex-grow">
+                <h3 className="text-sm font-bold text-[var(--neo-text-primary)] line-clamp-2 leading-snug">
                   {project.name}
                 </h3>
                 
                 {/* Health Bar */}
                 <div className="flex items-center gap-2 mt-2">
-                  <span className="text-xs text-[#8B95A8] font-mono font-semibold">
+                  <span className="text-xs text-[var(--neo-text-tertiary)] font-mono font-semibold">
                     {t('dashboard.hero.health')}:
                   </span>
-                  <div className="flex-1 h-2 bg-[rgba(15,30,50,0.06)] rounded-full overflow-hidden">
+                  <div className="flex-1 h-2 neo-inset-sm rounded-full overflow-hidden">
                     <div
                       className={cn(
                         'h-full rounded-full transition-all',
                         project.healthScore > 70
-                          ? 'bg-[#16A34A]'
+                          ? 'bg-[#10B981]'
                           : project.healthScore > 40
                           ? 'bg-[#EA580C]'
                           : 'bg-[#DC2626]'
@@ -113,33 +113,33 @@ export const DecisionHeroPanel: React.FC = () => {
                       style={{ width: `${project.healthScore}%` }}
                     />
                   </div>
-                  <span className="text-xs font-black text-[#0B1220] font-mono">
+                  <span className="text-xs font-black text-[var(--neo-text-primary)] font-mono">
                     {project.healthScore}/100
                   </span>
                 </div>
               </div>
 
               {/* Risk Details */}
-              <div className="mb-5 space-y-3">
+              <div className="mb-4 space-y-2.5 pt-3 border-t border-[rgba(200,212,226,0.4)]">
                 <div>
-                  <span className="text-[10px] font-bold text-[#8B95A8] uppercase tracking-[0.12em]">
+                  <span className="text-[10px] font-bold text-[var(--neo-text-tertiary)] uppercase tracking-[0.12em]">
                     {t('dashboard.hero.primaryRisk')}
                   </span>
-                  <p className="text-sm text-[#0B1220] font-medium mt-1 line-clamp-2 leading-snug">
+                  <p className="text-xs text-[var(--neo-text-primary)] font-medium mt-0.5 line-clamp-2 leading-snug">
                     {project.primaryRiskDriver}
                   </p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-[#8B95A8] uppercase tracking-[0.12em]">
+                  <span className="text-[10px] font-bold text-[var(--neo-text-tertiary)] uppercase tracking-[0.12em]">
                     {t('dashboard.hero.recommendedAction')}
                   </span>
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-2 mt-0.5">
                     {severityRank === 'CRITICAL' ? (
-                      <ShieldAlert className="w-4 h-4 text-[#DC2626]" />
+                      <ShieldAlert className="w-3.5 h-3.5 text-[#DC2626]" />
                     ) : (
-                      <Eye className="w-4 h-4 text-[#EA580C]" />
+                      <Eye className="w-3.5 h-3.5 text-[#EA580C]" />
                     )}
-                    <p className="text-sm text-[#0B1220] font-semibold">
+                    <p className="text-xs text-[var(--neo-text-primary)] font-semibold">
                       {getReviewStatus(severityRank)}
                     </p>
                   </div>
@@ -150,9 +150,10 @@ export const DecisionHeroPanel: React.FC = () => {
               <button
                 type="button"
                 onClick={() => navigate(`/projects/${project.id}`)}
-                className="w-full flex items-center justify-center gap-2 bg-[#1557D6] hover:bg-[#0A1B33] text-white text-sm font-bold py-3 rounded-xl transition-all cursor-pointer shadow-sm hover:shadow-md hover-lift"
+                className="w-full flex items-center justify-center gap-2 neo-button-primary text-white text-xs font-bold py-2.5 rounded-xl transition-all cursor-pointer shadow-xs"
               >
-                {t('dashboard.hero.investigateButton')} <ArrowRight className="w-4 h-4" />
+                <span>{t('dashboard.hero.investigateButton')}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </motion.div>
           );

@@ -44,30 +44,30 @@ export const StateDrawer: React.FC<StateDrawerProps> = ({
       animate={{ x: 0 }}
       exit={{ x: '100%' }}
       transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-      className="fixed right-0 top-0 bottom-0 w-full sm:w-[480px] bg-white dark:bg-[#0F1D2E] border-l border-slate-200 dark:border-slate-800 shadow-2xl z-50 overflow-y-auto"
+      className="fixed right-0 top-0 bottom-0 w-full sm:w-[480px] bg-[var(--neo-surface)] border-l border-[rgba(200,212,226,0.5)] shadow-[-8px_0_24px_rgba(166,180,200,0.35)] z-50 overflow-y-auto"
     >
       {/* Header */}
-      <div className="sticky top-0 bg-white/95 dark:bg-[#0F1D2E]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-6 z-10">
+      <div className="sticky top-0 bg-[var(--neo-surface)] border-b border-[rgba(200,212,226,0.45)] p-6 z-10">
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-sm font-mono font-black px-2 py-1 bg-[#155EEF] text-white rounded">
+              <span className="text-sm font-mono font-black px-2.5 py-1 neo-raised text-[#1557D6] rounded-lg">
                 {state.shortCode}
               </span>
-              <h2 className="text-xl font-black text-[#0B1F3A] dark:text-white tracking-tight">
+              <h2 className="text-xl font-black text-[var(--neo-text-primary)] tracking-tight">
                 {state.name}
               </h2>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-[var(--neo-text-secondary)]">
               National Infrastructure Risk Intelligence Dossier
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+            className="p-2 neo-raised rounded-xl transition-all cursor-pointer hover:translate-y-[-1px]"
           >
-            <X className="w-5 h-5 text-slate-400" />
+            <X className="w-5 h-5 text-[var(--neo-text-tertiary)]" />
           </button>
         </div>
       </div>

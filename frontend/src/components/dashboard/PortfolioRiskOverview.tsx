@@ -36,23 +36,23 @@ export const PortfolioRiskOverview: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'distribution' | 'cost' | 'delay' | 'sector'>('distribution');
 
   return (
-    <div className="bg-white rounded-[18px] border border-[#E2E8F0] gov-shadow p-5 sm:p-6 flex flex-col justify-between">
+    <div className="neo-panel p-5 sm:p-6 flex flex-col justify-between">
       {/* Top Header & View Tabs */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[rgba(200,212,226,0.45)]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#0E7490]" />
-            <h3 className="text-base sm:text-lg font-black text-[#0B1F3A] tracking-tight">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1557D6]" />
+            <h3 className="text-base sm:text-lg font-black text-[var(--neo-text-primary)] tracking-tight">
               Portfolio Risk Overview
             </h3>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[var(--neo-text-secondary)] mt-1">
             Macro risk distribution, capital exposure trajectory, and sector comparison.
           </p>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex flex-wrap items-center bg-[#F8FAFC] border border-[#E2E8F0] p-1 rounded-xl gap-1">
+        <div className="flex flex-wrap items-center neo-inset-sm p-1 rounded-xl gap-1">
           {[
             { id: 'distribution', label: 'Risk Distribution', icon: PieIcon },
             { id: 'cost', label: 'Cost-Risk Trend', icon: TrendingUp },
@@ -68,8 +68,8 @@ export const PortfolioRiskOverview: React.FC = () => {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[#0B1F3A] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-[#0B1F3A] hover:bg-slate-200/50'
+                    ? 'bg-[#1557D6] text-white shadow-xs'
+                    : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -106,12 +106,12 @@ export const PortfolioRiskOverview: React.FC = () => {
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-[#0B1F3A] text-white p-3 rounded-xl border border-white/10 text-xs shadow-xl">
-                            <p className="font-bold">{data.name}</p>
-                            <p className="text-slate-300 font-mono mt-1">
+                          <div className="neo-card p-3 rounded-xl text-xs shadow-xl">
+                            <p className="font-bold text-[var(--neo-text-primary)]">{data.name}</p>
+                            <p className="font-mono text-[#1557D6]">
                               {data.count} Projects ({data.percentage}%)
                             </p>
-                            <p className="text-emerald-400 font-mono text-[11px] font-bold">
+                            <p className="text-[var(--neo-text-secondary)] mt-0.5">
                               ₹{(data.valueCr / 1000).toFixed(1)}k Cr Outlay
                             </p>
                           </div>
@@ -129,7 +129,7 @@ export const PortfolioRiskOverview: React.FC = () => {
               {RISK_DISTRIBUTION_DATA.map((item) => (
                 <div
                   key={item.name}
-                  className="p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between hover:border-slate-300 transition-colors"
+                  className="p-3 rounded-xl neo-card flex items-center justify-between transition-colors"
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: item.color }} />

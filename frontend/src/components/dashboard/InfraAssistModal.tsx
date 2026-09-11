@@ -89,21 +89,21 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs select-none">
-      <div className="w-full max-w-2xl bg-white dark:bg-[#0F1D2E] rounded-[24px] border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-4 max-h-[85vh] flex flex-col justify-between text-slate-900 dark:text-slate-100">
+      <div className="w-full max-w-2xl neo-panel rounded-[24px] shadow-2xl p-6 space-y-4 max-h-[85vh] flex flex-col justify-between text-slate-900 border border-slate-300/80">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#155EEF] text-white flex items-center justify-center shadow-sm">
+        <div className="flex items-center justify-between border-b border-slate-300/60 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl neo-raised flex items-center justify-center text-indigo-700">
               <Bot className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-black text-slate-900 dark:text-white">Infra-Assist AI</h3>
-                <span className="text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                <h3 className="text-base font-black text-slate-900">Infra-Assist AI</h3>
+                <span className="text-[10px] font-bold bg-emerald-50 text-emerald-800 px-2.5 py-0.5 rounded-lg border border-emerald-200 neo-raised">
                   Grounded Core
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[11px] text-slate-500 font-medium">
                 Connected to {projects.length} monitored national infrastructure assets
               </p>
             </div>
@@ -111,15 +111,15 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
 
           <div className="flex items-center gap-2">
             {/* Project Context Selector */}
-            <div className="hidden sm:flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1">
-              <Building2 className="w-3.5 h-3.5 text-slate-400" />
+            <div className="hidden sm:flex items-center gap-1.5 neo-inset rounded-xl px-2.5 py-1">
+              <Building2 className="w-3.5 h-3.5 text-slate-500" />
               <select
                 value={selectedProjectId}
                 onChange={(e) => setSelectedProjectId(e.target.value)}
-                className="text-xs font-bold bg-transparent text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer max-w-[150px] truncate"
+                className="text-xs font-bold bg-transparent text-slate-800 focus:outline-none cursor-pointer max-w-[150px] truncate"
               >
                 {projects.map((p) => (
-                  <option key={p.id} value={p.id} className="dark:bg-[#0B1F3A]">
+                  <option key={p.id} value={p.id}>
                     {p.code}
                   </option>
                 ))}
@@ -129,7 +129,7 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg cursor-pointer transition-colors"
+              className="p-1.5 text-slate-400 hover:text-slate-800 rounded-lg cursor-pointer transition-colors"
               aria-label="Close modal"
             >
               <X className="w-4 h-4" />
@@ -145,28 +145,28 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
               className={`flex gap-2.5 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               {m.sender === 'ai' && (
-                <div className="w-7 h-7 rounded-lg bg-[#0B1F3A] dark:bg-indigo-900 text-white flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">
+                <div className="w-7 h-7 rounded-lg neo-raised text-indigo-700 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">
                   AI
                 </div>
               )}
               <div
                 className={`max-w-md p-3.5 rounded-2xl text-xs leading-relaxed ${
                   m.sender === 'user'
-                    ? 'bg-[#155EEF] text-white rounded-br-xs font-medium'
-                    : 'bg-slate-50 dark:bg-[#0B1F3A] border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-bl-xs'
+                    ? 'neo-button-primary text-white rounded-br-xs font-medium'
+                    : 'neo-card text-slate-800 rounded-bl-xs'
                 }`}
               >
                 <div className="whitespace-pre-line text-xs">{m.text}</div>
                 <span
                   className={`text-[9px] mt-1.5 block text-right font-mono ${
-                    m.sender === 'user' ? 'text-blue-200' : 'text-slate-400'
+                    m.sender === 'user' ? 'text-indigo-200' : 'text-slate-400'
                   }`}
                 >
                   {m.timestamp}
                 </span>
               </div>
               {m.sender === 'user' && (
-                <div className="w-7 h-7 rounded-lg bg-blue-100 text-[#155EEF] flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">
+                <div className="w-7 h-7 rounded-lg neo-inset text-indigo-700 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">
                   YOU
                 </div>
               )}
@@ -175,13 +175,13 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
 
           {isThinking && (
             <div className="flex gap-2.5 items-center text-xs text-slate-500">
-              <div className="w-7 h-7 rounded-lg bg-[#0B1F3A] dark:bg-indigo-900 text-white flex items-center justify-center shrink-0 text-xs font-bold animate-pulse">
+              <div className="w-7 h-7 rounded-lg neo-raised text-indigo-700 flex items-center justify-center shrink-0 text-xs font-bold animate-pulse">
                 AI
               </div>
-              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-[#0B1F3A] border border-slate-200 dark:border-slate-800 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#155EEF] animate-bounce" />
-                <span className="w-1.5 h-1.5 rounded-full bg-[#155EEF] animate-bounce [animation-delay:0.2s]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-[#155EEF] animate-bounce [animation-delay:0.4s]" />
+              <div className="p-3 rounded-2xl neo-card flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-bounce" />
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-bounce [animation-delay:0.2s]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-bounce [animation-delay:0.4s]" />
                 <span className="text-[11px] text-slate-500 font-medium ml-1">
                   Synthesizing telemetry data...
                 </span>
@@ -197,7 +197,7 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
               key={i}
               type="button"
               onClick={() => handleSendMessage(q)}
-              className="text-[11px] font-medium bg-slate-50 dark:bg-slate-800/80 hover:bg-indigo-50 dark:hover:bg-indigo-950 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 truncate max-w-xs transition-colors cursor-pointer"
+              className="text-[11px] font-bold neo-raised hover:text-indigo-700 text-slate-700 px-3 py-1 rounded-xl truncate max-w-xs transition-all cursor-pointer"
             >
               {q}
             </button>
@@ -205,14 +205,14 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
         </div>
 
         {/* Action Link to Full Copilot Page */}
-        <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-300/60">
           <button
             type="button"
             onClick={() => {
               onClose();
               navigate(`/assistant?project=${currentProject.id}`);
             }}
-            className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline flex items-center gap-1 cursor-pointer"
+            className="text-indigo-600 font-bold hover:underline flex items-center gap-1 cursor-pointer"
           >
             <span>Open Dedicated Infra-Assist Copilot Workspace</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -220,7 +220,7 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
         </div>
 
         {/* Input Bar */}
-        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+        <div className="pt-2 border-t border-slate-300/60 flex items-center gap-2">
           <input
             type="text"
             placeholder={`Ask about ${currentProject.code}, delays, cost variances, or SHAP...`}
@@ -229,16 +229,16 @@ export const InfraAssistModal: React.FC<InfraAssistModalProps> = ({ isOpen, onCl
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSendMessage();
             }}
-            className="flex-1 bg-slate-50 dark:bg-[#0B1F3A] border border-slate-200 dark:border-slate-700 focus:border-[#155EEF] text-xs text-slate-900 dark:text-white placeholder:text-slate-400 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 font-medium"
+            className="flex-1 neo-input text-xs text-slate-900 placeholder:text-slate-400 rounded-xl px-4 py-2.5 focus:outline-none font-medium"
           />
-          <Button
-            variant="primary"
-            size="sm"
+          <button
+            type="button"
             onClick={() => handleSendMessage()}
-            leftIcon={<Send className="w-3.5 h-3.5" />}
+            className="px-4 py-2.5 text-xs font-bold neo-button-primary flex items-center gap-1.5 cursor-pointer"
           >
-            Ask
-          </Button>
+            <Send className="w-3.5 h-3.5" />
+            <span>Ask</span>
+          </button>
         </div>
       </div>
     </div>

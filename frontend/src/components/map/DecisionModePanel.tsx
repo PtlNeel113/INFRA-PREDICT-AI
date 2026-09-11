@@ -55,38 +55,38 @@ export const DecisionModePanel: React.FC<DecisionModePanelProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
-        className="bg-white dark:bg-[#0F1D2E] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
+        className="neo-floating w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-6 border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-rose-50 to-indigo-50 dark:from-rose-950/20 dark:to-indigo-950/20">
+        <div className="p-6 border-b border-[rgba(200,212,226,0.45)] neo-surface">
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-xl bg-gradient-to-br from-rose-600 to-indigo-600 text-white">
+                <div className="p-2.5 rounded-xl neo-raised text-rose-600">
                   <Target className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-black text-[#0B1F3A] dark:text-white">
+                <h2 className="text-2xl font-black text-[var(--neo-text-primary)]">
                   DECISION MODE
                 </h2>
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 ml-14">
+              <p className="text-sm text-[var(--neo-text-secondary)] ml-14">
                 WHERE SHOULD WE ACT FIRST? — Ranked by composite urgency score
               </p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              className="p-2 neo-raised rounded-xl transition-all cursor-pointer hover:translate-y-[-1px]"
             >
-              <X className="w-5 h-5 text-slate-400" />
+              <X className="w-5 h-5 text-[var(--neo-text-tertiary)]" />
             </button>
           </div>
         </div>

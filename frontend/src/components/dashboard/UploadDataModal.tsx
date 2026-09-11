@@ -259,19 +259,19 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/70 backdrop-blur-xs select-none">
-      <div className="w-full max-w-2xl bg-white dark:bg-[#0F1D2E] rounded-[24px] border border-slate-200 dark:border-slate-800 shadow-2xl p-5 sm:p-7 space-y-4 max-h-[90vh] flex flex-col justify-between text-slate-900 dark:text-slate-100">
+      <div className="w-full max-w-2xl neo-panel rounded-[24px] shadow-2xl p-5 sm:p-7 space-y-4 max-h-[90vh] flex flex-col justify-between text-slate-900 border border-slate-300/80">
         {/* Modal Header */}
         <div>
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#155EEF] dark:text-blue-400 flex items-center justify-center border border-blue-100 dark:border-blue-900">
+          <div className="flex items-center justify-between border-b border-slate-300/60 pb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl neo-raised text-indigo-700 flex items-center justify-center">
                 <Upload className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-base font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+                <h3 className="text-base font-black tracking-tight text-slate-900 leading-tight">
                   Upload Project Telemetry
                 </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                <p className="text-[11px] text-slate-500 font-medium">
                   Government-Grade Data Ingestion & Sync Pipeline
                 </p>
               </div>
@@ -279,7 +279,7 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
             <button
               type="button"
               onClick={handleClose}
-              className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg cursor-pointer transition-colors"
+              className="p-1.5 text-slate-400 hover:text-slate-800 rounded-lg cursor-pointer transition-colors"
               aria-label="Close dialog"
             >
               <X className="w-4 h-4" />
@@ -287,14 +287,14 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex items-center gap-2 pt-3 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-2 pt-3 border-b border-slate-300/60">
             <button
               type="button"
               onClick={() => setActiveTab('INGEST')}
-              className={`pb-2 px-1 text-xs font-bold border-b-2 transition-colors cursor-pointer ${
+              className={`pb-2 px-3 text-xs font-bold rounded-t-lg transition-all cursor-pointer ${
                 activeTab === 'INGEST'
-                  ? 'border-[#155EEF] text-[#155EEF] dark:text-blue-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                  ? 'neo-raised text-indigo-700 font-extrabold border-b-2 border-indigo-600'
+                  : 'text-slate-500 hover:text-slate-800'
               }`}
             >
               Ingest & Map
@@ -302,10 +302,10 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
             <button
               type="button"
               onClick={() => setActiveTab('AUDIT')}
-              className={`pb-2 px-1 text-xs font-bold border-b-2 transition-colors cursor-pointer ${
+              className={`pb-2 px-3 text-xs font-bold rounded-t-lg transition-all cursor-pointer ${
                 activeTab === 'AUDIT'
-                  ? 'border-[#155EEF] text-[#155EEF] dark:text-blue-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                  ? 'neo-raised text-indigo-700 font-extrabold border-b-2 border-indigo-600'
+                  : 'text-slate-500 hover:text-slate-800'
               }`}
             >
               Audit History ({ingestionJobs.length})
@@ -313,10 +313,10 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
             <button
               type="button"
               onClick={() => setActiveTab('LIVE_SYNC')}
-              className={`pb-2 px-1 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
+              className={`pb-2 px-3 text-xs font-bold rounded-t-lg transition-all cursor-pointer flex items-center gap-1.5 ${
                 activeTab === 'LIVE_SYNC'
-                  ? 'border-[#155EEF] text-[#155EEF] dark:text-blue-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                  ? 'neo-raised text-indigo-700 font-extrabold border-b-2 border-indigo-600'
+                  : 'text-slate-500 hover:text-slate-800'
               }`}
             >
               <span>Automated Sync</span>
@@ -327,7 +327,7 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
 
         {/* Error Notice */}
         {errorMessage && (
-          <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 flex items-start gap-2 text-xs text-rose-700 dark:text-rose-300">
+          <div className="p-3.5 rounded-xl neo-inset border border-rose-300 flex items-start gap-2 text-xs text-rose-700">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-rose-600" />
             <div className="flex-1">
               <span className="font-bold block">Validation Error</span>
@@ -336,7 +336,7 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
             <button
               type="button"
               onClick={() => setErrorMessage(null)}
-              className="text-rose-500 hover:text-rose-700"
+              className="text-rose-500 hover:text-rose-700 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -358,22 +358,22 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
                   onDrop={handleDrop}
                   className={`border-2 border-dashed rounded-2xl p-6 sm:p-8 text-center transition-all ${
                     dragOver
-                      ? 'border-[#155EEF] bg-blue-50/50 dark:bg-blue-950/30'
-                      : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 bg-[#F8FAFC] dark:bg-[#0B1F3A]/50'
+                      ? 'border-indigo-600 neo-inset'
+                      : 'border-slate-300 neo-inset'
                   }`}
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-white dark:bg-[#0F1D2E] border border-slate-200 dark:border-slate-700 flex items-center justify-center mx-auto mb-3 shadow-xs">
-                    <FileSpreadsheet className="w-6 h-6 text-[#155EEF]" />
+                  <div className="w-12 h-12 rounded-2xl neo-raised flex items-center justify-center mx-auto mb-3">
+                    <FileSpreadsheet className="w-6 h-6 text-indigo-700" />
                   </div>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white">
+                  <p className="text-xs font-bold text-slate-900">
                     {selectedFile ? selectedFile.name : 'Drag and drop DPR or MPR spreadsheet here'}
                   </p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                  <p className="text-[11px] text-slate-500 mt-1">
                     Supports .xlsx, .xls, .csv, .json, and Ministry MPR format (Max 50 MB)
                   </p>
                   <div className="mt-4">
-                    <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-[#0F1D2E] border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer shadow-xs transition-colors">
-                      <Upload className="w-3.5 h-3.5 text-[#155EEF]" />
+                    <label className="inline-flex items-center gap-2 px-4 py-2 rounded-xl neo-button-secondary text-xs font-bold cursor-pointer">
+                      <Upload className="w-3.5 h-3.5 text-indigo-700" />
                       <span>Browse Local Files</span>
                       <input
                         type="file"
@@ -390,16 +390,16 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
                 </div>
 
                 {/* Live Sync Mini Banner */}
-                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/80 dark:border-slate-800 flex items-start gap-3 text-xs">
-                  <Database className="w-4 h-4 text-[#155EEF] shrink-0 mt-0.5" />
+                <div className="p-4 rounded-2xl neo-card flex items-start gap-3 text-xs">
+                  <Database className="w-4 h-4 text-indigo-700 shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-900 dark:text-white">Automated API Live Sync</span>
-                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      <span className="font-bold text-slate-900">Automated API Live Sync</span>
+                      <span className="text-[9px] font-bold px-2 py-0.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 neo-raised">
                         {liveSyncStatus.status === 'CONFIGURED' ? 'Configured' : 'API Not Configured'}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                    <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
                       {liveSyncStatus.message}
                     </p>
                   </div>
@@ -411,19 +411,19 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
             {currentStep === 'PREVIEW_AND_MAP' && previewData && (
               <div className="space-y-4">
                 {/* File summary stats */}
-                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 text-xs">
+                <div className="flex items-center justify-between p-3.5 rounded-xl neo-card text-xs">
                   <div>
-                    <span className="font-bold text-slate-900 dark:text-white block">
+                    <span className="font-bold text-slate-900 block">
                       {previewData.filename}
                     </span>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="text-[10px] text-slate-500 font-mono">
                       {previewData.totalRows} detected records • {(previewData.fileSize / 1024).toFixed(1)} KB
                     </span>
                   </div>
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="text-[11px] font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 underline cursor-pointer"
+                    className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 underline cursor-pointer"
                   >
                     Change File
                   </button>
@@ -432,20 +432,20 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
                 {/* Detected Records Preview (Top 5 rows) */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
                       Data Sample Preview (First 5 Rows)
                     </span>
-                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                    <span className="text-[10px] text-emerald-700 font-bold flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" />
                       Structure Validated
                     </span>
                   </div>
-                  <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+                  <div className="overflow-x-auto rounded-xl border border-slate-300/80 neo-panel p-1">
                     <table className="w-full text-[11px] text-left">
-                      <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                      <thead className="bg-slate-200/50 text-slate-800 font-bold">
                         <tr>
                           {previewData.headers.slice(0, 5).map((h) => (
-                            <th key={h} className="p-2 border-r border-slate-200 dark:border-slate-700 whitespace-nowrap">
+                            <th key={h} className="p-2 border-r border-slate-300/60 whitespace-nowrap">
                               {h}
                             </th>
                           ))}
@@ -453,9 +453,9 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
                       </thead>
                       <tbody>
                         {previewData.sampleRows.map((row, idx) => (
-                          <tr key={idx} className="border-t border-slate-100 dark:border-slate-800/60">
+                          <tr key={idx} className="border-t border-slate-200">
                             {previewData.headers.slice(0, 5).map((h) => (
-                              <td key={h} className="p-2 border-r border-slate-100 dark:border-slate-800/60 whitespace-nowrap text-slate-600 dark:text-slate-400 font-mono">
+                              <td key={h} className="p-2 border-r border-slate-200 whitespace-nowrap text-slate-600 font-mono">
                                 {String(row[h] || '—')}
                               </td>
                             ))}
@@ -469,7 +469,7 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
                 {/* Schema Column Mapping Section */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
                       Schema Column Mapping
                     </span>
                     <span className="text-[10px] text-slate-500">
@@ -477,16 +477,16 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
                     </span>
                   </div>
 
-                  <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 bg-slate-50/50 dark:bg-[#0B1F3A]/30">
+                  <div className="max-h-48 overflow-y-auto space-y-2 pr-1 rounded-xl p-2.5 neo-inset">
                     {previewData.headers.map((sourceCol) => {
                       const currentCanonical = columnMappings[sourceCol] || '';
                       return (
                         <div
                           key={sourceCol}
-                          className="flex items-center justify-between gap-2 p-2 rounded-lg bg-white dark:bg-[#0F1D2E] border border-slate-200/80 dark:border-slate-800 text-xs"
+                          className="flex items-center justify-between gap-2 p-2.5 rounded-xl neo-card text-xs"
                         >
                           <div className="min-w-0 flex-1">
-                            <span className="font-bold text-slate-900 dark:text-white block truncate">
+                            <span className="font-bold text-slate-900 block truncate">
                               {sourceCol}
                             </span>
                           </div>
@@ -495,7 +495,7 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
                             <select
                               value={currentCanonical}
                               onChange={(e) => handleMappingChange(sourceCol, e.target.value)}
-                              className="text-[11px] font-bold bg-slate-50 dark:bg-[#0B1F3A] border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-lg px-2 py-1 focus:outline-none cursor-pointer"
+                              className="text-[11px] font-bold neo-input text-slate-800 rounded-lg px-2.5 py-1 focus:outline-none cursor-pointer"
                             >
                               <option value="">-- Ignore Column --</option>
                               {CANONICAL_COLUMNS.map((col) => (
@@ -518,10 +518,10 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
               <div className="py-8 space-y-6 text-center">
                 <div className="w-12 h-12 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin mx-auto" />
                 <div className="space-y-2">
-                  <h4 className="text-sm font-black text-slate-900 dark:text-white">
+                  <h4 className="text-sm font-black text-slate-900">
                     Executing Production Telemetry Ingestion
                   </h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                  <p className="text-xs text-slate-500 max-w-md mx-auto">
                     Validating constraints, normalising financial currencies, deduplicating against database, and recalculating multi-pillar risk models...
                   </p>
                 </div>
@@ -531,11 +531,11 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
             {/* STEP 4: COMPLETE & SUMMARY */}
             {currentStep === 'COMPLETE' && ingestionSummary && (
               <div className="space-y-4 py-2">
-                <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-100 flex items-start gap-3">
+                <div className="p-4 rounded-2xl neo-card border-l-4 border-l-emerald-600 text-emerald-950 flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <span className="font-bold text-sm block">Ingestion Pipeline Completed</span>
-                    <span className="text-xs leading-relaxed">
+                    <span className="text-xs leading-relaxed text-slate-700">
                       Successfully committed records into active memory & database. All dashboard widgets and risk scores have been recalculated.
                     </span>
                   </div>
@@ -543,26 +543,26 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Processed</span>
-                    <strong className="text-base font-black font-mono text-slate-900 dark:text-white">
+                  <div className="p-3 rounded-xl neo-card text-center">
+                    <span className="text-[10px] uppercase font-bold text-slate-500 block">Processed</span>
+                    <strong className="text-base font-black font-mono text-slate-900">
                       {ingestionSummary.totalProcessed}
                     </strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Updated</span>
-                    <strong className="text-base font-black font-mono text-indigo-600 dark:text-indigo-400">
+                  <div className="p-3 rounded-xl neo-card text-center">
+                    <span className="text-[10px] uppercase font-bold text-slate-500 block">Updated</span>
+                    <strong className="text-base font-black font-mono text-indigo-700">
                       {ingestionSummary.updatedCount}
                     </strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block">New Projects</span>
-                    <strong className="text-base font-black font-mono text-emerald-600 dark:text-emerald-400">
+                  <div className="p-3 rounded-xl neo-card text-center">
+                    <span className="text-[10px] uppercase font-bold text-slate-500 block">New Projects</span>
+                    <strong className="text-base font-black font-mono text-emerald-700">
                       {ingestionSummary.createdCount}
                     </strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Rejected</span>
+                  <div className="p-3 rounded-xl neo-card text-center">
+                    <span className="text-[10px] uppercase font-bold text-slate-500 block">Rejected</span>
                     <strong className={`text-base font-black font-mono ${ingestionSummary.rejectedCount > 0 ? 'text-rose-600' : 'text-slate-400'}`}>
                       {ingestionSummary.rejectedCount}
                     </strong>
@@ -571,19 +571,19 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
 
                 {/* Download Error Report if rows were rejected */}
                 {ingestionSummary.rejectedCount > 0 && (
-                  <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 flex items-center justify-between text-xs">
+                  <div className="p-3.5 rounded-xl neo-card border-l-4 border-l-amber-500 flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-                      <span className="text-slate-800 dark:text-slate-200">
+                      <span className="text-slate-800">
                         {ingestionSummary.rejectedCount} records were rejected due to invalid cost or progress values.
                       </span>
                     </div>
                     <button
                       type="button"
                       onClick={handleDownloadErrorReport}
-                      className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-[11px] font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 flex items-center gap-1 cursor-pointer shrink-0"
+                      className="px-3 py-1.5 rounded-lg neo-button-secondary text-[11px] font-bold text-slate-800 flex items-center gap-1 cursor-pointer shrink-0"
                     >
-                      <Download className="w-3.5 h-3.5 text-[#155EEF]" />
+                      <Download className="w-3.5 h-3.5 text-indigo-700" />
                       Download Error CSV
                     </button>
                   </div>
@@ -596,32 +596,32 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
         {/* TAB 2: AUDIT HISTORY */}
         {activeTab === 'AUDIT' && (
           <div className="flex-1 overflow-y-auto max-h-[55vh] space-y-2.5 pr-1">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono block">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono block">
               Government Telemetry Ingestion Ledger
             </span>
 
             {ingestionJobs.map((job) => (
               <div
                 key={job.id}
-                className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 text-xs space-y-1.5"
+                className="p-3.5 rounded-xl neo-card text-xs space-y-1.5"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200">
+                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-md neo-inset text-slate-800">
                       {job.id}
                     </span>
-                    <strong className="text-slate-900 dark:text-white truncate max-w-xs">
+                    <strong className="text-slate-900 truncate max-w-xs">
                       {job.filename}
                     </strong>
                   </div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    job.status === 'COMPLETED' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-lg neo-raised ${
+                    job.status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200'
                   }`}>
                     {job.status}
                   </span>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-500 dark:text-slate-400">
+                <div className="flex flex-wrap items-center gap-4 text-[11px] text-slate-600">
                   <span>Processed: <strong>{job.totalRows}</strong></span>
                   <span>Updated: <strong>{job.updatedRows}</strong></span>
                   <span>New: <strong>{job.newRows}</strong></span>
@@ -641,37 +641,37 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
         {/* TAB 3: AUTOMATED API LIVE SYNC CONFIGURATION */}
         {activeTab === 'LIVE_SYNC' && (
           <div className="flex-1 overflow-y-auto max-h-[55vh] space-y-4 pr-1">
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div className="p-4 rounded-2xl neo-panel space-y-3">
               <div className="flex items-center gap-2.5">
-                <Database className="w-5 h-5 text-[#155EEF]" />
+                <Database className="w-5 h-5 text-indigo-700" />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                  <h4 className="text-sm font-bold text-slate-900">
                     Central Telemetry Connector Status
                   </h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  <p className="text-[11px] text-slate-500">
                     Automated push / pull synchronization with Ministry project management databases
                   </p>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-1.5 text-xs text-amber-900 dark:text-amber-200">
+              <div className="p-3.5 rounded-xl neo-card border-l-4 border-l-amber-500 space-y-1.5 text-xs text-amber-950">
                 <div className="flex items-center gap-2 font-bold">
                   <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
                   <span>Status: {liveSyncStatus.status === 'CONFIGURED' ? 'Live Connected' : 'API Connector Not Configured'}</span>
                 </div>
-                <p className="text-[11px] leading-relaxed">
+                <p className="text-[11px] leading-relaxed text-slate-700">
                   {liveSyncStatus.message}
                 </p>
               </div>
 
-              <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
-                <span className="font-bold text-[11px] uppercase tracking-wider text-slate-400 font-mono block">
+              <div className="space-y-2 text-xs text-slate-700">
+                <span className="font-bold text-[11px] uppercase tracking-wider text-slate-500 font-mono block">
                   Environment Configuration Guide
                 </span>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                <p className="text-[11px] text-slate-500 leading-relaxed">
                   To activate real daily synchronization with central telemetry, define the following variables in your server environment:
                 </p>
-                <div className="p-3 rounded-xl bg-slate-900 text-slate-100 font-mono text-[11px] space-y-1">
+                <div className="p-3.5 rounded-xl neo-inset font-mono text-[11px] space-y-1 bg-slate-900 text-slate-100">
                   <div>PAIMANA_API_ENDPOINT=https://api.paimana.gov.in/v1/telemetry</div>
                   <div>PAIMANA_API_KEY=sec_live_9a82b17c...</div>
                   <div>SYNC_CRON_SCHEDULE="0 0 * * *"</div>
@@ -682,8 +682,8 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
         )}
 
         {/* Modal Footer Controls */}
-        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2.5">
-          <div className="text-[11px] text-slate-400">
+        <div className="pt-3 border-t border-slate-300/60 flex items-center justify-between gap-2.5">
+          <div className="text-[11px] text-slate-500">
             {currentStep === 'PREVIEW_AND_MAP' && 'Review column mappings before ingestion.'}
             {currentStep === 'COMPLETE' && 'All risk models recalculated.'}
           </div>
@@ -691,40 +691,52 @@ export const UploadDataModal: React.FC<UploadDataModalProps> = ({ isOpen, onClos
           <div className="flex items-center gap-2">
             {currentStep === 'PREVIEW_AND_MAP' ? (
               <>
-                <Button variant="ghost" size="sm" onClick={handleReset}>
-                  Back
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  isLoading={isProcessing}
-                  onClick={handleRunIngestionPipeline}
-                  leftIcon={<Upload className="w-3.5 h-3.5" />}
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="px-3.5 py-2 text-xs font-bold neo-button-secondary cursor-pointer"
                 >
-                  Confirm Ingestion & Run Risk Engine
-                </Button>
+                  Back
+                </button>
+                <button
+                  type="button"
+                  disabled={isProcessing}
+                  onClick={handleRunIngestionPipeline}
+                  className="px-4 py-2 text-xs font-bold neo-button-primary flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Confirm Ingestion & Run Risk Engine</span>
+                </button>
               </>
             ) : currentStep === 'COMPLETE' ? (
               <>
-                <Button variant="ghost" size="sm" onClick={handleReset}>
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="px-3.5 py-2 text-xs font-bold neo-button-secondary cursor-pointer"
+                >
                   Upload Another File
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
+                </button>
+                <button
+                  type="button"
                   onClick={() => {
                     handleClose();
                     navigate('/projects');
                   }}
-                  leftIcon={<CheckCircle2 className="w-3.5 h-3.5" />}
+                  className="px-4 py-2 text-xs font-bold neo-button-primary flex items-center gap-1.5 cursor-pointer"
                 >
-                  View Ingested Projects
-                </Button>
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>View Ingested Projects</span>
+                </button>
               </>
             ) : (
-              <Button variant="ghost" size="sm" onClick={handleClose}>
+              <button
+                type="button"
+                onClick={handleClose}
+                className="px-4 py-2 text-xs font-bold neo-button-secondary cursor-pointer"
+              >
                 Close
-              </Button>
+              </button>
             )}
           </div>
         </div>

@@ -60,7 +60,7 @@ export const ProjectDetailPage: React.FC = () => {
         <button
           id="back-to-projects-btn"
           onClick={() => navigate('/projects')}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-colors bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm"
+          className="neo-raised inline-flex items-center gap-2 text-xs font-semibold text-[var(--neo-text-primary)] hover:text-[#1557D6] transition-all px-3 py-1.5 rounded-xl cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Projects Directory</span>
@@ -69,21 +69,21 @@ export const ProjectDetailPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => navigate(`/explainability?project=${project.id}`)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg transition-colors"
+            className="neo-raised inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#1557D6] hover:translate-y-[-1px] rounded-xl transition-all cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Explainable AI (SHAP)</span>
           </button>
           <button
             onClick={() => navigate(`/benchmarking?project=${project.id}`)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors shadow-sm"
+            className="neo-raised inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[var(--neo-text-primary)] hover:translate-y-[-1px] rounded-xl transition-all cursor-pointer"
           >
             <BarChart3 className="w-3.5 h-3.5" />
             <span>Peer Benchmarking</span>
           </button>
           <button
             onClick={() => alert(`Generated Dossier PDF for ${project.name}`)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors shadow-sm"
+            className="neo-button-primary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export Dossier</span>
@@ -92,64 +92,64 @@ export const ProjectDetailPage: React.FC = () => {
       </div>
 
       {/* Main Project Hero Header Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+      <div className="neo-panel p-6 md:p-8">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
           {/* Project Details Info */}
           <div className="space-y-3 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-md">
+              <span className="font-mono text-xs font-bold text-[#1557D6] neo-inset px-2.5 py-0.5 rounded-lg">
                 {project.code}
               </span>
-              <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-md">
+              <span className="text-xs font-semibold text-[var(--neo-text-secondary)] neo-raised px-2.5 py-0.5 rounded-lg">
                 {project.sector}
               </span>
-              <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-md">
+              <span className="text-xs font-semibold text-[var(--neo-text-secondary)] neo-raised px-2.5 py-0.5 rounded-lg">
                 {project.stage}
               </span>
               <RiskBadge level={project.riskLevel} />
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
+            <h1 className="text-2xl md:text-3xl font-black text-[var(--neo-text-primary)] tracking-tight leading-snug">
               {project.name}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-slate-600 pt-1">
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-[var(--neo-text-secondary)] pt-1">
               <div className="flex items-center gap-1.5">
-                <Building2 className="w-4 h-4 text-slate-400" />
-                <span>Agency: <strong>{project.implementingAgency}</strong></span>
+                <Building2 className="w-4 h-4 text-[var(--neo-text-tertiary)]" />
+                <span>Agency: <strong className="text-[var(--neo-text-primary)]">{project.implementingAgency}</strong></span>
               </div>
               {project.ministry && (
                 <div className="flex items-center gap-1.5">
-                  <Layers className="w-4 h-4 text-slate-400" />
-                  <span>Ministry: <strong>{project.ministry}</strong></span>
+                  <Layers className="w-4 h-4 text-[var(--neo-text-tertiary)]" />
+                  <span>Ministry: <strong className="text-[var(--neo-text-primary)]">{project.ministry}</strong></span>
                 </div>
               )}
               <div className="flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-slate-400" />
-                <span>Location: <strong>{project.state}{project.district ? ` (${project.district})` : ''}</strong></span>
+                <MapPin className="w-4 h-4 text-[var(--neo-text-tertiary)]" />
+                <span>Location: <strong className="text-[var(--neo-text-primary)]">{project.state}{project.district ? ` (${project.district})` : ''}</strong></span>
               </div>
               {project.startDate && (
                 <div className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-slate-400" />
-                  <span>Start Date: <strong>{project.startDate}</strong></span>
+                  <Calendar className="w-4 h-4 text-[var(--neo-text-tertiary)]" />
+                  <span>Start Date: <strong className="text-[var(--neo-text-primary)]">{project.startDate}</strong></span>
                 </div>
               )}
               <div className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-slate-400" />
-                <span>Target Date: <strong>{project.originalDeadline}</strong></span>
+                <Clock className="w-4 h-4 text-[var(--neo-text-tertiary)]" />
+                <span>Target Date: <strong className="text-[var(--neo-text-primary)]">{project.originalDeadline}</strong></span>
               </div>
             </div>
           </div>
 
           {/* Health Score Large Block */}
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 flex items-center gap-5 min-w-[280px]">
+          <div className="neo-card p-5 flex items-center gap-5 min-w-[280px]">
             <div className="flex flex-col">
-              <span className="text-[11px] font-bold tracking-wider uppercase text-slate-500">
+              <span className="text-[11px] font-bold tracking-wider uppercase text-[var(--neo-text-tertiary)]">
                 Composite Health
               </span>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-4xl font-extrabold text-slate-900">{project.healthScore}</span>
-                <span className="text-sm font-semibold text-slate-400">/ 100</span>
+                <span className="text-4xl font-black text-[var(--neo-text-primary)] font-mono">{project.healthScore}</span>
+                <span className="text-sm font-semibold text-[var(--neo-text-tertiary)]">/ 100</span>
               </div>
               <span className={`text-xs font-bold mt-1 ${
                 project.healthScore < 50
@@ -162,21 +162,21 @@ export const ProjectDetailPage: React.FC = () => {
               </span>
             </div>
 
-            <div className="w-px h-16 bg-slate-200" />
+            <div className="w-px h-16 bg-[rgba(200,212,226,0.5)]" />
 
             <div className="space-y-1.5 text-[11px]">
               <div className="flex items-center justify-between gap-3">
-                <span className="text-slate-500">60d Velocity:</span>
+                <span className="text-[var(--neo-text-tertiary)]">60d Velocity:</span>
                 <span className={`font-bold ${project.riskTrend > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
                   {project.riskTrend > 0 ? `+${project.riskTrend} pts` : `${project.riskTrend} pts`}
                 </span>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <span className="text-slate-500">Delay Exp.:</span>
-                <span className="font-bold text-slate-800">+{project.predictedDelayMonths} mos</span>
+                <span className="text-[var(--neo-text-tertiary)]">Delay Exp.:</span>
+                <span className="font-bold text-[var(--neo-text-primary)]">+{project.predictedDelayMonths} mos</span>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <span className="text-slate-500">Cost Exp.:</span>
+                <span className="text-[var(--neo-text-tertiary)]">Cost Exp.:</span>
                 <span className="font-bold text-rose-600">+₹{project.predictedCostOverrunCr} Cr</span>
               </div>
             </div>
@@ -184,48 +184,48 @@ export const ProjectDetailPage: React.FC = () => {
         </div>
 
         {/* 3 Prominent Risk Pillar Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-slate-100">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-[rgba(200,212,226,0.45)]">
           {/* Cost Risk */}
-          <div className="bg-rose-50/60 border border-rose-100 rounded-xl p-4 flex items-center justify-between">
+          <div className="neo-card p-4 flex items-center justify-between border-l-4 border-l-rose-600">
             <div>
-              <div className="text-xs font-bold text-rose-900 uppercase tracking-wide">
+              <div className="text-xs font-bold text-rose-900 dark:text-rose-300 uppercase tracking-wide">
                 Cost Risk Index
               </div>
-              <div className="text-xs text-rose-700/80 mt-0.5">
+              <div className="text-xs text-[var(--neo-text-secondary)] mt-0.5">
                 Escalation probability & claims exposure
               </div>
             </div>
-            <div className="text-3xl font-extrabold text-rose-700 font-mono">
+            <div className="text-3xl font-black text-rose-600 font-mono">
               {project.costRiskScore}
             </div>
           </div>
 
           {/* Time Risk */}
-          <div className="bg-amber-50/60 border border-amber-100 rounded-xl p-4 flex items-center justify-between">
+          <div className="neo-card p-4 flex items-center justify-between border-l-4 border-l-amber-500">
             <div>
-              <div className="text-xs font-bold text-amber-900 uppercase tracking-wide">
+              <div className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wide">
                 Time Risk Index
               </div>
-              <div className="text-xs text-amber-700/80 mt-0.5">
+              <div className="text-xs text-[var(--neo-text-secondary)] mt-0.5">
                 Critical path & schedule slippage
               </div>
             </div>
-            <div className="text-3xl font-extrabold text-amber-700 font-mono">
+            <div className="text-3xl font-black text-amber-600 font-mono">
               {project.timeRiskScore}
             </div>
           </div>
 
           {/* Execution Risk */}
-          <div className="bg-blue-50/60 border border-blue-100 rounded-xl p-4 flex items-center justify-between">
+          <div className="neo-card p-4 flex items-center justify-between border-l-4 border-l-[#1557D6]">
             <div>
-              <div className="text-xs font-bold text-blue-900 uppercase tracking-wide">
+              <div className="text-xs font-bold text-blue-900 dark:text-blue-300 uppercase tracking-wide">
                 Execution Risk Index
               </div>
-              <div className="text-xs text-blue-700/80 mt-0.5">
+              <div className="text-xs text-[var(--neo-text-secondary)] mt-0.5">
                 Machinery, geology & contractor solvency
               </div>
             </div>
-            <div className="text-3xl font-extrabold text-blue-700 font-mono">
+            <div className="text-3xl font-black text-[#1557D6] font-mono">
               {project.executionRiskScore}
             </div>
           </div>
@@ -233,53 +233,53 @@ export const ProjectDetailPage: React.FC = () => {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex border-b border-slate-200 bg-white rounded-xl p-1.5 shadow-sm gap-1 overflow-x-auto">
+      <div className="flex neo-inset p-1.5 rounded-2xl gap-1.5 overflow-x-auto">
         <button
           onClick={() => setActiveTab('overview')}
-          className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors whitespace-nowrap ${
+          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
             activeTab === 'overview'
-              ? 'bg-indigo-700 text-white shadow-sm'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              ? 'neo-raised text-[#1557D6] font-black shadow-[2px_2px_5px_rgba(166,180,200,0.45),-2px_-2px_5px_rgba(255,255,255,0.9)]'
+              : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
           }`}
         >
           Intelligence Overview
         </button>
         <button
           onClick={() => setActiveTab('cost')}
-          className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors whitespace-nowrap ${
+          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
             activeTab === 'cost'
-              ? 'bg-indigo-700 text-white shadow-sm'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              ? 'neo-raised text-[#1557D6] font-black shadow-[2px_2px_5px_rgba(166,180,200,0.45),-2px_-2px_5px_rgba(255,255,255,0.9)]'
+              : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
           }`}
         >
           Cost Intelligence
         </button>
         <button
           onClick={() => setActiveTab('schedule')}
-          className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors whitespace-nowrap ${
+          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
             activeTab === 'schedule'
-              ? 'bg-indigo-700 text-white shadow-sm'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              ? 'neo-raised text-[#1557D6] font-black shadow-[2px_2px_5px_rgba(166,180,200,0.45),-2px_-2px_5px_rgba(255,255,255,0.9)]'
+              : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
           }`}
         >
           Time & Schedule
         </button>
         <button
           onClick={() => setActiveTab('milestones')}
-          className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors whitespace-nowrap ${
+          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
             activeTab === 'milestones'
-              ? 'bg-indigo-700 text-white shadow-sm'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              ? 'neo-raised text-[#1557D6] font-black shadow-[2px_2px_5px_rgba(166,180,200,0.45),-2px_-2px_5px_rgba(255,255,255,0.9)]'
+              : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
           }`}
         >
           Milestone Timeline ({project.keyMilestones.length})
         </button>
         <button
           onClick={() => setActiveTab('what-changed')}
-          className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
             activeTab === 'what-changed'
-              ? 'bg-indigo-700 text-white shadow-sm'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              ? 'neo-raised text-[#1557D6] font-black shadow-[2px_2px_5px_rgba(166,180,200,0.45),-2px_-2px_5px_rgba(255,255,255,0.9)]'
+              : 'text-[var(--neo-text-secondary)] hover:text-[var(--neo-text-primary)]'
           }`}
         >
           <History className="w-3.5 h-3.5" />

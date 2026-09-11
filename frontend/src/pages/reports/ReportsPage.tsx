@@ -71,27 +71,27 @@ export const ReportsPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 select-none">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
-            <FileSpreadsheet className="w-5 h-5" />
+      <div className="neo-panel p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-2xl neo-raised flex items-center justify-center text-indigo-700">
+            <FileSpreadsheet className="w-6 h-6" />
           </div>
           <div>
             <h1 className="text-xl md:text-2xl font-black text-[#0B1F3A] tracking-tight">
               EXECUTIVE RISK DOSSIER & AI REPORTS
             </h1>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-xs text-slate-500 font-medium mt-0.5">
               Ministerial-grade briefings synthesizing SHAP attributions, trajectory forecasts & prescriptive actions.
             </p>
           </div>
         </div>
 
         {/* Top Control Buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={handlePrint}
-            className="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 flex items-center gap-2 transition-colors shadow-xs cursor-pointer"
+            className="px-4 py-2.5 rounded-xl neo-button-secondary text-xs font-bold flex items-center gap-2 cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5 text-slate-500" />
             <span>Print Dossier</span>
@@ -100,7 +100,7 @@ export const ReportsPage: React.FC = () => {
           <button
             type="button"
             onClick={handleDownload}
-            className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-2 transition-all shadow-xs cursor-pointer"
+            className="px-4 py-2.5 rounded-xl neo-button-primary text-xs font-bold flex items-center gap-2 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export Official PDF</span>
@@ -111,22 +111,22 @@ export const ReportsPage: React.FC = () => {
       {/* Main Container: Left Config Sidebar & Right Report Document Preview */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Left: Report Configuration Panel (1 Column) - Hidden during print */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4 text-slate-900 print:hidden">
-          <div className="border-b border-slate-100 pb-3">
-            <h2 className="text-xs font-black uppercase tracking-wider text-slate-400 font-mono">
+        <div className="neo-panel rounded-2xl p-5 space-y-4 text-slate-900 print:hidden">
+          <div className="border-b border-slate-300/60 pb-3">
+            <h2 className="text-xs font-black uppercase tracking-wider text-slate-500 font-mono">
               Dossier Configuration
             </h2>
           </div>
 
           {/* Project Selector */}
           <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-500 uppercase">
+            <label className="text-[11px] font-bold text-slate-600 uppercase">
               Target Project
             </label>
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="w-full text-xs font-bold bg-[#F8FAFC] border border-slate-200 rounded-xl p-2.5 focus:outline-none focus:border-indigo-500 text-[#0B1F3A] cursor-pointer"
+              className="w-full text-xs font-bold neo-input rounded-xl p-2.5 focus:outline-none text-[#0B1F3A] cursor-pointer"
             >
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -138,10 +138,10 @@ export const ReportsPage: React.FC = () => {
 
           {/* Report Type */}
           <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-500 uppercase">
+            <label className="text-[11px] font-bold text-slate-600 uppercase">
               Report Template
             </label>
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               {[
                 { id: 'EXECUTIVE_RISK_BRIEF', label: 'Executive Risk Brief' },
                 { id: 'COST_RISK_REPORT', label: 'Cost Overrun & Budget Escalation Audit' },
@@ -150,10 +150,10 @@ export const ReportsPage: React.FC = () => {
                 <label
                   key={tpl.id}
                   className={cn(
-                    'flex items-center gap-2.5 p-2.5 rounded-xl border text-xs font-semibold cursor-pointer transition-colors',
+                    'flex items-center gap-2.5 p-3 rounded-xl border text-xs font-bold cursor-pointer transition-all',
                     reportType === tpl.id
-                      ? 'bg-indigo-50/80 border-indigo-300 text-indigo-900'
-                      : 'bg-[#F8FAFC] hover:bg-slate-100/80 border-slate-200 text-slate-700',
+                      ? 'neo-raised bg-indigo-50/80 border-indigo-300 text-indigo-900'
+                      : 'neo-card hover:bg-slate-100/80 border-transparent text-slate-700',
                   )}
                 >
                   <input
@@ -161,7 +161,7 @@ export const ReportsPage: React.FC = () => {
                     name="reportType"
                     checked={reportType === tpl.id}
                     onChange={() => setReportType(tpl.id as any)}
-                    className="text-indigo-600 accent-indigo-600"
+                    className="text-indigo-600 accent-indigo-600 cursor-pointer"
                   />
                   <span>{tpl.label}</span>
                 </label>
@@ -170,38 +170,38 @@ export const ReportsPage: React.FC = () => {
           </div>
 
           {/* Include Sections Toggles */}
-          <div className="space-y-2 pt-2 border-t border-slate-100">
-            <label className="text-[11px] font-bold text-slate-500 uppercase block">
+          <div className="space-y-2 pt-2 border-t border-slate-300/60">
+            <label className="text-[11px] font-bold text-slate-600 uppercase block">
               Embedded Intelligence Modules
             </label>
 
-            <label className="flex items-center justify-between p-2.5 rounded-xl bg-[#F8FAFC] hover:bg-slate-100/80 border border-slate-200/80 text-xs font-medium text-slate-700 cursor-pointer transition-colors">
+            <label className="flex items-center justify-between p-3 rounded-xl neo-card border-transparent text-xs font-semibold text-slate-700 cursor-pointer transition-colors">
               <span>SHAP Feature Attributions</span>
               <input
                 type="checkbox"
                 checked={includeSHAP}
                 onChange={(e) => setIncludeSHAP(e.target.checked)}
-                className="rounded text-indigo-600 accent-indigo-600 cursor-pointer"
+                className="rounded text-indigo-600 accent-indigo-600 cursor-pointer w-4 h-4"
               />
             </label>
 
-            <label className="flex items-center justify-between p-2.5 rounded-xl bg-[#F8FAFC] hover:bg-slate-100/80 border border-slate-200/80 text-xs font-medium text-slate-700 cursor-pointer transition-colors">
+            <label className="flex items-center justify-between p-3 rounded-xl neo-card border-transparent text-xs font-semibold text-slate-700 cursor-pointer transition-colors">
               <span>Peer Sector Benchmarking</span>
               <input
                 type="checkbox"
                 checked={includeBenchmarking}
                 onChange={(e) => setIncludeBenchmarking(e.target.checked)}
-                className="rounded text-indigo-600 accent-indigo-600 cursor-pointer"
+                className="rounded text-indigo-600 accent-indigo-600 cursor-pointer w-4 h-4"
               />
             </label>
 
-            <label className="flex items-center justify-between p-2.5 rounded-xl bg-[#F8FAFC] hover:bg-slate-100/80 border border-slate-200/80 text-xs font-medium text-slate-700 cursor-pointer transition-colors">
+            <label className="flex items-center justify-between p-3 rounded-xl neo-card border-transparent text-xs font-semibold text-slate-700 cursor-pointer transition-colors">
               <span>Prescriptive Action Roadmap</span>
               <input
                 type="checkbox"
                 checked={includeMitigation}
                 onChange={(e) => setIncludeMitigation(e.target.checked)}
-                className="rounded text-indigo-600 accent-indigo-600 cursor-pointer"
+                className="rounded text-indigo-600 accent-indigo-600 cursor-pointer w-4 h-4"
               />
             </label>
           </div>
@@ -210,7 +210,7 @@ export const ReportsPage: React.FC = () => {
             type="button"
             onClick={handleRegenerate}
             disabled={isGenerating}
-            className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-2.5 rounded-xl neo-button-primary disabled:opacity-50 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>{isGenerating ? 'Synthesizing...' : 'Regenerate Risk Brief'}</span>
@@ -218,7 +218,7 @@ export const ReportsPage: React.FC = () => {
         </div>
 
         {/* Right: Official Document Preview (2 Columns) */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 md:p-10 border border-slate-200 shadow-sm space-y-6 text-slate-900">
+        <div className="lg:col-span-2 neo-panel rounded-2xl p-6 md:p-10 space-y-6 text-slate-900 bg-white">
           {/* Government Watermark Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-slate-900 pb-4">
             <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export const ReportsPage: React.FC = () => {
           </div>
 
           {/* Project Summary Banner */}
-          <div className="p-4 rounded-xl bg-[#F8FAFC] border border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div className="p-4 rounded-xl neo-inset grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs border border-slate-200">
             <div>
               <span className="text-[10px] font-bold uppercase text-slate-400 block">Project Name</span>
               <strong className="text-xs font-black text-[#0B1F3A] block mt-0.5">{activeProject.name}</strong>
@@ -285,7 +285,7 @@ export const ReportsPage: React.FC = () => {
                 2.0 SHAP Root Cause Attribution Matrix
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                <div className="p-3.5 rounded-xl bg-rose-50/70 border border-rose-200/80 space-y-1">
+                <div className="p-3.5 rounded-xl neo-card border-l-4 border-l-rose-500 space-y-1">
                   <span className="text-[10px] font-bold uppercase text-rose-700 font-mono">
                     Top Positive Drag (+24.2 Pts)
                   </span>
@@ -297,7 +297,7 @@ export const ReportsPage: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 space-y-1">
+                <div className="p-3.5 rounded-xl neo-card border-l-4 border-l-amber-500 space-y-1">
                   <span className="text-[10px] font-bold uppercase text-amber-800 font-mono">
                     Secondary Drag (+18.4 Pts)
                   </span>
@@ -319,9 +319,9 @@ export const ReportsPage: React.FC = () => {
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                 3.0 Prescriptive Ministerial Action Plan
               </h3>
-              <div className="p-4 rounded-xl bg-[#F8FAFC] border border-slate-200 space-y-2.5 text-xs">
+              <div className="p-4 rounded-xl neo-inset space-y-2.5 text-xs border border-slate-200">
                 <div className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-md bg-indigo-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                  <span className="w-5 h-5 rounded-md neo-raised bg-indigo-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
                     1
                   </span>
                   <p className="text-slate-700 font-medium leading-relaxed">
@@ -329,7 +329,7 @@ export const ReportsPage: React.FC = () => {
                   </p>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-md bg-indigo-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
+                  <span className="w-5 h-5 rounded-md neo-raised bg-indigo-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
                     2
                   </span>
                   <p className="text-slate-700 font-medium leading-relaxed">

@@ -89,39 +89,39 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white dark:bg-[#0F1D2E] shadow-2xl flex flex-col border-l border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100">
+        <div className="w-screen max-w-md neo-panel shadow-2xl flex flex-col border-l border-slate-300/80 text-slate-900 bg-[#EEF2F6]">
           {/* Drawer Header */}
-          <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-[#0B1F3A]/70">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+          <div className="p-4 sm:p-5 border-b border-slate-300/60 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl neo-raised flex items-center justify-center text-indigo-700">
                 <Bell className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-sm font-black uppercase tracking-wide">
+                  <h2 className="text-sm font-black uppercase tracking-wide text-slate-900">
                     Operational Alerts
                   </h2>
                   {unreadCount > 0 && (
-                    <span className="text-[10px] bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-400 font-bold px-2 py-0.5 rounded-full border border-rose-200 dark:border-rose-800">
+                    <span className="text-[10px] bg-rose-50 text-rose-700 font-extrabold px-2 py-0.5 rounded-lg border border-rose-200 neo-raised">
                       {unreadCount} New
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Real-time alerts, predictions & data events</p>
+                <p className="text-[11px] text-slate-500 font-medium">Real-time alerts, predictions & data events</p>
               </div>
             </div>
 
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              className="p-1.5 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-200/50 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Filter Bar & Bulk Actions */}
-          <div className="p-3 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-[#0F1D2E] flex items-center justify-between gap-2 overflow-x-auto text-xs">
+          <div className="p-3 border-b border-slate-300/60 flex items-center justify-between gap-2 overflow-x-auto text-xs">
             <div className="flex items-center gap-1.5">
               {[
                 { id: 'ALL', label: 'All' },
@@ -134,10 +134,10 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                   type="button"
                   onClick={() => setFilterType(tab.id)}
                   className={cn(
-                    'px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-colors cursor-pointer',
+                    'px-2.5 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all cursor-pointer',
                     filterType === tab.id
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700',
+                      ? 'neo-inset text-indigo-700 font-extrabold'
+                      : 'neo-raised text-slate-600 hover:text-slate-900',
                   )}
                 >
                   {tab.label}
@@ -150,7 +150,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                 <button
                   type="button"
                   onClick={onMarkAllAsRead}
-                  className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                  className="text-[11px] font-bold text-indigo-600 hover:underline cursor-pointer"
                 >
                   Mark All Read
                 </button>
@@ -167,12 +167,12 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
           </div>
 
           {/* Notifications List */}
-          <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
+          <div className="flex-1 overflow-y-auto p-3.5 space-y-2.5">
             {filteredNotifications.length === 0 ? (
-              <div className="p-8 text-center space-y-2">
-                <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto" />
-                <p className="text-xs font-bold">All Clear</p>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">No active escalations matching the selected filter.</p>
+              <div className="p-8 text-center space-y-2 neo-inset rounded-2xl">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
+                <p className="text-xs font-bold text-slate-900">All Clear</p>
+                <p className="text-[11px] text-slate-500">No active escalations matching the selected filter.</p>
               </div>
             ) : (
               filteredNotifications.map((notif) => (
@@ -180,38 +180,38 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                   key={notif.id}
                   onClick={() => handleNotificationClick(notif)}
                   className={cn(
-                    'p-3 rounded-xl border text-left cursor-pointer transition-all hover:shadow-xs group relative',
+                    'p-3.5 rounded-xl text-left cursor-pointer transition-all group relative',
                     notif.isRead
-                      ? 'bg-slate-50/50 dark:bg-[#0B1F3A]/40 border-slate-200/60 dark:border-slate-800 opacity-80'
-                      : 'bg-white dark:bg-[#0B1F3A] border-indigo-200/90 dark:border-indigo-800 shadow-2xs',
+                      ? 'neo-card opacity-80'
+                      : 'neo-raised border-l-4 border-l-indigo-600',
                   )}
                 >
                   {/* Unread indicator dot */}
                   {!notif.isRead && (
-                    <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-indigo-600 ring-2 ring-white dark:ring-slate-900" />
+                    <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-indigo-600 ring-2 ring-white" />
                   )}
 
                   <div className="flex items-start gap-3">
-                    <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 mt-0.5">
+                    <div className="w-8 h-8 rounded-lg neo-inset flex items-center justify-center shrink-0 mt-0.5">
                       {getIcon(notif.type)}
                     </div>
 
                     <div className="min-w-0 flex-1 pr-3 space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
                           {notif.badgeLabel || notif.type.replace('_', ' ')}
                         </span>
                         {notif.projectCode && (
-                          <span className="text-[10px] font-bold font-mono text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-1.5 py-0.2 rounded border border-indigo-200 dark:border-indigo-800">
+                          <span className="text-[10px] font-bold font-mono text-indigo-700 neo-inset px-1.5 py-0.2 rounded-md">
                             {notif.projectCode}
                           </span>
                         )}
                       </div>
 
-                      <h4 className="text-xs font-bold leading-snug">
+                      <h4 className="text-xs font-bold leading-snug text-slate-900">
                         {notif.title}
                       </h4>
-                      <p className="text-[11px] text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
+                      <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">
                         {notif.message}
                       </p>
 
@@ -220,7 +220,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                           <Clock className="w-3 h-3" />
                           {notif.timestamp}
                         </span>
-                        <span className="text-indigo-600 dark:text-indigo-400 font-bold group-hover:underline flex items-center gap-0.5">
+                        <span className="text-indigo-600 font-bold group-hover:underline flex items-center gap-0.5">
                           View details <ArrowRight className="w-3 h-3" />
                         </span>
                       </div>
@@ -232,7 +232,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
           </div>
 
           {/* Drawer Footer */}
-          <div className="p-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-[#07111F] text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+          <div className="p-3.5 border-t border-slate-300/60 text-[11px] text-slate-500 flex items-center justify-between">
             <span>Event Dispatcher</span>
             <button
               type="button"
@@ -240,7 +240,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                 onClose();
                 navigate('/alerts');
               }}
-              className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+              className="font-bold text-indigo-600 hover:underline cursor-pointer"
             >
               Open Early Warnings Hub →
             </button>

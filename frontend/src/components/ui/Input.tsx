@@ -30,14 +30,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5"
+            className="block text-[11px] font-black text-[var(--neo-text-primary)] uppercase tracking-wider mb-1.5"
           >
             {label}
           </label>
         )}
         <div className="relative rounded-xl">
           {leftIcon && (
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#1557D6]">
               {leftIcon}
             </div>
           )}
@@ -45,10 +45,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={cn(
-              'w-full rounded-xl border bg-[#F8FAFC] px-3.5 py-2.5 text-sm text-[#0B1F3A] placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all duration-150',
+              'w-full rounded-xl neo-input px-3.5 py-2.5 text-sm text-[var(--neo-text-primary)] placeholder:text-slate-400 focus:outline-none transition-all duration-150',
               error
-                ? 'border-[#DC2626] focus:border-[#DC2626] focus:ring-red-500/20'
-                : 'border-[#E2E8F0] focus:border-[#155EEF] focus:ring-[#155EEF]/20 hover:border-slate-300 focus:bg-white',
+                ? 'border-[#DC2626] focus:border-[#DC2626] focus:ring-2 focus:ring-red-500/20'
+                : 'border-[rgba(200,212,226,0.6)] focus:border-[#1557D6] focus:ring-2 focus:ring-[#1557D6]/20',
               leftIcon ? 'pl-10' : '',
               rightIcon ? 'pr-10' : '',
               className,

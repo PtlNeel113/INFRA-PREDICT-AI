@@ -123,25 +123,22 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-[1600px] mx-auto select-none">
       {/* EXECUTIVE COMMAND CENTER HERO */}
-      <div className="bg-white dark:bg-[#0F1D2E] rounded-[18px] p-6 sm:p-7 border border-[#E2E8F0] dark:border-slate-800 gov-shadow flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden text-slate-900 dark:text-slate-100">
-        {/* Subtle accent glow */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-500/10 via-teal-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-
+      <div className="neo-panel p-6 sm:p-7 flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden text-[var(--neo-text-primary)]">
         <div className="relative z-10 space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 shadow-2xs">
               Operational Intelligence Active
             </span>
-            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
+            <span className="text-xs font-semibold text-[var(--neo-text-tertiary)] flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
               <span>Grounded Decision System</span>
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-[32px] font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+          <h1 className="text-2xl sm:text-[32px] font-black tracking-tight text-[var(--neo-text-primary)] leading-tight">
             Executive Command Center
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-lg">
+          <p className="text-sm text-[var(--neo-text-secondary)] max-w-lg">
             Portfolio-wide predictive intelligence for infrastructure decision-making.
           </p>
         </div>
@@ -154,7 +151,7 @@ export const DashboardPage: React.FC = () => {
               setDecisionMode(true);
               toast.info('Decision Mode Active', 'Displaying top prioritized packages ranked by composite urgency.');
             }}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-700 hover:to-indigo-700 text-white text-xs font-black shadow-lg shadow-rose-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95 decision-pulse"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl neo-button-danger text-xs font-black transition-all cursor-pointer hover:scale-105 active:scale-95 decision-pulse"
           >
             <ShieldAlert className="w-4 h-4 text-white" />
             <span>ENTER DECISION MODE</span>
@@ -165,7 +162,7 @@ export const DashboardPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setBriefModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#155EEF] hover:bg-[#1048B5] text-xs font-bold text-white shadow-md shadow-blue-500/20 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl neo-button-primary text-xs font-bold text-white transition-all cursor-pointer"
           >
             <FileSpreadsheet className="w-3.5 h-3.5" />
             <span>GENERATE RISK BRIEF</span>
@@ -174,7 +171,7 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* PRIMARY 4 KPI CARDS */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {dynamicKpiCards.map((card, idx) => {
           const isSelected = activeKpiFilter === card.filterKey;
 
@@ -189,42 +186,42 @@ export const DashboardPage: React.FC = () => {
                 setActiveKpiFilter(newFilter);
                 toast.info(`Filter: ${card.title}`, card.sub);
               }}
-              className={`p-4 rounded-[18px] border transition-all cursor-pointer flex flex-col justify-between group ${
+              className={`p-4.5 rounded-2xl transition-all cursor-pointer flex flex-col justify-between group ${
                 isSelected
-                  ? 'bg-blue-50/70 dark:bg-indigo-950/60 border-[#155EEF] ring-2 ring-[#155EEF]/20 shadow-md'
-                  : 'bg-white dark:bg-[#0F1D2E] border-[#E2E8F0] dark:border-slate-800 gov-shadow hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md'
+                  ? 'neo-active border border-[#1557D6]/35 shadow-[inset_2px_2px_5px_rgba(166,180,200,0.45)]'
+                  : 'neo-card hover:translate-y-[-2px]'
               }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider line-clamp-1">
+                  <span className="text-[10px] font-bold text-[var(--neo-text-tertiary)] uppercase tracking-wider line-clamp-1">
                     {card.title}
                   </span>
-                  <div className="p-1.5 rounded-lg bg-[#F8FAFC] dark:bg-slate-800 border border-slate-200 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                  <div className="p-1.5 rounded-xl neo-inset-sm group-hover:scale-105 transition-transform">
                     {getKpiIcon(card.id)}
                   </div>
                 </div>
 
-                <div className="text-xl sm:text-2xl font-black text-[#0B1F3A] dark:text-white font-mono tracking-tight">
+                <div className="text-xl sm:text-2xl font-black text-[var(--neo-text-primary)] font-mono tracking-tight">
                   {card.value}
                 </div>
               </div>
 
-              <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-0.5">
+              <div className="mt-3 pt-2.5 border-t border-[rgba(200,212,226,0.45)] flex flex-col gap-0.5">
                 <span
                   className={`text-[11px] font-bold ${
                     card.risk
-                      ? 'text-[#DC2626] dark:text-rose-400'
+                      ? 'text-[#DC2626]'
                       : card.warning
-                      ? 'text-[#D97706] dark:text-amber-400'
+                      ? 'text-[#D97706]'
                       : card.success
-                      ? 'text-[#15803D] dark:text-emerald-400'
-                      : 'text-[#155EEF] dark:text-indigo-400'
+                      ? 'text-[#10B981]'
+                      : 'text-[#1557D6]'
                   }`}
                 >
                   {card.trend}
                 </span>
-                <span className="text-[10px] text-slate-400 line-clamp-1 leading-tight">
+                <span className="text-[10px] text-[var(--neo-text-muted)] line-clamp-1 leading-tight">
                   {card.sub}
                 </span>
               </div>

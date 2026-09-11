@@ -49,7 +49,7 @@ export const AppLayout: React.FC = () => {
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#F7F8F5] text-[#0B1220] transition-colors">
+    <div className="flex h-screen overflow-hidden bg-[var(--neo-bg)] text-[var(--neo-text-primary)] transition-colors">
       {/* Desktop & Tablet Sidebar */}
       <div className="hidden md:flex shrink-0">
         <Sidebar />

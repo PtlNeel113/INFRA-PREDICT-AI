@@ -49,17 +49,17 @@ export const InfrastructureScene: React.FC<InfrastructureSceneProps> = ({ isTran
       ref={containerRef}
       className="relative w-full h-full overflow-hidden"
       style={{
-        background: 'radial-gradient(ellipse at 50% 40%, #0C1A2E 0%, #07111F 65%, #040912 100%)',
+        background: 'radial-gradient(ellipse at 50% 40%, #F8FAFC 0%, #EEF2F6 65%, #E2E8F0 100%)',
       }}
     >
-      {/* Dark Blueprint / Grid */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none">
+      {/* Light Neumorphic Blueprint / Grid */}
+      <div className="absolute inset-0 opacity-25 pointer-events-none">
         <div 
           className="absolute inset-0" 
           style={{
             backgroundImage: `
-              linear-gradient(to right, rgba(21, 87, 214, 0.3) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(21, 87, 214, 0.3) 1px, transparent 1px)
+              linear-gradient(to right, rgba(21, 87, 214, 0.2) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(21, 87, 214, 0.2) 1px, transparent 1px)
             `,
             backgroundSize: '40px 40px',
           }}
@@ -72,9 +72,9 @@ export const InfrastructureScene: React.FC<InfrastructureSceneProps> = ({ isTran
           {Array.from({ length: 20 }).map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 rounded-full"
+              className="absolute w-1.5 h-1.5 rounded-full"
               style={{
-                background: 'rgba(21, 87, 214, 0.15)',
+                background: 'rgba(21, 87, 214, 0.25)',
               }}
               initial={{
                 x: `${Math.random() * 100}%`,
@@ -86,7 +86,7 @@ export const InfrastructureScene: React.FC<InfrastructureSceneProps> = ({ isTran
                   `${Math.random() * 100}%`,
                   `${Math.random() * 100}%`,
                 ],
-                opacity: [0.1, 0.3, 0.1],
+                opacity: [0.15, 0.4, 0.15],
               }}
               transition={{
                 duration: 8 + Math.random() * 4,
@@ -101,14 +101,14 @@ export const InfrastructureScene: React.FC<InfrastructureSceneProps> = ({ isTran
       
       {/* 3D Scene Container with Perspective */}
       <motion.div
-        className="absolute inset-0 flex items-center justify-center"
+        className="absolute inset-0 flex items-center justify-center overflow-hidden"
         style={{
           perspective: '1000px',
           perspectiveOrigin: '50% 50%',
         }}
       >
         <motion.div
-          className="relative w-full h-full max-w-5xl max-h-[600px]"
+          className="relative w-full h-full max-w-[500px] max-h-[460px] flex items-center justify-center"
           style={{
             transformStyle: 'preserve-3d',
             rotateX: prefersReducedMotion ? 0 : rotateX,
@@ -127,14 +127,14 @@ export const InfrastructureScene: React.FC<InfrastructureSceneProps> = ({ isTran
           >
             {/* Platform Grid */}
             <div className="absolute inset-0">
-              <svg width="100%" height="100%" className="opacity-40">
+              <svg width="100%" height="100%" className="opacity-60">
                 <defs>
                   <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
                     <path
                       d="M 40 0 L 0 0 0 40"
                       fill="none"
-                      stroke="#2563EB"
-                      strokeWidth="0.75"
+                      stroke="#3B82F6"
+                      strokeWidth="0.85"
                     />
                   </pattern>
                 </defs>
@@ -188,7 +188,7 @@ export const InfrastructureScene: React.FC<InfrastructureSceneProps> = ({ isTran
                 {/* Data Connection Lines */}
                 {index < DEMO_INFRASTRUCTURE_NODES.length - 1 && (
                   <svg
-                    className="absolute top-0 left-0 pointer-events-none opacity-20"
+                    className="absolute top-0 left-0 pointer-events-none opacity-40"
                     style={{
                       width: `${Math.abs((DEMO_INFRASTRUCTURE_NODES[index + 1].x - node.x) * 600)}px`,
                       height: `${Math.abs((DEMO_INFRASTRUCTURE_NODES[index + 1].y - node.y) * 400)}px`,
@@ -200,7 +200,7 @@ export const InfrastructureScene: React.FC<InfrastructureSceneProps> = ({ isTran
                       x2="100%"
                       y2="100%"
                       stroke="#1557D6"
-                      strokeWidth="1"
+                      strokeWidth="1.5"
                       strokeDasharray="4 4"
                     />
                   </svg>
@@ -216,14 +216,13 @@ export const InfrastructureScene: React.FC<InfrastructureSceneProps> = ({ isTran
           {AI_INTELLIGENCE_LAYERS.map((layer, index) => (
             <motion.div
               key={layer.label}
-              className="absolute left-0 font-bold text-sm tracking-wider"
+              className="absolute left-0 font-extrabold text-xs sm:text-sm tracking-wider"
               initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 0.6, x: 0 }}
+              animate={{ opacity: 0.9, x: 0 }}
               transition={{ delay: 0.5 + index * 0.15 }}
               style={{
                 top: `${layer.y * 100}%`,
                 transform: 'translateZ(100px)',
-                textShadow: `0 0 10px ${layer.color}40`,
                 color: layer.color,
               }}
             >

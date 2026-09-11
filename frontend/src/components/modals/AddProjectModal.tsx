@@ -289,63 +289,63 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
   // SUCCESS CONFIRMATION MODAL
   if (createdProject) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-        <div className="bg-white dark:bg-[#0F1D2E] rounded-2xl p-6 sm:p-8 max-w-lg w-full text-center space-y-5 shadow-2xl border border-slate-200 dark:border-slate-800">
-          <div className="w-16 h-16 mx-auto bg-emerald-100 dark:bg-emerald-950/60 rounded-2xl flex items-center justify-center shadow-inner">
-            <CheckCircle2 className="w-9 h-9 text-emerald-600 dark:text-emerald-400" />
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200 select-none">
+        <div className="neo-panel rounded-2xl p-6 sm:p-8 max-w-lg w-full text-center space-y-5 shadow-2xl border border-slate-300/80 text-slate-900">
+          <div className="w-16 h-16 mx-auto neo-inset rounded-2xl flex items-center justify-center">
+            <CheckCircle2 className="w-9 h-9 text-emerald-600" />
           </div>
 
           <div className="space-y-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200 neo-raised">
               Project Onboarded
             </span>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-2">
               Project successfully added to Project Intelligence.
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">
               Automated multi-dimensional prototype risk scoring, schedule telemetry, and forward escalation trajectories have been calculated.
             </p>
           </div>
 
           {/* Project Summary Chip Card */}
-          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 text-left space-y-3">
+          <div className="p-4.5 neo-card rounded-xl text-left space-y-3">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <span className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded">
+                <span className="font-mono text-xs font-bold text-indigo-700 neo-inset px-2.5 py-1 rounded-lg">
                   {createdProject.code}
                 </span>
-                <h3 className="font-bold text-slate-900 dark:text-white text-sm mt-1 leading-snug">
+                <h3 className="font-bold text-slate-900 text-sm mt-2 leading-snug">
                   {createdProject.name}
                 </h3>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                <span className="text-[11px] text-slate-500">
                   {createdProject.sector} • {createdProject.state}
                 </span>
               </div>
               <HealthScoreBadge score={createdProject.healthScore} size="sm" showLabel />
             </div>
 
-            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-200/60 dark:border-slate-700 text-center">
-              <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200/50 dark:border-slate-700/50">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Cost Risk</span>
-                <span className="text-xs font-black font-mono text-slate-800 dark:text-slate-200">
+            <div className="grid grid-cols-3 gap-2.5 pt-2 border-t border-slate-300/60 text-center">
+              <div className="neo-inset p-2 rounded-xl">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">Cost Risk</span>
+                <span className="text-xs font-black font-mono text-slate-900">
                   {createdProject.costRiskScore}/100
                 </span>
               </div>
-              <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200/50 dark:border-slate-700/50">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Time Risk</span>
-                <span className="text-xs font-black font-mono text-slate-800 dark:text-slate-200">
+              <div className="neo-inset p-2 rounded-xl">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">Time Risk</span>
+                <span className="text-xs font-black font-mono text-slate-900">
                   {createdProject.timeRiskScore}/100
                 </span>
               </div>
-              <div className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200/50 dark:border-slate-700/50">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Execution</span>
-                <span className="text-xs font-black font-mono text-slate-800 dark:text-slate-200">
+              <div className="neo-inset p-2 rounded-xl">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">Execution</span>
+                <span className="text-xs font-black font-mono text-slate-900">
                   {createdProject.executionRiskScore}/100
                 </span>
               </div>
             </div>
 
-            <div className="text-[11px] text-slate-600 dark:text-slate-300 flex items-center gap-1.5 pt-1">
+            <div className="text-[11px] text-slate-700 flex items-center gap-1.5 pt-1">
               <ShieldAlert className="w-3.5 h-3.5 text-amber-500 shrink-0" />
               <span>Primary Driver: <strong>{createdProject.primaryRiskDriver}</strong></span>
             </div>
@@ -360,14 +360,14 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                 handleClose();
                 navigate(`/projects/${targetId}`);
               }}
-              className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-md shadow-indigo-600/20 cursor-pointer"
+              className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs font-bold neo-button-primary cursor-pointer"
             >
               <span>View Project &rarr;</span>
             </button>
 
             <button
               onClick={handleClose}
-              className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+              className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold neo-button-secondary cursor-pointer"
             >
               Back to Projects Table
             </button>
@@ -378,26 +378,26 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white dark:bg-[#0F1D2E] text-slate-900 dark:text-slate-100 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-slate-200 dark:border-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 select-none">
+      <div className="neo-panel text-slate-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-slate-300/80">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 sm:p-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between p-5 sm:p-6 border-b border-slate-300/60">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Add New Project</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            <h2 className="text-xl font-bold text-slate-900 tracking-tight">Add New Project</h2>
+            <p className="text-xs text-slate-500 mt-1">
               Complete all steps to onboard project into the AI intelligence pipeline
             </p>
           </div>
           <button
             onClick={handleClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-200/50 text-slate-400 hover:text-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Progress Steps Header */}
-        <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 overflow-x-auto bg-slate-50/50 dark:bg-slate-900/30">
+        <div className="px-6 py-4 border-b border-slate-300/60 overflow-x-auto">
           <div className="flex items-center gap-2 min-w-max">
             {steps.map((step, index) => {
               const Icon = step.icon;
@@ -412,19 +412,19 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                         setCurrentStep(step.id as FormStep);
                       }
                     }}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left ${
+                    className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all text-left ${
                       isActive
-                        ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 font-semibold'
+                        ? 'neo-inset text-indigo-700 font-extrabold'
                         : isCompleted
-                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 cursor-pointer hover:bg-emerald-100'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-400 opacity-60'
+                        ? 'neo-raised text-emerald-700 cursor-pointer'
+                        : 'text-slate-400 opacity-60'
                     }`}
                   >
                     {isCompleted ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
                     <span className="text-xs whitespace-nowrap">{step.title}</span>
                   </button>
                   {index < steps.length - 1 && (
-                    <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600" />
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
                   )}
                 </React.Fragment>
               );
@@ -438,7 +438,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
           {currentStep === 1 && (
             <div className="space-y-4 max-w-2xl">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Project Name <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -449,8 +449,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     if (errors.projectName) setErrors((prev) => ({ ...prev, projectName: '' }));
                   }}
                   placeholder="e.g., Delhi-Mumbai Expressway Package IV"
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.projectName ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none ${
+                    errors.projectName ? 'border-rose-500' : ''
                   }`}
                 />
                 {errors.projectName && (
@@ -459,7 +459,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Project ID / Code <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -470,8 +470,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     if (errors.projectCode) setErrors((prev) => ({ ...prev, projectCode: '' }));
                   }}
                   placeholder="e.g., DME-PKG-IV"
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.projectCode ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none ${
+                    errors.projectCode ? 'border-rose-500' : ''
                   }`}
                 />
                 {errors.projectCode && (
@@ -480,7 +480,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Ministry / Agency <span className="text-rose-500">*</span>
                 </label>
                 <select
@@ -489,8 +489,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     setMinistry(e.target.value);
                     if (errors.ministry) setErrors((prev) => ({ ...prev, ministry: '' }));
                   }}
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.ministry ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none cursor-pointer ${
+                    errors.ministry ? 'border-rose-500' : ''
                   }`}
                 >
                   <option value="">Select Ministry</option>
@@ -510,7 +510,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Sector <span className="text-rose-500">*</span>
                 </label>
                 <select
@@ -519,8 +519,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     setSector(e.target.value);
                     if (errors.sector) setErrors((prev) => ({ ...prev, sector: '' }));
                   }}
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.sector ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none cursor-pointer ${
+                    errors.sector ? 'border-rose-500' : ''
                   }`}
                 >
                   <option value="">Select Sector</option>
@@ -545,7 +545,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
           {currentStep === 2 && (
             <div className="space-y-4 max-w-2xl">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   State / UT <span className="text-rose-500">*</span>
                 </label>
                 <select
@@ -554,8 +554,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     setState(e.target.value);
                     if (errors.state) setErrors((prev) => ({ ...prev, state: '' }));
                   }}
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.state ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none cursor-pointer ${
+                    errors.state ? 'border-rose-500' : ''
                   }`}
                 >
                   <option value="">Select State</option>
@@ -581,7 +581,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   District <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -592,8 +592,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     if (errors.district) setErrors((prev) => ({ ...prev, district: '' }));
                   }}
                   placeholder="e.g., Surat"
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.district ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none ${
+                    errors.district ? 'border-rose-500' : ''
                   }`}
                 />
                 {errors.district && (
@@ -603,7 +603,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                  <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                     Latitude
                   </label>
                   <input
@@ -611,11 +611,11 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     value={latitude}
                     onChange={(e) => setLatitude(e.target.value)}
                     placeholder="e.g., 21.1702"
-                    className="w-full px-4 py-2.5 text-sm border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900"
+                    className="w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                  <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                     Longitude
                   </label>
                   <input
@@ -623,7 +623,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     value={longitude}
                     onChange={(e) => setLongitude(e.target.value)}
                     placeholder="e.g., 72.8311"
-                    className="w-full px-4 py-2.5 text-sm border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900"
+                    className="w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none"
                   />
                 </div>
               </div>
@@ -637,7 +637,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
           {currentStep === 3 && (
             <div className="space-y-4 max-w-2xl">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Sanctioned Cost (₹ Crores) <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -648,8 +648,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     if (errors.sanctionedCost) setErrors((prev) => ({ ...prev, sanctionedCost: '' }));
                   }}
                   placeholder="e.g., 4500"
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.sanctionedCost ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none ${
+                    errors.sanctionedCost ? 'border-rose-500' : ''
                   }`}
                 />
                 {errors.sanctionedCost && (
@@ -658,7 +658,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Expenditure Till Date (₹ Crores) <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -669,8 +669,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     if (errors.expenditure) setErrors((prev) => ({ ...prev, expenditure: '' }));
                   }}
                   placeholder="e.g., 2800"
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.expenditure ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none ${
+                    errors.expenditure ? 'border-rose-500' : ''
                   }`}
                 />
                 {errors.expenditure && (
@@ -679,7 +679,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Revised Cost (₹ Crores) <span className="text-slate-400 text-xs">(if applicable)</span>
                 </label>
                 <input
@@ -690,8 +690,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     if (errors.revisedCost) setErrors((prev) => ({ ...prev, revisedCost: '' }));
                   }}
                   placeholder="e.g., 4850"
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.revisedCost ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none ${
+                    errors.revisedCost ? 'border-rose-500' : ''
                   }`}
                 />
                 {errors.revisedCost && (
@@ -705,7 +705,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
           {currentStep === 4 && (
             <div className="space-y-4 max-w-2xl">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Physical Progress (%) <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -718,8 +718,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     if (errors.physicalProgress) setErrors((prev) => ({ ...prev, physicalProgress: '' }));
                   }}
                   placeholder="e.g., 62"
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.physicalProgress ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none ${
+                    errors.physicalProgress ? 'border-rose-500' : ''
                   }`}
                 />
                 {errors.physicalProgress && (
@@ -728,7 +728,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Project Start Date <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -738,8 +738,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     setStartDate(e.target.value);
                     if (errors.startDate) setErrors((prev) => ({ ...prev, startDate: '' }));
                   }}
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.startDate ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none ${
+                    errors.startDate ? 'border-rose-500' : ''
                   }`}
                 />
                 {errors.startDate && (
@@ -748,7 +748,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Target Completion Date <span className="text-rose-500">*</span>
                 </label>
                 <input
@@ -758,8 +758,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                     setTargetDate(e.target.value);
                     if (errors.targetDate) setErrors((prev) => ({ ...prev, targetDate: '' }));
                   }}
-                  className={`w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900 ${
-                    errors.targetDate ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-300 dark:border-slate-700'
+                  className={`w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none ${
+                    errors.targetDate ? 'border-rose-500' : ''
                   }`}
                 />
                 {errors.targetDate && (
@@ -774,39 +774,39 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
             <div className="space-y-4 max-w-3xl">
               <div className="flex items-center justify-between mb-2">
                 <div>
-                  <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                  <label className="text-sm font-semibold text-slate-800">
                     Key Project Milestones <span className="text-rose-500">*</span>
                   </label>
-                  <p className="text-xs text-slate-400">At least one milestone with planned date is required</p>
+                  <p className="text-xs text-slate-500">At least one milestone with planned date is required</p>
                 </div>
                 <button
                   type="button"
                   onClick={addMilestone}
-                  className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950/60 rounded-lg transition-colors cursor-pointer"
+                  className="text-xs font-bold text-indigo-700 px-3.5 py-1.5 neo-button-secondary rounded-xl transition-all cursor-pointer"
                 >
                   + Add Milestone
                 </button>
               </div>
 
               {errors.milestones && (
-                <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-lg text-xs text-rose-600 dark:text-rose-400 font-medium">
+                <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 font-medium neo-inset">
                   {errors.milestones}
                 </div>
               )}
 
               {milestones.map((milestone, index) => (
-                <div key={index} className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-xl space-y-3 relative border border-slate-200 dark:border-slate-800">
+                <div key={index} className="p-4.5 neo-card rounded-xl space-y-3 relative">
                   {milestones.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeMilestone(index)}
-                      className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-400 hover:text-slate-600"
+                      className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-md hover:bg-slate-200 transition-colors text-slate-400 hover:text-slate-700"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   )}
                   <div>
-                    <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
                       Milestone Name <span className="text-rose-500">*</span>
                     </label>
                     <input
@@ -814,30 +814,30 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                       value={milestone.name}
                       onChange={(e) => updateMilestone(index, 'name', e.target.value)}
                       placeholder="e.g., Land Acquisition Complete"
-                      className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900"
+                      className="w-full px-3.5 py-2 text-sm neo-input rounded-xl focus:outline-none"
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
                         Planned Date <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="date"
                         value={milestone.planned}
                         onChange={(e) => updateMilestone(index, 'planned', e.target.value)}
-                        className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900"
+                        className="w-full px-3.5 py-2 text-sm neo-input rounded-xl focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                        Actual Date <span className="text-slate-400">(if completed)</span>
+                      <label className="block text-xs font-bold text-slate-700 mb-1">
+                        Actual Date <span className="text-slate-400 font-normal">(if completed)</span>
                       </label>
                       <input
                         type="date"
                         value={milestone.actual}
                         onChange={(e) => updateMilestone(index, 'actual', e.target.value)}
-                        className="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-slate-900"
+                        className="w-full px-3.5 py-2 text-sm neo-input rounded-xl focus:outline-none"
                       />
                     </div>
                   </div>
@@ -850,7 +850,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
           {currentStep === 6 && (
             <div className="space-y-4 max-w-2xl">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Current Issues / Challenges
                 </label>
                 <textarea
@@ -858,12 +858,12 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                   onChange={(e) => setCurrentIssues(e.target.value)}
                   placeholder="Describe any current technical, regulatory, land acquisition, or operational challenges..."
                   rows={3}
-                  className="w-full px-4 py-2.5 text-sm border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none bg-white dark:bg-slate-900"
+                  className="w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Delays & Schedule Slippages
                 </label>
                 <textarea
@@ -871,12 +871,12 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                   onChange={(e) => setDelays(e.target.value)}
                   placeholder="Document any schedule delays, reasons, and expected recovery timeline..."
                   rows={3}
-                  className="w-full px-4 py-2.5 text-sm border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none bg-white dark:bg-slate-900"
+                  className="w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1.5">
                   Resource & Other Constraints
                 </label>
                 <textarea
@@ -884,7 +884,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                   onChange={(e) => setConstraints(e.target.value)}
                   placeholder="List any funding, manpower, material, or environmental constraints..."
                   rows={3}
-                  className="w-full px-4 py-2.5 text-sm border border-slate-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none bg-white dark:bg-slate-900"
+                  className="w-full px-4 py-2.5 text-sm neo-input rounded-xl focus:outline-none resize-none"
                 />
               </div>
 
@@ -896,8 +896,8 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between p-5 sm:p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
-          <div className="text-xs text-slate-500 dark:text-slate-400">
+        <div className="flex items-center justify-between p-5 sm:p-6 border-t border-slate-300/60">
+          <div className="text-xs font-mono font-bold text-slate-500 neo-inset px-3 py-1 rounded-lg">
             Step {currentStep} of 6
           </div>
           <div className="flex items-center gap-3">
@@ -905,7 +905,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               <button
                 type="button"
                 onClick={handlePrevious}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-lg transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold neo-button-secondary cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Previous
@@ -916,7 +916,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors cursor-pointer shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold neo-button-primary cursor-pointer"
               >
                 Next
                 <ChevronRight className="w-4 h-4" />
@@ -926,7 +926,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-2 px-6 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 rounded-lg transition-all cursor-pointer shadow-sm"
+                className="inline-flex items-center gap-2 px-6 py-2 text-xs font-bold neo-button-primary cursor-pointer disabled:opacity-60"
               >
                 {isSubmitting ? (
                   <>
